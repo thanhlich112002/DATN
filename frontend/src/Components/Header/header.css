@@ -1,0 +1,146 @@
+body {
+  background-color: #f6f6f6;
+  -webkit-font-smoothing: antialiased;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+@media (min-width: 1400px) {
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl,
+  .container-xxl {
+    max-width: 1140px !important;
+  }
+}
+.container {
+  display: block;
+  margin: 0 auto !important;
+  padding: 10px;
+}
+
+.header-top-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  padding-top: 5px;
+}
+
+.header-left-wrap div a {
+  display: flex;
+  align-items: center;
+}
+
+.header-right-wrap {
+}
+
+.header-account {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.header-login-and-register {
+  display: flex;
+  align-items: center;
+}
+
+.header-icon {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.header-register {
+  /* Thêm kiểu dáng cho phần header register */
+}
+
+.header-login {
+  /* Thêm kiểu dáng cho phần header login */
+}
+.header-form-group div input {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+  border-color: gray;
+}
+.header-form-group div label {
+  display: flex;
+  position: absolute;
+  right: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  align-items: center;
+  padding-left: 10px;
+  border-left: 0.1px solid gray;
+}
+.header-form-group div {
+  display: flex;
+  align-items: center;
+}
+.header-form-group {
+  position: relative;
+  width: 450px;
+}
+
+/*bottom*/
+.header-bottom-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.background_cl {
+  background-color: #006a31;
+}
+
+.header-main-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0;
+}
+.header-a {
+  font-size: 18px;
+  font-weight: 500;
+  color: #f6f6f6;
+  padding: 15px;
+  text-decoration: none;
+  align-items: center;
+}
+.header-bottom-wrap {
+  border-radius: 50px;
+  padding: 5px;
+}
+.header-cart {
+  display: flex;
+  border-radius: 20px;
+  background-color: #f6f6f6;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 5px 3px 10px;
+}
+.header-cart-qty {
+  display: flex;
+  color: #f6f6f6;
+  font-size: 16px;
+  font-weight: 500;
+  background-color: red;
+  height: 20px;
+  width: 20px;
+  border-radius: 50px;
+  justify-content: center;
+  align-items: center;
+}
+.header-icon {
+  color: #006a31;
+}
+.header-cart p a {
+  font-size: 16px;
+  font-weight: 500;
+}
