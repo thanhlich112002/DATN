@@ -1,0 +1,140 @@
+.cat_title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  color: #f6f6f6;
+}
+/* .cat_img {
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+.cat_img::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #006a31;
+  z-index: -1;
+}
+.cat_img img {
+  height: 450px;
+  width: 100%;
+} */
+
+.cat_img {
+  position: relative;
+  width: 100%;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  opacity: 0;
+  transition: width 0.5s ease-in-out;
+}
+
+.cat_img:hover .overlay {
+  opacity: 0.5;
+  width: 0%;
+}
+
+.cat_img img {
+  display: block;
+  height: 450px;
+  width: 100%;
+}
+.cursor {
+  cursor: pointer;
+}
+
+/* Item */
+.item {
+  height: 300px;
+  width: 230px;
+  cursor: pointer;
+  outline: none;
+}
+.item_img {
+  height: 192px;
+  width: 100%;
+}
+.item_img img {
+  height: 100%;
+  width: 100%;
+}
+.item_name {
+  width: 100%;
+  display: flex;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 5px;
+}
+.cat_list_product {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cat_list_product > div {
+  flex: 0 1 20%;
+  box-sizing: border-box;
+}
+.item_bottom {
+  height: 20%;
+  align-items: center;
+  width: 100%;
+  display: flex;
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 5px;
+  color: #006a31;
+  position: relative;
+  overflow: hidden;
+}
+
+.item_icons {
+  display: flex;
+  gap: 10px;
+  position: absolute;
+  top: -50px;
+  transition-property: top;
+  transition-duration: 1s;
+}
+
+.item:hover .item_icons {
+  top: 20px;
+}
+
+.item_icons div {
+  display: flex;
+  padding: 5px;
+  border: 0.1px solid #006a31;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.item_icons div:hover {
+  color: #ffffff;
+  background-color: #006a31;
+}
+
+.item_price {
+  display: flex;
+  position: absolute;
+  bottom: 20px;
+  transition-property: bottom, opacity;
+  opacity: 1;
+  transition-duration: 1s;
+}
+
+.item:hover .item_price {
+  bottom: -50px;
+  opacity: 0;
+}

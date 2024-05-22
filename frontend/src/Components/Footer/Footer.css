@@ -1,0 +1,47 @@
+.Footer_container {
+  width: 100%;
+  height: 450px;
+  background-color: #0a953d;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.Footer_logo img {
+  height: 50px;
+  width: 50px;
+}
+
+.Footer_logo {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  border-bottom: 1px solid white;
+}
+
+.Pooter_infor {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Item_Footer {
+  width: 270px;
+  padding: 20px 5px 10px 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.t_h5 {
+  margin-bottom: 10px;
+  color: #fff;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 18px;
+}
+
+.t_h6 {
+  color: #fff;
+  font-weight: 400;
+  font-size: 14px;
+  margin: 5px 0 5px;
+}

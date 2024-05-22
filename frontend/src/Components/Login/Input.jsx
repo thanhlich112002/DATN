@@ -10,6 +10,7 @@ function Input(props) {
         className="input_value"
         type={props?.type}
         placeholder={`Nhập ${props?.placeholder}`}
+        onChange={(e) => props.setValue(e.target.value)}
       />
     </div>
   );

@@ -2,12 +2,12 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const productSchema = new Schema(
   {
-    brandId: {
+    Brand: {
       type: Schema.Types.ObjectId,
       ref: "Brand",
       required: true,
     },
-    categoryId: {
+    Category: {
       type: Schema.Types.ObjectId,
       ref: "Category",
       required: true,
@@ -47,11 +47,11 @@ const productSchema = new Schema(
     },
     description: {
       type: String,
-      maxLength: [200, "Mô tả chỉ được tối da 200 kí tự"],
+      maxLength: [2000, "Mô tả chỉ được tối da 200 kí tự"],
     },
     origin: {
       type: String,
-      maxLength: [200, "Xuất xứ chỉ được tối da 200 kí tự"],
+      maxLength: [2000, "Xuất xứ chỉ được tối da 200 kí tự"],
     },
     isOutofOrder: {
       type: Boolean,
@@ -79,12 +79,12 @@ const productSchema = new Schema(
     IncenseGroup: {
       origin: {
         type: String,
-        maxLength: [200, "Nhóm hương chỉ được tối da 200 kí tự"],
+        maxLength: [2000, "Nhóm hương chỉ được tối da 200 kí tự"],
       },
     },
     isAvailable: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   {

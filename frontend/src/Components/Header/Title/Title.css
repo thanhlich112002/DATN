@@ -1,0 +1,10 @@
+.Title {
+    padding: 10px 0;
+    border-bottom: 1px solid #e1e1e1;
+    margin-bottom: 20px;
+}
+
+.Title span {
+    font-size: 30px;
+    font-weight: 600;
+}

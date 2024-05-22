@@ -14,7 +14,7 @@ const categorySchema = new Schema({
   ],
   description: {
     type: String,
-    maxLength: [200, "Mô tả chỉ được tối da 200 kí tự"],
+    maxLength: [2000, "Mô tả chỉ được tối da 200 kí tự"],
     required: true,
   },
 });

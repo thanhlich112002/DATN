@@ -45,7 +45,7 @@ h2 {
   background: #fafafa;
   padding: 2px 20px;
   width: 90%;
-  height: 35px;
+  height: 30px;
 }
 
 .button {
@@ -82,7 +82,16 @@ h2 {
   justify-content: center;
   gap: 10px;
   margin-bottom: 20px;
+  cursor: pointer;
 }
 .mgt10 {
   margin-top: 10px;
+}
+
+.w40 {
+  width: 40% !important;
+}
+.a {
+  text-decoration: none;
+  color: #00addf;
 }

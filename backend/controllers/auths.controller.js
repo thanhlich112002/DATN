@@ -10,7 +10,6 @@ const Email = require("../utils/email");
 class AuthController {
   singUp = (Model, role) =>
     catchAsync(async (req, res, next) => {
-      console.log(role);
       let body = {
         ...req.body,
         role,
@@ -34,7 +33,7 @@ class AuthController {
     if (!user) {
       return next(new appError("Email không hợp lệ", 401));
     }
-    if (!(await user.isCorrectPassword(user.password, password))) {
+    if (await !user.isCorrectPassword(user.password, password)) {
       return next(new appError("Mật khẩu không hợp lệ", 401));
     }
     jwtToken.generateAndSendJWTToken(user, 200, res, req);
@@ -178,6 +177,7 @@ class AuthController {
     console.log(decoded);
     // 3. If the user is exits
     const user = await User.findById(decoded.id);
+    console.log(user);
     if (!user) {
       return next(new appError("Người dùng không tồn tại!", 401));
     }
