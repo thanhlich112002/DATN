@@ -8,6 +8,12 @@ import Home from "../Components/Home/Home";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import Collections from "../Components/Collections/Collections";
+import Cart from "../Components/Cart/Cart";
+
+import Product from "../Components/Product/Product";
+import Checkout from "../Components/Checkout/Checkout";
+import Account from "../Components/Account/Account";
 
 function App() {
   return (
@@ -16,8 +22,13 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/collections" element={<Collections />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgetpassword" element={<Forgetpassword />} />
+        <Route path="/product/:id" element={<Product />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/account/:i" element={<Account />} />
         <Route path="/logout" element={<Forgetpassword />} />
       </Routes>
       <Footer />

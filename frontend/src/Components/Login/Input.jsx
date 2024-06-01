@@ -7,6 +7,7 @@ function Input(props) {
         {props?.title} <span className="required">*</span>
       </div>
       <input
+        id={props?.type}
         className="input_value"
         type={props?.type}
         placeholder={`Nhập ${props?.placeholder}`}

@@ -1,19 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SimpleSlider from "../Slider/SliderComponent";
 import Category from "../Category/category";
 import "./home.css";
-import pizzaBanner1 from "../assets/imgs/pizza-banner-1.png";
-import pizzaBanner2 from "../assets/imgs/pizza-banner-2.png";
-import pizzaBanner3 from "../assets/imgs/pizza-banner-3.png";
-import pizzaBanner4 from "../assets/imgs/pizza-banner-4.jpg";
+import Brand from "../Brand/Brand";
+import { Getallcategory } from "../../service/API";
 
 function Home() {
-  const images = [pizzaBanner1, pizzaBanner2, pizzaBanner3, pizzaBanner4];
+  const [cat, setCat] = useState([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await Getallcategory();
+        console.log(res.data);
+        setCat(res.data.data); // Assuming res.data is an array of categories
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+  const images = [
+    "https://theme.hstatic.net/1000340570/1000964732/14/slideshow_1.jpg?v=5322",
+    "https://theme.hstatic.net/1000340570/1000964732/14/slideshow_1.jpg?v=5322",
+    "https://theme.hstatic.net/1000340570/1000964732/14/slideshow_1.jpg?v=5322",
+    "https://theme.hstatic.net/1000340570/1000964732/14/slideshow_1.jpg?v=5322",
+  ];
   return (
     <div>
       <div>
         <SimpleSlider arrImages={images} />
-        <Category />
+        {cat.map((category, index) => (
+          <Category key={index} Category={category} />
+        ))}
+        <Brand />
       </div>
     </div>
   );

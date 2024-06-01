@@ -2,8 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 10px;
-  padding: 10px;
+  padding: 10px 5px;
   font-size: 18px;
   font-weight: 500;
   color: #f6f6f6;
@@ -72,20 +71,25 @@
   width: 100%;
 }
 .item_name {
-  width: 100%;
+  width: 80%;
   display: flex;
   font-size: 16px;
   font-weight: 600;
   margin: 5px;
 }
+
 .cat_list_product {
   display: flex;
   flex-wrap: wrap;
+  gap: 5px;
 }
 
 .cat_list_product > div {
+  overflow: hidden;
   flex: 0 1 20%;
+  height: 300px;
   box-sizing: border-box;
+  border: 0.1px solid rgba(0, 0, 0, 0.5);
 }
 .item_bottom {
   height: 20%;
@@ -106,7 +110,7 @@
   position: absolute;
   top: -50px;
   transition-property: top;
-  transition-duration: 1s;
+  transition-duration: 0.25s;
 }
 
 .item:hover .item_icons {
@@ -131,10 +135,30 @@
   bottom: 20px;
   transition-property: bottom, opacity;
   opacity: 1;
-  transition-duration: 1s;
+  transition-duration: 0.25s;
 }
 
 .item:hover .item_price {
   bottom: -50px;
   opacity: 0;
+}
+.cat1 {
+  margin: 5px 0px;
+}
+.cat2 {
+  border-top: 0.1px solid #cdcdcd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cat2 div {
+  border: 0.1px solid #cdcdcd;
+  padding: 5px 10px;
+  margin: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 400;
+  color: #f6f6f6;
 }

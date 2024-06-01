@@ -1,0 +1,167 @@
+.collections {
+  display: flex;
+}
+
+.collections_left {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+  border: 0.1px solid #c7c7c7;
+  border-radius: 2px;
+  margin: 5px;
+  gap: 20px;
+  height: auto;
+  flex: 0 0 auto; /* Không co giãn, chiều cao cố định */
+  height: 530px; /* Chiều cao cố định */
+}
+.collections_left_ {
+  padding-bottom: 2px;
+  border-bottom: 0.1px solid #c7c7c7;
+}
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 20px;
+}
+
+.collections_title {
+  margin-left: 5px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.collections_col {
+  margin-left: 5px;
+  font-size: 14px;
+}
+.collections_input input {
+  width: 75%;
+  padding: 5px;
+  border-color: #979494;
+}
+.collections_input input:focus {
+  outline: none; /* Remove outline when input is focused */
+}
+
+.collections_input {
+  display: flex;
+  margin-left: 5px;
+  margin-top: 10px;
+}
+.collections_input div {
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  color: #ffffff;
+  justify-content: center;
+  background-color: #006a31;
+}
+
+.collections_left_checkbox {
+  display: flex;
+  flex-direction: column;
+  margin-right: 13px;
+  margin-left: 5px;
+  margin-top: 10px;
+  height: 150px;
+  max-height: 150px; /* Maximum height of the container */
+  overflow-y: auto; /* Enable vertical scrolling when needed */
+}
+
+.checkbox-container {
+  font-size: 14px;
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  border-radius: 2px;
+  background-color: #eee;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #006a31;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+.checkbox-container .checkmark:after {
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 7px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.collections_right {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  border: 0.1px solid #c7c7c7;
+  border-radius: 2px;
+  padding: 5px;
+  margin: 5px;
+  gap: 20px;
+  min-height: 690px;
+}
+.collections_right_col {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.collections_right_col > div {
+  overflow: hidden;
+  flex: 0 1 24%;
+  box-sizing: border-box;
+  border: 0.1px solid #c7c7c7;
+}
+.collections_right_title {
+  font-size: 20px;
+  font-weight: 500;
+  padding-bottom: 20px;
+  border-bottom: 0.05px solid #c7c7c7;
+}

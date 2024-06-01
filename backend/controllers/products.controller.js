@@ -95,8 +95,26 @@ class productsController {
     return res.status(200).json({ message: "success", data: products });
   });
   searchProducts = catchAsync(async (req, res, next) => {
+    const { search, CategoryID, BrandID } = req.body;
+    console.log(req.body);
+    let conditions = [];
+
+    if (search) {
+      conditions.push({ name: { $regex: search, $options: "i" } });
+    }
+
+    if (CategoryID && CategoryID.length > 0) {
+      conditions.push({ Category: { $in: CategoryID } });
+    }
+
+    if (BrandID && BrandID.length > 0) {
+      conditions.push({ Brand: { $in: BrandID } });
+    }
+
+    const query = conditions.length > 0 ? { $and: conditions } : {};
+    console.log(query);
     const features = new ApiFeatures(
-      Products.find({ name: { $regex: req.body.search, $options: "i" } })
+      Products.find(query)
         .populate({
           path: "Category",
           select: "name",
@@ -110,11 +128,17 @@ class productsController {
       .filter()
       .search()
       .sort()
-      // .limitFields()
       .paginate();
+
     const products = await features.query;
-    return res.status(200).json({ message: "success", data: products });
+
+    res.status(200).json({
+      status: "success",
+      results: products.length,
+      data: products,
+    });
   });
+
   updateProduct = catchAsync(async (req, res, next) => {
     try {
       const id = req.params.id;

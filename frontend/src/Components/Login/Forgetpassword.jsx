@@ -2,18 +2,20 @@ import React from "react";
 import Input from "./Input";
 import Button from "./button";
 import { logoutAPI } from "../../service/API";
-import { useAuth } from "../../service/authContext";
+import { useAuth, useLogout } from "../../service/authContext";
+import { useNavigate } from "react-router-dom";
 
 function Forgetpassword() {
+  const navigate = useNavigate();
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useAuth();
+  const logout = useLogout();
   const handleSubmit = async () => {
     try {
       const res = await logoutAPI();
       if (res.status === 200) {
-        // Ensure the response status is OK
-        setIsLoggedIn(false);
-        setUser(null); // Assuming `setUser` should reset user to null or initial state
-        localStorage.removeItem("token"); // Remove token instead of setting it
+        navigate("/");
+        localStorage.removeItem("token");
+        logout();
       } else {
         // Handle the case where the logout was not successful
         console.error("Logout failed", res.status);

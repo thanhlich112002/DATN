@@ -1,26 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCartPlus, faEye, faHeart } from "@fortawesome/free-solid-svg-icons";
-import "./style.css"; // Đảm bảo rằng bạn đã tạo file CSS và import đúng cách
+import "./style.css";
+import Detailproduct from "../Detailproduct/Detailproduct";
+import { useNavigate } from "react-router-dom";
 
-function Item() {
+function Item({ product }) {
+  const navigate = useNavigate();
+
+  const handleNav = (nav) => {
+    navigate(`/product/${nav}`);
+  };
+  const [detail, setDetail] = useState(false);
   return (
     <div className="item">
-      <div className="item_img">
-        <img
-          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSonfxjxQicX5UFPczdZIcv6EAG5suvd83yeG2x829CCg&s"
-          alt="Dior Sauvage EDP"
-        />
+      {detail ? <Detailproduct item={product} setDetail={setDetail} /> : <></>}
+      <div className="item_img" onClick={() => handleNav(product._id)}>
+        <img src={product?.images} alt={product?.name} />
       </div>
-      <div className="item_name">Dior Sauvage EDP</div>
+      <div className="item_name" onClick={() => handleNav(product._id)}>
+        {product?.name}
+      </div>
       <div className="item_bottom">
-        <div className="item_price">300.000đ - 500.000đ</div>
+        <div className="item_price">{product?.price} đ</div>
         <div className="item_icons">
           <div>
             <FontAwesomeIcon icon={faCartPlus} />
           </div>
           <div>
-            <FontAwesomeIcon icon={faEye} />
+            <FontAwesomeIcon icon={faEye} onClick={() => setDetail(true)} />
           </div>
           <div>
             <FontAwesomeIcon icon={faHeart} />

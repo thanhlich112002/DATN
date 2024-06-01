@@ -14,6 +14,7 @@ class AuthController {
         ...req.body,
         role,
         isVerified: false,
+        photo: process.env.DEFAULT_AVATAR,
       };
       const doc = await Model.create(body);
       const signUpToken = doc.createSignUpToken();
@@ -22,6 +23,7 @@ class AuthController {
       // 3) Gửi email chứa mã token tới email của doc
       req.doc = doc;
       req.signUpToken = signUpToken;
+      res.status(200).json({ status: "success", data: doc });
       next();
     });
   login = catchAsync(async (req, res, next) => {
@@ -183,6 +185,27 @@ class AuthController {
     }
     req.user = user;
     next();
+  });
+  getUser = catchAsync(async (req, res, next) => {
+    console.log(req);
+    let token = req.cookies.jwt;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer ")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+    // 2. validate the token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    console.log(decoded);
+    // 3. If the user is exits
+    const user = await User.findById(decoded.id);
+    console.log(user);
+    if (!user) {
+      return next(new appError("Người dùng không tồn tại!", 401));
+    }
+    req.user = user;
+    res.status(200).json({ message: "success", data: user });
   });
 
   restrict = (...roles) => {

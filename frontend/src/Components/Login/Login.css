@@ -51,7 +51,7 @@ h2 {
 .button {
   outline: none;
   border: 1px solid #e1e1e1;
-  background-color: #006a31;
+  background-color: #07503d;
   color: #fafafa;
   border-radius: 8px;
   padding: 2px 20px;
@@ -88,10 +88,13 @@ h2 {
   margin-top: 10px;
 }
 
-.w40 {
-  width: 40% !important;
+.w50 {
+  width: 45% !important;
 }
 .a {
   text-decoration: none;
   color: #00addf;
+}
+.w90 {
+  width: 98%;
 }

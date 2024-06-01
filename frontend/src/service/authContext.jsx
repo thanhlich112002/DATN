@@ -1,13 +1,19 @@
 // AuthContext.js
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { GetUserByToken } from "./API";
+
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState();
-  const [img, setImg] = useState("");
+  const [user, setUser] = useState(null);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setUser(JSON.parse(localStorage.getItem("setUser")));
+    if (token) setIsLoggedIn(true);
+  }, []);
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser }}>
       {children}
@@ -22,12 +28,12 @@ export function useAuth() {
 
 // Custom hook to handle logout functionality
 export function useLogout() {
-  const { setIsLoggedIn, setUserName, setImg } = useAuth();
+  const { setIsLoggedIn, setUser } = useAuth();
 
   function logout() {
     setIsLoggedIn(false);
-    setUserName("");
-    setImg("");
+    setUser(null);
+    localStorage.removeItem("token");
   }
 
   return logout;

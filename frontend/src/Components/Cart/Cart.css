@@ -1,0 +1,123 @@
+.Cart {
+  display: flex;
+  flex-direction: column;
+  border: 0.1px solid #e1e1e1;
+  border-radius: 2px;
+  margin: 5px;
+  gap: 10px;
+  height: auto;
+  flex: 0 0 auto;
+  min-height: 530px;
+}
+.Cart_body {
+  display: flex;
+  margin: 10px;
+  gap: 10px;
+}
+.Cart_title {
+  font-size: 18px;
+  font-weight: 400;
+  padding: 20px 0px 10px 20px;
+  border-bottom: 0.1px solid #e7e7e7;
+}
+.Cart_left {
+  width: 75%;
+}
+
+.Cart_right {
+  width: 25%;
+}
+
+.Cart1 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.Cart1_price {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  color: #000;
+  font-weight: 500;
+  padding: 10px 0px;
+}
+.Cart1_price1 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #000;
+  font-weight: 400;
+  padding: 15px;
+  border-bottom: 0.1px solid #e7e7e7;
+}
+.Cart1_item_rigth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px;
+  font-size: 16px;
+  border: 0.1px solid #07503d;
+  width: 100%;
+  font-weight: 300;
+  background-color: #07503d;
+  border-radius: 5px;
+  color: #ffffff;
+  gap: 30px;
+  cursor: pointer;
+}
+
+.Cart1_item_rigth:hover {
+  background-color: #03251c;
+}
+
+.CartItem {
+  display: flex;
+  gap: 15px;
+  border-bottom: 0.1px solid #e1e1e1;
+}
+.CartItem_img {
+  margin: 5px;
+  width: 20%;
+}
+.CartItem_img img {
+  width: 100%;
+}
+.CartItem_np {
+  margin: 5px;
+  width: 50%;
+  display: flex;
+  font-size: 16px;
+  font-weight: 500;
+  gap: 20px;
+}
+.CartItem_end {
+  margin: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px;
+  border: 0.1px solid #e1e1e1;
+  border-radius: 2px;
+  height: 20px;
+}
+
+.CartItembt {
+  cursor: pointer;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.CartItem_ {
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background-color: #e1e1e1;
+}

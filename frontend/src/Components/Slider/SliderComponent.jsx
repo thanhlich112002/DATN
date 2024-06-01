@@ -13,6 +13,16 @@ const WrapperSliderStyle = styled(Slider)`
     align-items: center;
     height: 450px;
   }
+  & .slick-arrow.slick-prev {
+    left: 12px;
+    top: 50%;
+    z-index: 10;
+  }
+  & .slick-arrow.slick-next {
+    right: 28px;
+    top: 50%;
+    z-index: 10;
+  }
 `;
 
 const SimpleSlider = ({ arrImages }) => {
@@ -24,7 +34,6 @@ const SimpleSlider = ({ arrImages }) => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    className: "center",
     centerPadding: "150px",
     centerMode: true,
     centerPadding: "0",

@@ -13,6 +13,7 @@ function Login() {
   console.log(email);
 
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useAuth();
+  const [message, setMessage] = useState("");
 
   const handleSubmit = async () => {
     try {
@@ -23,6 +24,7 @@ function Login() {
       setIsLoggedIn(true);
       setUser(res.data.data.user);
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("setUser", JSON.stringify(res.data.data.user));
       if (res.data.data.user.role === "User") {
         if (0) {
           navigate("/user/order");
@@ -32,7 +34,9 @@ function Login() {
       } else if (res.data.data.user.role === "Admin") {
         navigate("/admin");
       }
-    } catch {}
+    } catch (e) {
+      setMessage(e.message);
+    }
   };
 
   return (
@@ -41,7 +45,7 @@ function Login() {
         <h2 className="lineup">Đăng nhập</h2>
         <Input
           title="Email"
-          type="text"
+          type="email"
           placeholder="Email"
           value={email}
           setValue={setEmail}
@@ -59,10 +63,13 @@ function Login() {
           </a>
         </div>
         <div className="mgt10">
-          Bạn chưa có tài khoản?:{" "}
+          Bạn chưa có tài khoản?:{""}
           <a href="/register" className="a">
             Đăng ký
           </a>
+        </div>
+        <div>
+          <div className="thongbao">{message}</div>
         </div>
         <Button title="Đăng nhập" handle={handleSubmit} />
       </div>

@@ -35,10 +35,10 @@ function App() {
               path="/*"
               element={<User element={<User />} role="User" />}
             />
-            {/* <Route
+            <Route
               path="/admin/*"
               element={<Admin element={<Admin />} role="Admin" />}
-            /> */}
+            />
           </Routes>
         </Router>
       </UserProvider>

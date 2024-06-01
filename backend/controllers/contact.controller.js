@@ -5,7 +5,9 @@ const catchAsync = require("../utils/catchAsync.utlis");
 
 class contactController {
   createContact = catchAsync(async (req, res, next) => {
-    const { phoneNumber, address } = req.body.contact;
+    console.log(req.body);
+    const { phoneNumber, address } = req.body;
+
     req.body.contact = await Contact.create({
       phoneNumber,
       address,

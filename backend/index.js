@@ -5,7 +5,6 @@ const router = require("./routes/index");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-
 require("dotenv").config();
 
 mongoose

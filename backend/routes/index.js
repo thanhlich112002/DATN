@@ -6,4 +6,6 @@ router.use("/api/auths", require("./auths/index"));
 router.use("/api/contacts", require("./contacts/index"));
 router.use("/api/products", require("./products/index"));
 router.use("/api/categorys", require("./categorys/index"));
+router.use("/api/brands", require("./brands/index"));
+router.use("/api/orders", require("./orders/index"));
 module.exports = router;

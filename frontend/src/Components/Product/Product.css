@@ -1,0 +1,129 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.product {
+  display: flex;
+  border: 0.1px solid #cdcdcd;
+  border-radius: 2px;
+  padding: 10px;
+  margin-top: 5px;
+  gap: 40px;
+  border-radius: 5px;
+}
+
+.product_left {
+  width: 40%;
+}
+
+.large-image img {
+  width: 100%;
+}
+
+.thumbnail-carousel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.thumbnail-item {
+  width: calc(100% / 4 - 10px);
+}
+
+.thumbnail-item img {
+  height: 90px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.thumbnail-item1 {
+  position: absolute;
+  left: -50px;
+  padding: 5px 5px;
+  cursor: pointer;
+  transition: left 1s; /* Add transition for left property */
+}
+
+.thumbnail-item12 {
+  position: absolute;
+  right: -50px;
+  padding: 5px 5px;
+  cursor: pointer;
+  transition: right 1s; /* Add transition for right property */
+}
+
+.thumbnail-carousel:hover .thumbnail-item1 {
+  left: 10px;
+}
+
+.thumbnail-carousel:hover .thumbnail-item12 {
+  right: 10px;
+}
+.product_right {
+  width: 55%;
+}
+
+.product_r_name {
+  font-weight: 500;
+  font-size: 22px;
+  padding: 0;
+  margin-bottom: 0;
+  margin-top: 10px;
+  color: #191919;
+}
+.product_r_price {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: 500;
+  text-align: justify;
+}
+.product_r_status {
+  color: #191919;
+}
+.product_r {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: column;
+}
+.product_r_title {
+  font-size: 16px;
+  font-weight: 500;
+  text-align: justify;
+}
+.product_r_t {
+  padding-top: 5px;
+  display: flex;
+  gap: 5px;
+}
+.product_r_b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px;
+  font-size: 20px;
+  border: 0.1px solid #07503d;
+  width: 100%;
+  font-weight: 500;
+  background-color: #07503d;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+}
+.product_r_icon {
+  display: flex;
+  font-size: 24px;
+  align-items: center;
+  margin-top: 10px;
+  gap: 10px;
+  color: #07503d;
+}
+.product_r_icon span {
+  font-size: 16px;
+  align-items: center;
+  font-weight: 300;
+}

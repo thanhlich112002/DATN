@@ -5,7 +5,7 @@ import {
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 
-function Select() {
+function Select({ title, actions, icon }) {
   return (
     <div
       className="hover"
@@ -19,6 +19,7 @@ function Select() {
         transition: "background-color 0.3s ease",
         alignItems: "center",
       }}
+      onClick={() => actions()}
     >
       <div
         style={{
@@ -36,13 +37,13 @@ function Select() {
             height: "35px",
             width: "35px",
             borderRadius: "50px",
-            backgroundColor: "gray",
+            backgroundColor: "#d3d3d3",
             fontSize: "20px",
           }}
         >
-          <FontAwesomeIcon icon={faRightFromBracket} />
+          <FontAwesomeIcon icon={icon} />
         </div>
-        <div style={{ fontWeight: "500px", fontSize: "18px" }}>Đăng xuất</div>
+        <div style={{ fontSize: ".9375rem", fontWeight: 500 }}>{title}</div>
       </div>
       <div>
         <FontAwesomeIcon icon={faChevronRight} />
