@@ -5,13 +5,12 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
-function AddAdress() {
+function AddAdress({ setIsOpen }) {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
-  const { user } = useAuth();
 
   useEffect(() => {
     axios
@@ -47,7 +46,7 @@ function AddAdress() {
   return (
     <div className="full">
       <div className="Form_Add">
-        <div className="X">
+        <div className="X" onClick={() => setIsOpen(false)}>
           <FontAwesomeIcon icon={faTimes} />
         </div>
         <div className="checkout_left_top">
@@ -58,14 +57,7 @@ function AddAdress() {
             <label for="phone" class="field__label">
               Số điện thoại
             </label>
-            <input
-              name="phone"
-              id="phone"
-              type="tel"
-              class="field__input"
-              data-bind="phone"
-              value={user?.contact[0].phoneNumber}
-            />
+            <input name="phone" id="phone" type="tel" class="field__input" />
           </div>
           <div className="diachi">
             {" "}

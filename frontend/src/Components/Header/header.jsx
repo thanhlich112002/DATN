@@ -12,7 +12,7 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "../../service/userContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 
 function Header() {
   const navigate = useNavigate();
@@ -26,6 +26,9 @@ function Header() {
   const cartRef = useRef(null);
   const Nav = () => {
     navigate("/account/info");
+  };
+  const NavF = () => {
+    navigate("/Favorite");
   };
 
   const toggleAccountMenu = () => {
@@ -54,12 +57,12 @@ function Header() {
     }
   };
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  // useEffect(() => {
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
 
   return (
     <div>
@@ -141,7 +144,10 @@ function Header() {
                 <div href="/customer/info" className="header-icon">
                   <em>
                     {" "}
-                    <FontAwesomeIcon icon={faCircleUser} />
+                    <FontAwesomeIcon
+                      icon={faCircleUser}
+                      style={{ color: "#ffffff" }}
+                    />
                   </em>
                 </div>
                 <div className="header-login-and-register">
@@ -189,13 +195,19 @@ function Header() {
               >
                 <div className="header-icon">
                   <a style={{ display: "flex", gap: "20px" }}>
-                    <em>
+                    <em onClick={() => NavF()}>
                       <FontAwesomeIcon
                         icon={faHeart}
                         style={{ fontSize: "24px", color: "#07503d" }}
                       />
                     </em>
-                    <em onClick={toggleCart} ref={cartRef}>
+                    <em
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleCart();
+                      }}
+                      ref={cartRef}
+                    >
                       <FontAwesomeIcon
                         icon={faCartShopping}
                         style={{ fontSize: "24px", color: "#07503d" }}
@@ -203,6 +215,7 @@ function Header() {
                     </em>
                   </a>
                 </div>
+
                 <div className="header-amount">
                   <span className="header-cart-qty" id="_TotalProducts">
                     {cart.length}

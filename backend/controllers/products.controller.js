@@ -5,6 +5,7 @@ const catchAsync = require("../utils/catchAsync.utlis");
 const Products = require("../models/product.model");
 const Brand = require("../models/brand.model");
 const UploadImage = require("../utils/uploadConfig.utlis");
+const cloudinary = require("cloudinary").v2;
 
 class productsController {
   UpImage = UploadImage.array("images", 10);
@@ -22,7 +23,8 @@ class productsController {
     if (!brand) {
       return next(new appError("Không tìm thấy nhãn hiệu", 404));
     }
-
+    if (!req.files) return next(new appError("Vui longf theem anhe", 404));
+    console.log(req.files);
     req.body.Category = category._id;
     req.body.Brand = brand._id;
     req.body.images = req.files.map((file) => file.path);
@@ -138,47 +140,81 @@ class productsController {
       data: products,
     });
   });
-
   updateProduct = catchAsync(async (req, res, next) => {
-    try {
-      const id = req.params.id;
-      const { name, price, description } = req.body;
+    const category = await Category.findById(req.body.categoryId);
+    const brand = await Brand.findById(req.body.brandId);
 
-      // Tìm sản phẩm theo id
-      const product = await Products.findById(id);
-      if (!product) {
-        return res.status(404).json({ message: "Sản phẩm không tồn tại" });
-      }
-      const category = await Category.findOne({ name: req.body.category });
-      if (!category) {
-        return next(new appError("Không tím thấy danh mục ", 404));
-      }
-      const brand = await Brand.findOne({ name: req.body.brand });
-      if (!brand) {
-        return next(new appError("Không tím thấy nhãn hiệu", 404));
-      }
-      product.categoryId = category._id;
-      product.brandId = brand._id;
-
-      // Cập nhật thông tin sản phẩm
-      product.name = name;
-      product.price = price;
-      product.description = description;
-
-      // Lưu sản phẩm đã được cập nhật vào cơ sở dữ liệu
-      const updatedProduct = await product.save();
-
-      // Trả về phản hồi thành công
-      return res
-        .status(200)
-        .json({ message: "Sản phẩm đã được cập nhật", data: updatedProduct });
-    } catch (error) {
-      // Xử lý lỗi nếu có
-      return res.status(500).json({
-        message: "Đã xảy ra lỗi khi cập nhật sản phẩm",
-        error: error.message,
-      });
+    // Kiểm tra xem danh mục có tồn tại không
+    if (!category) {
+      return next(new appError("Không tìm thấy danh mục", 404));
     }
+
+    // Kiểm tra xem nhãn hiệu có tồn tại không
+    if (!brand) {
+      return next(new appError("Không tìm thấy nhãn hiệu", 404));
+    }
+    req.body.category = category._id;
+    req.body.brand = brand._id;
+    let body = req.body;
+    let product = await Products.findById(req.params.id);
+    if (!product) {
+      return next(new appError("Không thể tìm thấy sản phẩm", 404));
+    }
+
+    let images = [...product.images];
+    let dels = req.body.dels;
+
+    if (dels) {
+      images = images.filter((el) => !dels.includes(el));
+    }
+
+    if (req.files) {
+      images = images.concat(req.files.map((image) => image.path));
+      body.images = images;
+    }
+
+    const updatedProduct = await Products.findByIdAndUpdate(
+      req.params.id,
+      body,
+      {
+        new: true,
+        runValidators: true,
+      }
+    ).catch((err) => next(err));
+
+    // Xóa hình ảnh
+    if (dels) {
+      for (let i = 0; i < dels.length; i++) {
+        let parts = dels[i].split("/");
+        let id =
+          parts.slice(parts.length - 2, parts.length - 1).join("/") +
+          "/" +
+          parts[parts.length - 1].split(".")[0];
+        console.log(id);
+        cloudinary.uploader.destroy(id);
+      }
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: updatedProduct,
+    });
+  });
+  deleteProduct = catchAsync(async (req, res, next) => {
+    const product = await Products.findByIdAndDelete({ _id: req.params.id });
+    if (!product) {
+      return next(new appError("Không thể tìm thấy sản phẩm", 404));
+    }
+    product.images.forEach((links) => {
+      let parts = links.split("/");
+      let id =
+        parts.slice(parts.length - 2, parts.length - 1).join("/") +
+        "/" +
+        parts[parts.length - 1].split(".")[0];
+      cloudinary.uploader.destroy(id);
+    });
+
+    res.status(200).json("Đã xoá thành công");
   });
 }
 module.exports = new productsController();

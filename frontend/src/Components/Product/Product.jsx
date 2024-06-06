@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import style from "./Product.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faUpload } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "../../service/userContext"; // Import the custom hook
-import { getProductsbyID } from "../../service/API";
+import { getProductsbyID, createComment } from "../../service/API";
 import { useParams } from "react-router-dom";
 
 function Product() {
@@ -27,7 +27,7 @@ function Product() {
     };
 
     fetchProduct();
-  }, []);
+  }, [id]);
 
   const handleNext = () => {
     if (product && startIndex + 4 < product.images?.length) {
@@ -38,6 +38,19 @@ function Product() {
   const handlePrev = () => {
     if (startIndex - 1 >= 0) {
       setStartIndex(startIndex - 1);
+    }
+  };
+
+  const handleSubmitComment = async (event) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
+    try {
+      await createComment(formData, product._id);
+      alert("Comment submitted successfully!");
+      event.target.reset();
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+      alert("Failed to submit comment.");
     }
   };
 
@@ -74,7 +87,7 @@ function Product() {
               ))}
             <button
               onClick={handleNext}
-              disabled={startIndex + 4 >= product?.images}
+              disabled={startIndex + 4 >= product?.images.length}
               className="thumbnail-item12"
             >
               Next
@@ -85,7 +98,9 @@ function Product() {
           <div className="product_r_name">{product?.name}</div>
           <div className="product_r">
             <span className="product_r_title">Tình trạng:</span>
-            <span className="product_r_t">{product?.isOutofOrder}</span>
+            <span className="product_r_t">
+              {product?.isOutofOrder ? "Out of Order" : "Available"}
+            </span>
           </div>
           <div className="product_r_price">{product?.price} đ</div>
           <div className="product_r product_r_title">
@@ -97,34 +112,16 @@ function Product() {
           </div>
           <div className="product_r">
             <span className="product_r_title">Danh mục:</span>
-            <span className="product_r_t">{product?.Category.name}</span>
+            <span className="product_r_t">{product?.Category?.name}</span>
           </div>
           <div className="product_r">
             <span className="product_r_title">Thương hiệu:</span>
-            <span className="product_r_t">{product?.Brand.name}</span>
+            <span className="product_r_t">{product?.Brand?.name}</span>
           </div>
-          {/* <div className="product_r">
-            <span className="product_r_title">Số lượng:</span>
-            <div
-              className="product_r_t"
-              style={{
-                border: "0.1px solid #e7e7e7",
-                width: "90px",
-                padding: "5px",
-              }}
-            >
-              <div className="CartItembt">-</div>
-              <div className="divider"></div>
-              <div className="CartItem_">3</div>
-              <div className="divider"></div>
-              <div className="CartItembt">+</div>
-            </div>
-          </div> */}
           <div className="product_r_t">
             <div className="product_r_b">
               <span>MUA NGAY</span>
             </div>
-
             <div className="product_r_b" onClick={() => addToCart(product)}>
               <span>THÊM VÀO GIỎ HÀNG</span>
             </div>
@@ -136,6 +133,54 @@ function Product() {
             <span>Thêm vào yêu thích</span>
           </div>
         </div>
+      </div>
+      <div className="comments-section">
+        <h2 className="comments-title">Comments</h2>
+        <div className="comment">
+          <div className="comment-header">
+            <img
+              className="comment-avatar"
+              src="https://res.cloudinary.com/dzy3cnyb6/image/upload/v1716368308/perfume/ydttzqxmuoyzcyekd9zr.png"
+              alt="User1 Avatar"
+            />
+            <div className="comment-info">
+              <span className="comment-user">User1</span>
+              <span className="comment-date">2024-06-03</span>
+            </div>
+          </div>
+          <div className="comment-body">
+            <p>
+              This is a sample comment. It contains some text and maybe an
+              image.
+            </p>
+            <img
+              className="comment-img"
+              src="https://res.cloudinary.com/dzy3cnyb6/image/upload/v1716368308/perfume/ydttzqxmuoyzcyekd9zr.png"
+              alt="Comment Image"
+            />
+          </div>
+        </div>
+      </div>
+      <div className="comment comments-section">
+        <form className="comment-form" onSubmit={handleSubmitComment}>
+          <div className="comment-title">Đánh giá sản phẩm</div>
+          <textarea
+            name="comment"
+            placeholder="Nhập bình luận"
+            required
+          ></textarea>
+          <div className="file-input">
+            <FontAwesomeIcon icon={faUpload} size="2x" className="ic" />
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              style={{ display: "none" }}
+            />
+          </div>
+          <button type="submit1">Submit</button>
+        </form>
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { faCartPlus, faEye, faHeart } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
 import Detailproduct from "../Detailproduct/Detailproduct";
 import { useNavigate } from "react-router-dom";
+import { addFavorite } from "../../service/API";
 
 function Item({ product }) {
   const navigate = useNavigate();
@@ -31,7 +32,10 @@ function Item({ product }) {
             <FontAwesomeIcon icon={faEye} onClick={() => setDetail(true)} />
           </div>
           <div>
-            <FontAwesomeIcon icon={faHeart} />
+            <FontAwesomeIcon
+              icon={faHeart}
+              onClick={() => addFavorite(product._id)}
+            />
           </div>
         </div>
       </div>

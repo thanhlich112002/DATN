@@ -77,10 +77,8 @@ const productSchema = new Schema(
       default: 0,
     },
     IncenseGroup: {
-      origin: {
-        type: String,
-        maxLength: [2000, "Nhóm hương chỉ được tối da 200 kí tự"],
-      },
+      type: String,
+      maxLength: [2000, "Nhóm hương chỉ được tối da 200 kí tự"],
     },
     isAvailable: {
       type: Boolean,

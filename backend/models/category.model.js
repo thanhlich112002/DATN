@@ -6,12 +6,10 @@ const categorySchema = new Schema({
     maxLength: [200, "Mô tả chỉ được tối da 200 kí tự"],
     required: true,
   },
-  images: [
-    {
-      type: String,
-      required: [true, "Hình ảnh là bắt buộc"],
-    },
-  ],
+  images: {
+    type: String,
+    required: [true, "Hình ảnh là bắt buộc"],
+  },
   description: {
     type: String,
     maxLength: [2000, "Mô tả chỉ được tối da 200 kí tự"],

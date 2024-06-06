@@ -2,22 +2,25 @@ import React, { useState } from "react";
 import style from "./Account.css";
 import Input from "../Login/Input";
 import Button from "../Login/button";
+import Form from "./form";
 import { useAuth } from "../../service/authContext";
 
 function Address() {
   const { user } = useAuth();
-  console.log(user.contact);
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="address">
+      {isOpen ? <Form setIsOpen={setIsOpen} /> : <></>}
+
       <span className="checkout_left_span">Địa chỉ</span>
       <div className="cart1_button dmk">
-        <div className="Cart1_item_rigth">
+        <div className="Cart1_item_rigth" onClick={() => setIsOpen(true)}>
           <span>Thêm địa chỉ</span>
         </div>
       </div>
       <div>
         <div>
-          {user.contact.map((contact) => (
+          {user?.contact.map((contact) => (
             <div class="address-group" key={contact._id}>
               <div class="address-group_info">
                 <p>

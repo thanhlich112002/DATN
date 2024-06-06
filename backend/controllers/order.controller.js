@@ -31,8 +31,6 @@ class orderController {
     if (grandTotal !== totalPrice) {
       return next(new appError("Total price does not match", 400));
     }
-
-    // Create the order
     const newOrder = await Order.create({
       user: userId,
       cart,

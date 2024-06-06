@@ -8,6 +8,7 @@ router
     CategoryController.updatePhoto,
     CategoryController.createCategory
   )
+  .get("/getCategoryById/:id", CategoryController.getCategoryById)
   .get("/getAllCategory", CategoryController.getAllCategory);
 
 module.exports = router;

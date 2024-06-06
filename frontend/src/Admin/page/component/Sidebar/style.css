@@ -1,0 +1,96 @@
+/* * {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+} */
+
+.container-admin {
+    display: flex;
+}
+
+main-sider {
+    /* width: 100%; */
+    padding: 20px;
+    /* width: 100%; */
+    flex: auto;
+}
+
+.sidebar-admin {
+    background: whitesmoke;
+    color: #000;
+    height: 100vh;
+    width: 260px;
+    transition: all 0.5s;
+}
+
+.top_section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 15px;
+}
+
+.bars {
+    display: flex;
+    font-size: 24px;
+
+}
+
+.link {
+    border-radius: 5px;
+    display: flex;
+    color: #000;
+    margin: 5px 5px;
+    padding: 10px 15px;
+    gap: 15px;
+    transition: all 0.5s;
+    align-content: center;
+}
+
+.link-1 {
+    border-radius: 5px;
+    display: flex;
+    color: #000;
+    margin: 5px 5px;
+    padding: 10px 15px;
+    gap: 15px;
+    transition: all 0.5s;
+    align-content: center;
+}
+
+.link:hover {
+    background: #03bf62;
+    color: #F7F6F6;
+    transition: all 0.5s;
+}
+
+.active {
+    background: #03bf62;
+    color: #F7F6F6;
+}
+
+.logo {
+
+    width: 60px;
+    /* Specify your desired width */
+    height: 60px;
+    /* Specify your desired height */
+    border-radius: 50%;
+    /* Make it circular */
+    overflow: hidden;
+    /* Hide overflowing parts of the image */
+}
+
+.logo img {
+
+    width: 100%;
+    /* Make the image fill its container */
+    height: auto;
+    /* Maintain aspect ratio */
+}
+
+.icon,
+.link_text {
+    font-size: 18px;
+    font-weight: 500;
+}

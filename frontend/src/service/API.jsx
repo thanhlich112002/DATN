@@ -25,6 +25,20 @@ const config = {
 const GetUserByToken = async () => {
   return axios.get(`${url}/api/auths/getUser`, config);
 };
+const addFavorite = async (id) => {
+  return await axios.post(`${url}/api/favorites/addFavorite/${id}`, {}, config);
+};
+const getFavorite = async () => {
+  return await axios.get(`${url}/api/favorites/GetFavorites`, config);
+};
+
+const createComment = async (Form, id) => {
+  return await axios.post(
+    `${url}/api/comments/createComment/${id}`,
+    Form,
+    config
+  );
+};
 
 const getAllProductsbyCat = async (name, limit, page) => {
   return axios.post(
@@ -74,6 +88,9 @@ const changepassword = async (
 };
 
 export {
+  createComment,
+  getFavorite,
+  addFavorite,
   changepassword,
   getOrdersByUserId,
   loginAPI,

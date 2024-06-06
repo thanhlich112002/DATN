@@ -37,8 +37,6 @@ class BrandController {
       if (!nameBrand) {
         return res.status(400).json({ message: "Brand name is required" });
       }
-
-      // Use regular expression to find similar names, case-insensitive
       const brand = await Brand.find({ name: new RegExp(nameBrand, "i") });
       console.log(brand);
       return res.status(200).json({ message: "success", data: brand });

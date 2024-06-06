@@ -14,7 +14,7 @@ function Cart() {
   const navigate = useNavigate();
 
   const handleNav = (nav) => {
-    navigate(`/${nav}`);
+    navigate(`${nav}`);
   };
 
   return (
@@ -49,13 +49,25 @@ function Cart() {
               </div>
               <div className="cart1_button">
                 <div className="Cart1_item_rigth">
-                  <span>MUA NGAY</span>
+                  <span
+                    onClick={() => {
+                      handleNav("/checkout");
+                    }}
+                  >
+                    MUA NGAY
+                  </span>
                   {/* <FontAwesomeIcon icon={faArrowRight} /> */}
                 </div>
               </div>
               <div className="cart1_button">
                 <div className="Cart1_item_rigth">
-                  <span>TIẾP TỤC MUA HÀNG</span>
+                  <span
+                    onClick={() => {
+                      handleNav("/collections");
+                    }}
+                  >
+                    TIẾP TỤC MUA HÀNG
+                  </span>
                   {/* <FontAwesomeIcon icon={faArrowRight} /> */}
                 </div>
               </div>

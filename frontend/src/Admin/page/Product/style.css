@@ -1,0 +1,217 @@
+/* src/styles.css */
+.dot {
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.green-dot {
+  background-color: green;
+}
+
+.red-dot {
+  background-color: red;
+}
+
+.btn_tab {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.btn-edit,
+.btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-edit:hover,
+.btn-delete:hover {
+  color: blue; /* Change color on hover */
+}
+/* src/components/ReactPaginate.css */
+.ReactPaginate {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.ReactPaginate div {
+  cursor: pointer;
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.ReactPaginate div:hover {
+  background-color: #e0e0e0;
+}
+
+.ReactPaginate .active {
+  background-color: #007bff;
+  color: #fff;
+}
+.card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.card-header span {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.card-header button {
+  padding: 10px 20px;
+  border: none;
+  background: #009879;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.styled-table {
+  padding: 5px 10px;
+  margin: 4px 0;
+  font-size: 0.9em;
+  width: 100%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 10px 10px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009879;
+}
+
+.styled-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.green-dot {
+  background-color: #28a745;
+}
+
+.red-dot {
+  background-color: #dc3545;
+}
+.btn_tab {
+  justify-content: center;
+}
+
+.btn_tab .btn-edit,
+.btn_tab .btn-delete {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.btn_tab .btn-edit {
+  color: #ffc107;
+}
+
+.btn_tab .btn-delete {
+  color: #dc3545;
+}
+
+.pagination {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  margin: 0 2px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  cursor: pointer;
+}
+
+.pagination button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+}
+.deletaf {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu xám semi-transparent */
+  z-index: 999; /* Đảm bảo nằm phía dưới của form */
+}
+.Form_dele {
+  position: fixed;
+  top: 50%; /* Đặt ở giữa màn hình theo chiều dọc */
+  left: 50%; /* Đặt ở giữa màn hình theo chiều ngang */
+  transform: translate(-50%, -50%); /* Đảm bảo phần tử nằm chính giữa */
+  width: 30%; /* Độ rộng của form */
+  max-width: 600px; /* Độ rộng tối đa của form */
+  padding: 20px;
+  border-radius: 5px;
+  background-color: hsl(0, 0%, 100%);
+  z-index: 1000;
+}
+.delete-button {
+  padding: 10px 20px;
+  margin-top: 20px;
+}
+.delete_bottom {
+  display: flex;
+  justify-content: end;
+  margin-right: 20px;
+}

@@ -1,0 +1,517 @@
+@media (min-width: 1200px) {
+    .main-section {
+        padding: 35px 0;
+    }
+}
+
+@media (min-width: 576px) {
+    .form-wrapper {
+        padding: 30px;
+    }
+}
+
+.form-wrapper {
+    -webkit-box-shadow: 0 0 10px 0 rgba(0, 0, 0, .2);
+    margin: 0 auto;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .2);
+    border-radius: 8px;
+    padding: 15px;
+    max-width: 540px;
+}
+
+@media (min-width: 1024px) {
+    .form-wrapper {
+        padding: 40px 30px 50px;
+    }
+}
+
+.main-title.line-2 {
+    position: relative;
+    padding-top: 10px;
+}
+
+@media (min-width: 768px) {
+    .main-title {
+        font-size: 26px;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .main-title {
+        font-size: 28px;
+    }
+}
+
+@media (min-width: 1200px) {
+
+    .main-title {
+        font-size: 30px;
+    }
+}
+
+.main-title {
+    color: #333;
+    font-weight: 600;
+}
+
+.main-title.line-2:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #00b041;
+    width: 24px;
+    height: 2px;
+    content: "";
+}
+
+.form-wrapper .wrap-form {
+    margin-top: 15px;
+}
+
+.form-wrapper .wrap-form .form-group {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 15px;
+    flex-wrap: wrap;
+}
+
+.form-wrapper .wrap-form .form-group label {
+    display: block;
+    margin-bottom: 10px;
+    color: #111;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.wrap-form>div span {
+    color: red;
+    font-size: 13px;
+}
+
+.form-wrapper .wrap-form .form-group input[type=password],
+.form-wrapper .wrap-form .form-group input[type=text] {
+    outline: none;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    background: #fafafa;
+    padding: 5px 20px;
+    width: 100%;
+    height: 40px;
+    caret-color: #006a31;
+}
+
+.input-validation-error {
+    border-bottom: 2px solid #ff4f60 !important;
+}
+
+.wrap-form>div span {
+    color: red;
+    font-size: 13px;
+}
+
+.form-wrapper .wrap-form .form-group {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 15px;
+    flex-wrap: wrap;
+}
+
+.form-wrapper .wrap-form .form-group .forgot-pass {
+    color: #00addf;
+    font-size: 14px;
+}
+
+.form-wrapper .wrap-form .form-group.form-submit {
+    margin-bottom: 0;
+}
+
+.form-wrapper .wrap-form .form-group .btn-creat-acc {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-transition: all .2s ease-in-out;
+    -o-transition: .2s ease-in-out all;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .2s ease-in-out;
+    border: 1px solid #006a31;
+    border-radius: 8px;
+    background: #006a31;
+    width: 100%;
+    height: 45px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 400;
+    text-align: center;
+}
+
+.form-wrapper .wrap-form .form-group .btn-creat-acc:hover {
+    background: #fff;
+    color: #006a31;
+}
+
+.form-wrapper .wrap-form .form-group .btn-creat-acc em {
+    margin-left: 15px;
+    font-size: 20px;
+}
+
+input::placeholder {
+    font-style: italic;
+    /* Đặt kiểu chữ nghiêng cho placeholder */
+    font-size: 15px;
+}
+
+.account-page #Username,
+.registration-page #Username {
+    max-width: calc(100%);
+}
+
+.form-wrapper .wrap-form .form-group.form-accept {
+    margin-bottom: 20px;
+}
+
+.form-wrapper .wrap-form .form-group .checked {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    align-items: center;
+}
+
+input#AcceptPrivacyPolicy {
+    position: unset;
+    left: unset;
+}
+
+.form-wrapper .wrap-form .form-group .checked input {
+    margin-right: 5px;
+}
+
+.form-wrapper .wrap-form .form-group .checked label {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    display: block;
+    color: #111;
+}
+
+.password-recovery-page {
+    margin-bottom: 10px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+@media (min-height: 640px) and (max-height: 767px) {
+    .custom-master-column-wrapper-min-height {
+        min-height: 527px;
+    }
+}
+
+.page-title,
+.category-description,
+.manufacturer-description,
+.vendor-description {
+    text-align: center;
+    margin: 0 0 25px;
+}
+
+.page:after,
+.page-title:after,
+.page-body:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.password-recovery-page .tooltip {
+    margin: 0 0 20px;
+    font-size: 15px;
+    color: #8c8c8c;
+    line-height: 1.5;
+}
+
+.fieldset,
+.section {
+    position: relative;
+    margin: 0 0 20px;
+}
+
+.form-fields {
+    position: relative;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444;
+}
+
+.inputs>label {
+    display: inline-block;
+    max-width: calc(100% - 10px);
+    width: auto;
+    font-size: 15px;
+    margin: 0 0 8px;
+    font-weight: bold;
+    color: #444444;
+    text-align: left;
+    white-space: normal;
+}
+
+.inputs>* {
+    float: left;
+    clear: both;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+textarea,
+select {
+    height: 40px;
+    border: 1px solid #e7e7e7;
+    border-radius: 3px;
+    padding: 0 20px;
+    vertical-align: middle;
+    font-size: 15px;
+    color: #8c8c8c;
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+}
+
+.inputs input[type="text"],
+.inputs input[type="password"],
+.inputs input[type="email"],
+.inputs input[type="tel"],
+.inputs select,
+.inputs textarea {
+    height: 45px;
+    color: #8c8c8c;
+    border-radius: 3px;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.inputs>.required {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.buttons {
+    text-align: center;
+}
+
+.registration-page .page-body,
+.email-a-friend-page .page-body form,
+.contact-page .page-body form,
+.apply-vendor-page .page-body form,
+.forum-edit-page .page-body,
+.password-recovery-page .page-body,
+.private-message-send-page .page-body,
+.move-topic-page .page-body {
+    max-width: none;
+    margin-bottom: 0;
+    margin: 0 auto 30px;
+    border: 1px solid #eee;
+    border-radius: 3px;
+}
+
+.inputs:first-child {
+    margin-top: 0;
+}
+
+.inputs {
+    position: relative;
+    margin: 20px 0 0;
+    text-align: center;
+    white-space: nowrap;
+    font-size: 0;
+}
+
+.button-1 {
+    border: none;
+    height: 45px;
+    padding: 0 25px;
+    border-radius: 3px;
+    background-color: #007d43;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+    transition: all .2s ease;
+}
+
+.fancybox-content {
+    -webkit-overflow-scrolling: touch;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    margin: 0;
+    background: #fff;
+    padding: 44px;
+    max-width: 100%;
+    overflow: auto;
+    text-align: left;
+}
+
+.product-title.line {
+    position: relative;
+    padding-top: 10px;
+}
+
+.product-title {
+    margin-top: 5px;
+    color: #111;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+
+#btnResendOtp:disabled {
+    color: lightgray !important;
+}
+
+.otp-wrapper {
+    background: 0;
+    padding: 20px;
+    width: 100%;
+    overflow: hidden
+}
+
+.otp-wrapper .otp {
+    border-radius: 20px;
+    background: #fff;
+    padding: 20px
+}
+
+.otp-wrapper .otp .desc {
+    margin-top: 15px;
+    color: #666;
+    font-size: 14px
+}
+
+.otp-wrapper .otp .desc span {
+    color: #00b041
+}
+
+.otp-wrapper .otp .form-group {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px
+}
+
+.otp-wrapper .otp .form-group input {
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    background: #fafafa;
+    padding: 5px 15px;
+    width: 100%;
+    height: 40px
+}
+
+.otp-wrapper .otp .form-group input::-webkit-input-placeholder {
+    font-style: italic
+}
+
+.otp-wrapper .otp .form-group input::-moz-placeholder {
+    font-style: italic
+}
+
+.otp-wrapper .otp .form-group input:-ms-input-placeholder {
+    font-style: italic
+}
+
+.otp-wrapper .otp .form-group input::-ms-input-placeholder {
+    font-style: italic
+}
+
+.otp-wrapper .otp .form-group input::placeholder {
+    font-style: italic
+}
+
+.otp-wrapper .otp .form-group button {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    border: 1px solid #006a31;
+    border-radius: 8px;
+    background: #006a31;
+    width: 100%;
+    height: 40px;
+    color: #fff
+}
+
+.otp-wrapper .otp .form-group button em {
+    margin-left: 10px;
+    font-size: 24px
+}
+
+@media (min-width:1025px) {
+    .otp-wrapper {
+        padding: 40px;
+        width: 580px
+    }
+
+    .otp-wrapper .otp {
+        border-radius: 30px;
+        padding: 40px
+    }
+}
+
+#btnOtp:disabled {
+    background-color: gray;
+    border-color: grey;
+}
+
+.product-title.line:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #006a31;
+    width: 24px;
+    height: 2px;
+    content: "";
+}
+
+@media (min-height: 410px) and (max-height: 539px) {
+    .custom-master-column-wrapper-min-height {
+        min-height: 619px;
+    }
+}
+
+.account-page {
+    padding: 40px 20px;
+    background-color: #f6f6f6;
+    min-height: 200px;
+    text-align: center;
+}
+
+.customer-info-page .page-body, .change-password-page .page-body, .check-gift-card-balance-page .page-body, .avatar-page .page-body, .address-edit-page .page-body, .vendorinfo-page .page-body {
+    padding: 50px;
+    max-width: 740px;
+    margin: 0 auto;
+    border-radius: 3px;
+    border: 1px solid #eeeeee;
+    background-color: #fff;
+}
