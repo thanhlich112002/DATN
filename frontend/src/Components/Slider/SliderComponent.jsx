@@ -23,6 +23,24 @@ const WrapperSliderStyle = styled(Slider)`
     top: 50%;
     z-index: 10;
   }
+
+  @media only screen and (min-width: 1000px) {
+    & .slick-slide > div {
+      height: 450px;
+    }
+  }
+
+  @media only screen and (max-width: 800px) {
+    & .slick-slide > div {
+      height: 320px;
+    }
+  }
+
+  @media only screen and (max-width: 600px) {
+    & .slick-slide > div {
+      height: 220px;
+    }
+  }
 `;
 
 const SimpleSlider = ({ arrImages }) => {

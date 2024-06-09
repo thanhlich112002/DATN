@@ -10,6 +10,7 @@ router.post(
   userController.singUpUser,
   userController.userSendEmail
 );
+router.get("/getUser", authsController.protect, userController.getUser);
 router.post(
   "/addContact",
   authsController.protect,
@@ -21,11 +22,11 @@ router.post(
   authsController.protect,
   userController.defaultContact
 );
+router.post("/updateUser", authsController.protect, userController.updateUser);
 router.delete(
   "/delContact/:contactId",
   authsController.protect,
   contactController.delContact,
-  userController.delContact
 );
 router.patch(
   "/UpdateContact/:contactId",

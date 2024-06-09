@@ -1,41 +1,41 @@
-.card {
+.card5 {
   padding: 10px;
-  box-shadow: 0 0 5px #ffdfdf;
   border-radius: 5px;
   width: 100%;
   /* height: 70%; */
   overflow: hidden;
-  border: 0.1px dotted #818181;
 }
 
-.card .container1 {
+.card5 .container1 {
   gap: 2%;
   width: 100%;
   height: auto;
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   flex-wrap: wrap;
-  height: 200px;
-  overflow: auto;
+  height: 250px;
   margin-bottom: 3px;
 }
 
-.card .container1 .image {
-  width: 30%;
+.card5 .container1 .image {
+  display: flex;
+  width: 31%;
+  min-width: 280px;
+  height: 100%;
   margin-right: 5px;
-  height: 40%;
   position: relative;
   margin-bottom: 8px;
+  border: 0.1px solid #89898972;
 }
 
-.card .container1 img {
+.card5 .container1 img {
   width: 100%;
   height: 100%;
   border-radius: 5px;
 }
 
-.card .container1 .image span {
+.card5 .container1 .image span {
   position: absolute;
   color: rgb(92, 92, 203);
   top: -2px;
@@ -44,12 +44,13 @@
   cursor: pointer;
 }
 
-.card .container1 .image i {
+.card5 .container1 .image .poisi {
   position: absolute;
   color: rgb(134, 134, 134);
-  top: 17px;
-  right: 24px;
-  font-size: 30px;
+  top: 50%; /* Đặt vị trí ở giữa theo chiều dọc */
+  left: 50%; /* Đặt vị trí ở giữa theo chiều ngang */
+  transform: translate(-50%, -50%);
+  font-size: 60px;
   cursor: pointer;
 }
 

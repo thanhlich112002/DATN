@@ -17,25 +17,37 @@ function Login() {
 
   const handleSubmit = async () => {
     try {
+      if (!email) {
+        setMessage("Vui lòng nhập email");
+        return;
+      }
+      if (!password) {
+        setMessage("Vui lòng nhập mật khẩu");
+        return;
+      }
+
       let res = await loginAPI({
         password: password,
         email: email,
       });
+
       setIsLoggedIn(true);
       setUser(res.data.data.user);
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("setUser", JSON.stringify(res.data.data.user));
-      if (res.data.data.user.role === "User") {
-        if (0) {
-          navigate("/user/order");
-        } else {
-          navigate("/");
-        }
-      } else if (res.data.data.user.role === "Admin") {
+
+      const userRole = res.data.data.user.role;
+
+      if (userRole === "User") {
+        navigate("/"); // Thay đổi điều kiện này nếu cần
+      } else if (userRole === "Admin") {
         navigate("/admin");
+      } else {
+        navigate("/");
       }
     } catch (e) {
-      setMessage(e.message);
+      // setMessage(e.Error);
+      console.error(e.response.data.message);
     }
   };
 

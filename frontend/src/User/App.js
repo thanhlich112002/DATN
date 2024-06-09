@@ -10,7 +10,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Collections from "../Components/Collections/Collections";
 import Cart from "../Components/Cart/Cart";
-
+import Introduce from "../Components/Gioithieu/Gioithieu";
 import Product from "../Components/Product/Product";
 import Checkout from "../Components/Checkout/Checkout";
 import Account from "../Components/Account/Account";
@@ -32,6 +32,7 @@ function App() {
         <Route path="/favorite" element={<Favorite />} />
         <Route path="/account/:i" element={<Account />} />
         <Route path="/logout" element={<Forgetpassword />} />
+        <Route path="/introduce" element={<Introduce />} />
       </Routes>
       <Footer />
     </div>

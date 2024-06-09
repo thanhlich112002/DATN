@@ -10,26 +10,27 @@ exports.addToFavorites = async (req, res) => {
     });
 
     if (existingFavorite) {
-      console.log(existingFavorite.isFavorite);
       if (existingFavorite.isFavorite) {
         existingFavorite.isFavorite = false;
+        await existingFavorite.save();
+        return res
+          .status(200)
+          .json({ message: "Sản phẩm đã được bỏ khỏi danh sách yêu thích" });
       } else {
         existingFavorite.isFavorite = true;
+        await existingFavorite.save();
+        return res.status(200).json({
+          message: "Sản phẩm đã được thêm vào danh sách yêu thích",
+        });
       }
-      await existingFavorite.save();
-      return res
-        .status(400)
-        .json({ message: "Sản phẩm đã có trong danh sách yêu thích" });
     }
 
-    // Nếu sản phẩm chưa tồn tại trong danh sách yêu thích, thêm mới
     const newFavorite = new Favorite({
       user: userId,
       product: productID,
       isFavorite: true,
     });
     await newFavorite.save();
-
     res.status(201).json({
       message: "Sản phẩm đã được thêm vào danh sách yêu thích",
       favorite: newFavorite,
@@ -39,6 +40,7 @@ exports.addToFavorites = async (req, res) => {
     res.status(500).json({ message: "Lỗi máy chủ" });
   }
 };
+
 exports.GetFavorites = async (req, res) => {
   const userId = req.user._id;
   try {

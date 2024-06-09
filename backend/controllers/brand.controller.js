@@ -6,22 +6,13 @@ const parser = require("../utils/uploadConfig.utlis");
 class BrandController {
   createCategory = catchAsync(async (req, res, next) => {
     const cat = await Brand.findOne({ name: req.body.name });
-
-    // Kiểm tra xem danh mục đã tồn tại hay không
     if (cat) {
       return res.status(409).json({
-        message: "Brand already exists",
+        message: "Danh mục đã tồn tại",
       });
     }
-    const imagePath = req.file.path;
-    const categoryData = {
-      ...req.body,
-      images: imagePath,
-    };
 
-    const doc = await Brand.create(categoryData);
-
-    // Trả về kết quả
+    const doc = await Brand.create(req.body);
     res.status(200).json({
       data: doc,
     });
@@ -33,7 +24,7 @@ class BrandController {
   seachBrands = catchAsync(async (req, res, next) => {
     try {
       console.log(req.body)
-      const nameBrand = req.body.nameBrand; // Corrected typo here
+      const nameBrand = req.body.nameBrand;
       if (!nameBrand) {
         return res.status(400).json({ message: "Brand name is required" });
       }
@@ -45,8 +36,6 @@ class BrandController {
       return res.status(500).json({ message: "Server error" });
     }
   });
-
-  updatePhoto = parser.single("images");
 }
 
 module.exports = new BrandController();

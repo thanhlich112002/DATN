@@ -6,6 +6,7 @@ main-sider {
   flex: auto;
   overflow-y: auto;
   max-height: 100vh;
+  background-color: #ffffff;
 }
 
 .sidebar-admin {
@@ -19,7 +20,7 @@ main-sider {
 .top_section {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 20px 15px;
 }
 
@@ -54,11 +55,6 @@ main-sider {
   background: #03bf62;
   color: #f7f6f6;
   transition: all 0.5s;
-}
-
-.active {
-  background: #03bf62;
-  color: #f7f6f6;
 }
 
 .logo {

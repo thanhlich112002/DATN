@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { createCategory } from "../../service/userService";
 import "./style.css";
+import Image from "../Product/image";
+import { toast } from "react-toastify";
 
 function AddCategory() {
   const [categoryName, setCategoryName] = useState("");
@@ -13,7 +15,8 @@ function AddCategory() {
   const [error, setError] = useState(null);
   const inputRef = useRef(null);
   const navigate = useNavigate();
-
+  const [images, setImages] = useState([]);
+  const [deletedImageUrls, setDeletedImageUrls] = useState([]);
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     setSelectedImage(file);
@@ -24,8 +27,7 @@ function AddCategory() {
   };
 
   const handleSubmit = async () => {
-    // Kiểm tra nếu có trường nào trống
-    if (!categoryName || !categoryDescription || !selectedImage) {
+    if (!categoryName || !categoryDescription || !images[0]?.file) {
       alert("Vui lòng điền đầy đủ thông tin và chọn hình ảnh");
       return;
     }
@@ -37,12 +39,11 @@ function AddCategory() {
 
     formData.append("name", categoryName);
     formData.append("description", categoryDescription);
-    formData.append("images", selectedImage);
+    formData.append("images", images[0]?.file);
 
     try {
       const res = await createCategory(formData);
-      console.log("Danh mục đã được tạo thành công!");
-      alert("Danh mục đã được tạo thành công!");
+      toast.success("Danh mục đã được tạo thành công!");
       navigate("/admin/tableCategory");
     } catch (error) {
       console.error("Đã xảy ra lỗi khi tạo danh mục:", error);
@@ -81,7 +82,7 @@ function AddCategory() {
               <div
                 style={{
                   marginTop: "30px",
-                  marginBottom: "30px",
+                  marginBottom: "10px",
                   display: "flex",
                   width: "100%",
                   alignItems: "center",
@@ -89,19 +90,22 @@ function AddCategory() {
                   overflow: "hidden",
                 }}
               >
-                {selectedImage ? (
-                  <img
-                    style={{ width: "40%", borderRadius: "5px" }}
-                    src={URL.createObjectURL(selectedImage)}
-                    alt=""
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    marginBottom: "10px",
+                    padding: "10px 100px",
+                  }}
+                >
+                  <Image
+                    images={images}
+                    setImages={setImages}
+                    setDeletedImageUrls={setDeletedImageUrls}
+                    max={1}
                   />
-                ) : (
-                  <img
-                    style={{ width: "80%", height: "300px" }}
-                    src="https://res.cloudinary.com/dzy3cnyb6/image/upload/v1716366995/perfume/zye8px4t5uyrrh9epr8y.png"
-                    alt=""
-                  />
-                )}
+                </div>
               </div>
               <tbody>
                 <tr className="table-row">
@@ -122,19 +126,6 @@ function AddCategory() {
                       value={categoryDescription}
                       onChange={(e) => setCategoryDescription(e.target.value)}
                     />
-                  </td>
-                </tr>
-                <tr className="table-row">
-                  <td className="column-1">Chọn ảnh</td>
-                  <td className="column-2">
-                    <input
-                      ref={inputRef}
-                      type="file"
-                      accept="image/*"
-                      style={{ display: "none" }}
-                      onChange={handleImageChange}
-                    />
-                    <button onClick={handleChooseImage}>Chọn ảnh</button>
                   </td>
                 </tr>
                 <tr className="table-row">

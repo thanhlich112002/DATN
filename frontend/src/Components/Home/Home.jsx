@@ -30,10 +30,10 @@ function Home() {
     <div>
       <div>
         <SimpleSlider arrImages={images} />
+        <Brand />
         {cat.map((category, index) => (
           <Category key={index} Category={category} />
         ))}
-        <Brand />
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ class ApiFeatures {
     if (this.queryStr.sort) {
       const sortBy = this.queryStr.sort.split(",").join(" ");
       this.query = this.query.sort(sortBy);
+      console.log(sortBy);
     } else {
       this.query = this.query.sort("_id");
     }

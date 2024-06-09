@@ -58,16 +58,13 @@ function Detailproduct({ setDetail, item }) {
                 </button>
               )}
             </div>
-            <div className="dr_Name_item color">
-              <span>Ghi chú</span>
+            <div className="product_r">
+              <span className="product_r_title">Danh mục:</span>
+              <span className="product_r_t">{item?.Category?.name}</span>
             </div>
-            <div className="dr_note">
-              <textarea
-                cols="30"
-                rows="10"
-                placeholder="Nhập ghi chú của bạn tại đây"
-                onChange={handleChange}
-              ></textarea>
+            <div className="product_r">
+              <span className="product_r_title">Thương hiệu:</span>
+              <span className="product_r_t">{item?.Brand?.name}</span>
             </div>
             <div className="dr_button" onClick={add}>
               <span>Thêm vào giỏ hàng</span>

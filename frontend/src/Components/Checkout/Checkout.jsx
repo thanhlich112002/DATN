@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Checkout.css";
-import { useUser } from "../../service/userContext"; 
+import { useUser } from "../../service/userContext";
 import { useAuth } from "../../service/authContext";
+import { getUser, createOrder, getVouchersbyCode } from "../../service/API";
+import { toast } from "react-toastify";
 
 function Checkout() {
   const [cities, setCities] = useState([]);
@@ -13,40 +15,63 @@ function Checkout() {
   const [selectedPayment, setSelectedPayment] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
-
   const { cart } = useUser();
-  const { isLoggedIn, setIsLoggedIn, user } = useAuth();
+  const [user, setUser] = useState();
+  const [address, setAddress] = useState(null);
+  const [vouchers, setVouchers] = useState();
+  const [code, setCode] = useState("");
+  const getUserData = async () => {
+    try {
+      const res = await getUser();
+      setUser(res.data);
+      console.log(address);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+  const getVoucher = async (code) => {
+    try {
+      setVouchers(null);
+      const res = await getVouchersbyCode(code);
+      setVouchers(res.data);
+      console.log(address);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+  const Order = async () => {
+    try {
+      if (vouchers) {
+        if (vouchers.conditions > total + vouchers.amount) {
+          toast.error("Vui lòng chọn lại voucher");
+          return;
+        }
+      }
+      const req = await createOrder(total, 29000, address._id, vouchers?._id);
+      console.log(req.data.url);
+      if (req.data && req.data.url) {
+        window.open(req.data.url);
+      }
+    } catch (error) {
+      toast.error("Lỗi khi tạo đơn hàng");
+    }
+  };
 
+  const getAddress = (id) => {
+    console.log(id);
+    const defaultContactId = id;
+    const address = user?.contact.find(
+      (contact) => contact._id === defaultContactId
+    );
+    console.log(address);
+    setAddress(address);
+  };
   useEffect(() => {
-    axios
-      .get(
-        "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json"
-      )
-      .then((response) => {
-        setCities(response.data);
-      });
+    getUserData();
   }, []);
-
   useEffect(() => {
-    if (selectedCity) {
-      const city = cities.find((city) => city.Id === selectedCity);
-      setDistricts(city.Districts);
-    } else {
-      setDistricts([]);
-    }
-    setWards([]);
-  }, [selectedCity]);
-
-  useEffect(() => {
-    if (selectedDistrict) {
-      const district = districts.find(
-        (district) => district.Id === selectedDistrict
-      );
-      setWards(district.Wards);
-    } else {
-      setWards([]);
-    }
-  }, [selectedDistrict]);
+    getAddress(user?.defaultContact);
+  }, [user]);
 
   useEffect(() => {
     // Calculate subtotal and total
@@ -55,11 +80,11 @@ function Checkout() {
       0
     );
     const shippingFee = 29000; // Shipping fee in VND
-    const newTotal = newSubtotal + shippingFee;
-
+    const newTotal =
+      newSubtotal + shippingFee - (vouchers ? vouchers.amount : 0);
     setSubtotal(newSubtotal);
     setTotal(newTotal);
-  }, [cart]);
+  }, [cart, vouchers]);
 
   return (
     <div
@@ -100,76 +125,39 @@ function Checkout() {
             </div>
           </div>
           <div className="checkout_left_top">
-            <span>Thông tin mua hàng</span>
+            <span>Địa chỉ mặc định</span>
           </div>
           <div className="checkout_left">
+            <div class="field__input-wrapper">
+              <label for="province" class="field__label">
+                Chọn địa chỉ
+              </label>
+              <select
+                name="phone_number"
+                id="phone_number"
+                class="field__input"
+                data-bind="province"
+                onChange={(e) => getAddress(e.target.value)}
+              >
+                {user?.contact?.map((contact) => (
+                  <option key={contact._id} value={contact._id}>
+                    {contact.address}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div class="field__input-wrapper">
               <label for="phone" class="field__label">
                 Số điện thoại
               </label>
               <input
-                name="phone"
-                id="phone"
+                name="address"
+                id="address"
                 type="tel"
                 class="field__input"
                 data-bind="phone"
-                value={user?.contact[0].phoneNumber}
+                value={address?.phoneNumber}
               />
-            </div>
-            <div class="field__input-wrapper">
-              <label for="province" class="field__label">
-                Chọn tỉnh
-              </label>
-              <select
-                name="province"
-                id="province"
-                class="field__input"
-                data-bind="province"
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-              >
-                {cities.map((city) => (
-                  <option key={city.Id} value={city.Id}>
-                    {city.Name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div class="field__input-wrapper">
-              <label for="district" class="field__label">
-                Chọn huyện
-              </label>
-              <select
-                name="district"
-                id="district"
-                class="field__input"
-                data-bind="district"
-                value={selectedDistrict}
-                onChange={(e) => setSelectedDistrict(e.target.value)}
-              >
-                {districts.map((district) => (
-                  <option key={district.Id} value={district.Id}>
-                    {district.Name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div class="field__input-wrapper">
-              <label for="ward" class="field__label">
-                Chọn phường xã
-              </label>
-              <select
-                name="ward"
-                id="ward"
-                class="field__input"
-                data-bind="ward"
-              >
-                {wards.map((ward) => (
-                  <option key={ward.Id} value={ward.Id}>
-                    {ward.Name}
-                  </option>
-                ))}
-              </select>
             </div>
           </div>
         </div>
@@ -181,7 +169,7 @@ function Checkout() {
           </div>
           <div class="radio-wrapper">
             <div class="radio__input">
-              <input type="radio" class="input-radio" />
+              <input type="radio" class="input-radio" checked={true} />
             </div>
             <label class="radio__label">
               <span>
@@ -197,13 +185,7 @@ function Checkout() {
           <div className="checkout_left_top">
             <span>Thanh toán</span>
           </div>{" "}
-          {[
-            "Thanh toán qua VNPAY-QR",
-            "Thanh toán qua MoMo",
-            "Thanh toán qua ZaloPay",
-            "Thanh toán khi nhận hàng (COD)",
-            "Thanh toán qua thẻ ngân hàng",
-          ].map((option, index) => (
+          {["Thanh toán qua MoMo"].map((option, index) => (
             <div class="radio-wrapper">
               <div class="radio__input">
                 <input
@@ -211,7 +193,7 @@ function Checkout() {
                   className="input-radio"
                   name="payment"
                   value={option}
-                  checked={selectedPayment === option}
+                  checked={true}
                   onChange={(e) => setSelectedPayment(e.target.value)}
                 />
               </div>
@@ -273,8 +255,20 @@ function Checkout() {
             <label for="reductionCode" class="field__label">
               Nhập mã giảm giá
             </label>
-            <input type="text" class="field__input" />
-            <div className="btn_code">Áp dụng</div>
+            <input
+              type="text"
+              class="field__input"
+              onChange={(e) => setCode(e.target.value)}
+              value={code}
+            />
+            <div
+              className="btn_code cursor"
+              onClick={() => {
+                getVoucher(code);
+              }}
+            >
+              Áp dụng
+            </div>
           </div>
         </div>
 
@@ -305,6 +299,43 @@ function Checkout() {
               </th>
               <td class="total-line__price">29.000₫</td>
             </div>
+            {vouchers ? (
+              <>
+                {" "}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingBottom: "20px",
+                  }}
+                  className="border-bottom"
+                >
+                  <th class="total-line__name" style={{ color: " #717171" }}>
+                    Giảm giá
+                  </th>
+                  <td class="total-line__price">
+                    {vouchers.amount.toLocaleString()}đ
+                  </td>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingBottom: "20px",
+                  }}
+                  className="border-bottom"
+                >
+                  <th class="total-line__name" style={{ color: " #717171" }}>
+                    Điều kiện
+                  </th>
+                  <td class="total-line__price">
+                    {vouchers.conditions.toLocaleString()}đ
+                  </td>
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
 
             <div
               style={{
@@ -337,7 +368,7 @@ function Checkout() {
               <span>Quay về giỏ hàng</span>
             </a>
             <div style={{ cursor: "pointer" }}>
-              <span>ĐẶT HÀNG</span>
+              <span onClick={() => Order()}>ĐẶT HÀNG</span>
             </div>
           </div>
         </div>

@@ -24,10 +24,10 @@ class AuthController {
       req.doc = doc;
       req.signUpToken = signUpToken;
       res.status(200).json({ status: "success", data: doc });
-      next();
     });
   login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
+    console.log(email, password);
     if (!email || !password) {
       return next(new appError("Vui lòng nhập email và mật khẩu", 400));
     }
@@ -35,7 +35,7 @@ class AuthController {
     if (!user) {
       return next(new appError("Email không hợp lệ", 401));
     }
-    if (await !user.isCorrectPassword(user.password, password)) {
+    if (!(await user.isCorrectPassword(user.password, password))) {
       return next(new appError("Mật khẩu không hợp lệ", 401));
     }
     jwtToken.generateAndSendJWTToken(user, 200, res, req);

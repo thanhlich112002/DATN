@@ -6,6 +6,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
+const errorHandler = require("./utils/errorHandler");
 
 mongoose
   .connect(process.env.DATABASE, {})
@@ -22,6 +23,7 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use("/", router);
 const port = process.env.PORT;
+app.use(errorHandler);
 const server = app.listen(port, () => {
   console.log(`http://localhost:${port}`);
 });

@@ -7,25 +7,6 @@ import { AuthProvider } from "./service/authContext";
 import { UserProvider } from "./service/userContext";
 
 function App() {
-  const UserRoute = ({ element, role }) => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      const userData = JSON.parse(user);
-      if (userData.role === role) {
-        return element;
-      } else {
-        if (userData.role === "User") {
-          // return <Navigate to="/"/>;
-          return <User />;
-        } else if (userData.role === "Admin") {
-          // return <Navigate to="/admin/"/>;
-          return <Admin />;
-        }
-      }
-    } else {
-      return <User />;
-    }
-  };
   return (
     <AuthProvider>
       <UserProvider>

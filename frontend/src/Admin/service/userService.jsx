@@ -4,7 +4,27 @@ const url = "http://localhost:3000";
 const getAllProducts = async (page) => {
   return axios.get(`${url}/api/products/getAllProducts?limit=7&page=${page}`);
 };
-// Order
+const getAllOrders = async (page) => {
+  const token = localStorage.getItem("token");
+  return axios.get(
+    `${url}/api/orders/getAllOrders?limit=10&page=${page}&sort=-dateOrdered`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+    }
+  );
+};
+const getOrdersByOrderId = async (id) => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/orders/getOrdersByOrderId${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
 const getAllUser = async (page) => {
   const token = localStorage.getItem("token");
   return axios.get(`${url}/api/user?page=${page}`, {
@@ -13,6 +33,9 @@ const getAllUser = async (page) => {
       ContentType: "multipart/form-data",
     },
   });
+};
+const getProductsbyID = async (id) => {
+  return axios.get(`${url}/api/products/getProductsbyID/${id}`);
 };
 const addproduct = async (formData) => {
   const token = localStorage.getItem("token");
@@ -71,8 +94,57 @@ const getAllBrand = async (page) => {
     },
   });
 };
-
+const quantity = async (page) => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/admin/quantity`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const getStatistics = async (page) => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/admin/getStatistics`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const upStatus = async (data, id) => {
+  const token = localStorage.getItem("token");
+  return axios.post(`${url}/api/admin/upStatus/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const getAllVouchers = async () => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/vouchers/getAllVouchers`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const createVoucher = async (data) => {
+  const token = localStorage.getItem("token");
+  return axios.post(`${url}/api/vouchers/createVoucher`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
 export {
+  createVoucher,
+  getAllVouchers,
+  upStatus,
+  quantity,
+  getProductsbyID,
   createCategory,
   upproduct,
   getAllProducts,
@@ -81,4 +153,7 @@ export {
   getAllBrand,
   addproduct,
   deleteproduct,
+  getAllOrders,
+  getOrdersByOrderId,
+  getStatistics,
 };

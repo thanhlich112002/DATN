@@ -6,9 +6,10 @@ const Product = require("../models/product.model");
 class commentController {
   createComment = catchAsync(async (req, res, next) => {
     const productID = req.params.productID;
-    const { comment, image } = req.body;
-    const userId = req.user._id;
-    console.log(req.body);
+    const imagePaths = req.file?.path || ""; // Assuming req.files contains an array of uploaded image files
+    const { content } = req.body;
+    const user = req.user._id;
+
     try {
       const product = await Product.findById(productID);
 
@@ -16,17 +17,14 @@ class commentController {
         return res.status(404).json({ message: "Product not found" });
       }
 
-      // Create a new comment
       const newComment = new Comment({
         product: productID,
-        content: comment,
-        image: "htyh",
-        user: userId,
+        content,
+        images: imagePaths,
+        user: user,
       });
 
-      // Save the comment to the database
       const savedComment = await newComment.save();
-
       res.status(201).json(savedComment);
     } catch (error) {
       console.error(error);
@@ -37,7 +35,6 @@ class commentController {
   delComment = catchAsync(async (req, res, next) => {
     const commentID = req.params.commentID;
     const userId = req.user._id;
-
     try {
       // Find the comment by ID
       const comment = await Comment.findById(commentID);
@@ -93,6 +90,22 @@ class commentController {
       const updatedComment = await comment.save();
 
       res.status(200).json(updatedComment);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  getAllComment = catchAsync(async (req, res, next) => {
+    const commentID = req.params.commentID;
+    try {
+      const comment = await Comment.find({ product: commentID }).populate(
+        "user"
+      );
+      console.log(comment);
+      if (!comment) {
+        return res.status(404).json({ message: "Comment not found" });
+      }
+      res.status(200).json({ data: comment });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Server error" });

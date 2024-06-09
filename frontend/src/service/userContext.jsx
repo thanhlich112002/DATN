@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "react-toastify"; // Import toast from react-toastify
 
 // Create the UserContext
 const UserContext = createContext();
@@ -23,7 +24,6 @@ export function UserProvider({ children }) {
 
   // Function to add item to cart
   const addToCart = (item) => {
-    console.log(item);
     const existingItem = cart.find((cartItem) => cartItem.id === item.id);
     if (existingItem) {
       setCart(
@@ -36,11 +36,11 @@ export function UserProvider({ children }) {
     } else {
       setCart([...cart, { ...item, quantity: 1 }]);
     }
+    toast.success("Đã thêm vào giỏ hàng!"); // Show success message
   };
 
   // Function to remove item from cart
   const removeFromCart = (item) => {
-    console.log(item);
     const existingItem = cart.find((cartItem) => cartItem.id === item.id);
     if (existingItem) {
       if (existingItem.quantity > 1) {

@@ -4,9 +4,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
 import { faTrash, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "../../service/userContext"; // Import the custom hook
+import { useAuth } from "../../service/authContext";
 
 function Cart({ setIsopencart }) {
   const { cart, removeFromCart } = useUser();
+  const { isLoggedIn } = useAuth();
   function formatCurrency(price) {
     return price.toLocaleString("vi-VN", {
       style: "currency",
@@ -79,26 +81,38 @@ function Cart({ setIsopencart }) {
               })}
             </div>
           </div>
-          <div className="cart1_button">
-            <div
-              className="cart1_item_rigth"
-              onClick={() => {
-                handleNav("collections");
-                setIsopencart(false);
-              }}
-            >
-              <span>QUAY LẠI MUA HÀNG</span>
+          {isLoggedIn ? (
+            <div className="cart1_button">
+              <div
+                className="cart1_item_rigth"
+                onClick={() => {
+                  handleNav("collections");
+                  setIsopencart(false);
+                }}
+              >
+                <span>QUAY LẠI MUA HÀNG</span>
+              </div>
+              <div
+                className="cart1_item_rigth"
+                onClick={() => {
+                  handleNav("cart");
+                  setIsopencart(false);
+                }}
+              >
+                <span>THANH TOÁN</span>
+              </div>
             </div>
-            <div
-              className="cart1_item_rigth"
-              onClick={() => {
-                handleNav("cart");
-                setIsopencart(false);
-              }}
-            >
-              <span>THANH TOÁN</span>
-            </div>
-          </div>
+          ) : (
+            <>
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <span
+                  style={{ display: "flex", margin: "10px", fontSize: "20px" }}
+                >
+                  Đăng nhập để mua hàng
+                </span>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>

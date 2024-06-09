@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTable } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import "./style.css"; // Import the CSS file with the dot styles
 import UpdateProduct from "./UpdateProduct";
 import DeleteProductForm from "./detate";
+import { useNavigate } from "react-router-dom";
 
-const ProductTable = ({ products, onEdit, onDelete }) => {
-  const [editingProduct, setEditingProduct] = useState(null);
+const ProductTable = ({ products, fetchProducts, currentPage }) => {
   const [deletingProduct, setDeletingProduct] = useState(null);
-
+  const navigate = useNavigate();
   const data = React.useMemo(() => products, [products]);
   const columns = React.useMemo(
     () => [
@@ -36,10 +36,7 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
         accessor: "actions",
         Cell: ({ row }) => (
           <div className="btn_tab">
-            <button
-              onClick={() => setEditingProduct(row.original)}
-              className="btn-edit"
-            >
+            <button onClick={() => Up(row.original._id)} className="btn-edit">
               <FontAwesomeIcon icon={faEdit} />
             </button>
             <button
@@ -57,18 +54,17 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
-
+  const Up = (id) => {
+    navigate(`/admin/tableProduct/${id}`);
+  };
+  useEffect(() => {
+    fetchProducts(currentPage);
+  }, [deletingProduct]);
   return (
     <div>
       <div className="projects">
         <div className="_card">
           <div className="_card-body">
-            {editingProduct && (
-              <UpdateProduct
-                setIsOpenAdd={() => setEditingProduct(null)}
-                Item={editingProduct}
-              />
-            )}
             {deletingProduct && (
               <DeleteProductForm
                 setIsOpen={() => setDeletingProduct(null)}

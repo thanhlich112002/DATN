@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-
 router.use("/api/users", require("./users/index"));
 router.use("/api/auths", require("./auths/index"));
 router.use("/api/contacts", require("./contacts/index"));
@@ -10,5 +9,6 @@ router.use("/api/brands", require("./brands/index"));
 router.use("/api/orders", require("./orders/index"));
 router.use("/api/comments", require("./comments/index"));
 router.use("/api/favorites", require("./favorites/index"));
-
+router.use("/api/admin", require("./admins/index"));
+router.use("/api/vouchers", require("./vouchers/index"));
 module.exports = router;

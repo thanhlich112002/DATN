@@ -11,11 +11,12 @@
   display: flex;
   justify-content: space-between;
   background-color: #fff;
-  padding: 2rem;
+  padding: 2rem 1rem;
   border-radius: 2px;
+  cursor: pointer;
 }
 .dashboard_card-single > div:first-child > div {
-  font-size: 2.5rem;
+  font-size: 1.7rem;
 }
 .dashboard_card-single div:last-child .icon {
   font-size: 2.5rem;
@@ -31,7 +32,7 @@
 }
 
 .recent-grid {
-  margin-top: 3.5rem;
+  margin-top: 2.5rem;
   display: grid;
   grid-template-columns: 70% auto;
   grid-gap: 2rem;
@@ -55,12 +56,13 @@
   align-items: center;
 }
 .card-header button {
-  background-color: #07503d;
-  border-radius: 10px;
+  background-color: #002f23 !important;
+  border-radius: 1px !important;
   color: #fff;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   padding: 0.5rem 1rem;
   border: 1px solid beige;
+  font-weight: 400;
 }
 .card-body table {
   border-collapse: collapse;
@@ -85,11 +87,34 @@
 }
 .card-body table tbody td .status {
   display: inline-block;
-  height: 20px;
-  width: 20px;
+  height: 10px;
+  width: 10px;
   border-radius: 50%;
-  background-color: #07503d;
 }
+.Pending {
+  background-color: rgb(255, 43, 198);
+}
+
+/* Trạng thái Confirmed */
+.Confirmed {
+  background-color: rgb(0, 74, 0);
+}
+
+/* Trạng thái Shipped */
+.Shipped {
+  background-color: rgb(0, 0, 179);
+}
+
+/* Trạng thái Finished */
+.Finished {
+  background-color: purple;
+}
+
+/* Trạng thái Cancelled */
+.Cancelled {
+  background-color: red;
+}
+
 .customer {
   display: flex;
   justify-content: space-between;

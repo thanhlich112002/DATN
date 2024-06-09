@@ -1,57 +1,113 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { updateUser, getUser } from "../../service/API";
+import { toast } from "react-toastify";
 import { useAuth } from "../../service/authContext";
-import style from "./Account.css";
+
 
 function Info() {
-  const { user } = useAuth();
+  const { setUser } = useAuth();
+  const [user, setuser] = useState();
+  const [formData, setFormData] = useState({
+    firstName: user?.firstName,
+    lastName: user?.lastName,
+    email: user?.email,
+  });
+  const getUserData = async () => {
+    try {
+      const res = await getUser();
+      setuser(res.data);
+      console.log(res.data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, []);
+  useEffect(() => {
+    setFormData({
+      firstName: user?.firstName,
+      lastName: user?.lastName,
+      email: user?.email,
+    });
+  }, [user]);
+
+  const update = async () => {
+    try {
+      const res = await updateUser(formData);
+      console.log(res.data);
+      setUser(res.data);
+      getUserData();
+      toast.success("Cập nhật thành công");
+    } catch (error) {
+      console.error("Error updating user:", error);
+      toast.error("Có lỗi xảy ra khi cập nhật thông tin người dùng.");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSaveChanges = () => {
+    update();
+    console.log("Dữ liệu đã được cập nhật:", formData);
+  };
+
   return (
     <div>
       <span className="checkout_left_span">Thông tin tài khoản</span>
       <div style={{ width: "50%" }}>
+
         <div className="checkout_left info">
-          <div class="field__input-wrapper">
-            <label for="name" class="field__label">
+          <div className="field__input-wrapper">
+            <label htmlFor="lastName" className="field__label">
               Họ
             </label>
             <input
-              name="name"
-              id="name"
+              name="lastName"
+              id="lastName"
               type="text"
-              class="field__input"
-              data-bind="name"
-              value={user?.lastName}
+              className="field__input"
+              value={formData.lastName}
+              onChange={handleChange}
             />
           </div>
-          <div class="field__input-wrapper">
-            <label for="name" class="field__label">
+          <div className="field__input-wrapper">
+            <label htmlFor="firstName" className="field__label">
               Tên
             </label>
             <input
-              name="name"
-              id="name"
+              name="firstName"
+              id="firstName"
               type="text"
-              class="field__input"
-              data-bind="name"
-              value={user?.firstName}
+              className="field__input"
+              value={formData.firstName}
+              onChange={handleChange}
             />
           </div>
-          <div class="field__input-wrapper">
-            <label for="email" class="field__label">
-              Email (tùy chọn)
+          <div className="field__input-wrapper">
+            <label htmlFor="email" className="field__label">
+              Email
             </label>
             <input
               name="email"
               id="email"
               type="email"
-              class="field__input"
-              data-bind="email"
-              value={user?.email}
+              className="field__input"
+              value={formData.email}
+              onChange={handleChange}
             />
           </div>
         </div>
         <div className="cart1_button dmk">
           <div className="Cart1_item_rigth">
-            <span>Lưu thay đổi</span>
+            <span onClick={handleSaveChanges}>Lưu thay đổi</span>
           </div>
         </div>
       </div>

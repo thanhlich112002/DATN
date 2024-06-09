@@ -8,6 +8,14 @@ class appError extends Error {
 
     Error.captureStackTrace(this, this.constructor);
   }
+
+  toString() {
+    return `${this.name}: ${this.message}`;
+  }
+
+  toJSON() {
+    return { name: this.name, message: this.message };
+  }
 }
 
 module.exports = appError;

@@ -6,8 +6,7 @@ const catchAsync = require("../utils/catchAsync.utlis");
 class contactController {
   createContact = catchAsync(async (req, res, next) => {
     console.log(req.body);
-    const { phoneNumber, address } = req.body;
-
+    const { phoneNumber, address } = req.body.contact;
     req.body.contact = await Contact.create({
       phoneNumber,
       address,
@@ -16,13 +15,40 @@ class contactController {
     return next();
   });
   delContact = catchAsync(async (req, res, next) => {
-    const contact = await Contact.findById(req.params.contactId);
-    if (!contact)
-      return next(new appError("Thông tin liên hệ không tìm thấy!", 404));
+    const user = await User.findOne({ email: req.user.email });
 
+    // Check if the contact to be deleted is the default contact
+    if (req.params.contactId === user.defaultContact.toString()) {
+      return res.status(400).json({
+        error: "Không thể xóa địa chỉ mặc định",
+      });
+    }
+
+    // Find the contact by ID
+    const contact = await Contact.findById(req.params.contactId);
+    if (!contact) {
+      return res.status(400).json({
+        error: "Contact information not found!",
+      });
+    }
+
+    // Filter out the contact to be deleted from the user's contact list
+    user.contact = user.contact.filter(
+      (obj) => obj._id.toString() !== req.params.contactId
+    );
+
+    // Delete the contact
     await Contact.findByIdAndDelete(req.params.contactId);
-    next();
+    await user.save({ validateBeforeSave: false });
+
+    // Respond with the updated user information
+    res.status(200).json({
+      status: "success",
+      message: "Contact deleted successfully",
+      data: user,
+    });
   });
+
   updateContact = catchAsync(async (req, res, next) => {
     const contact = await Contact.findById(req.params.contactId);
     if (!contact)

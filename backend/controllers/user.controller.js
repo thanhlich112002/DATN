@@ -10,44 +10,65 @@ const Email = require("../utils/email");
 class UserController {
   singUpUser = AuthsController.singUp(User, "User");
 
-  createdefaultContact = catchAsync(async (req, res, next) => {});
   userSendEmail = catchAsync(async (req, res, next) => {
     const doc = req.doc;
     const signUpToken = req.signUpToken;
-    // const url = process.env.URL_VERIRY_EMAIL;
-
-    // if (!url) {
-    //   return res.status(500).json({
-    //     error: "URL_VERIRY_EMAIL chưa được cấu hình.",
-    //   });
-    // }
-
     await new Email(doc, signUpToken).send();
-
     res.status(200).json({
       message: "Mã đã được gửi đến email!",
     });
   });
+  updateUser = catchAsync(async (req, res, next) => {
+    const check = await User.findOne({ email: req.body.email });
+    if (check && req.body.email !== req.user.email) {
+      return res
+        .status(404)
+        .json({ error: "Đã có tài khoản sữ dụng Email này" });
+    }
+    const user = await User.findOneAndUpdate(
+      { email: req.user.email },
+      {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(user);
+  });
+  defaultContact = catchAsync(async (req, res, next) => {
+    try {
+      const user = await User.findOne({ email: req.user.email });
+      if (!req.params._id) {
+        return res.status(400).json({ error: "Thiếu ID liên hệ." });
+      }
+      user.defaultContact = req.params._id;
+      await user.save({ validateBeforeSave: false });
+      res.status(200).json(user);
+    } catch (error) {
+      res
+        .status(400)
+        .json({ error: "Đã xảy ra lỗi khi đặt liên hệ mặc định." });
+    }
+  });
+
+  getUser = catchAsync(async (req, res, next) => {
+    const user = await User.findOne({ email: req.user.email });
+    res.status(200).json(user);
+  });
+
   addContact = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email: req.user.email });
     console.log(user);
     user.contact.push(req.body.contact);
-    await user.save({ validateBeforeSave: false });
-    res.status(200).json(user);
-  });
-  defaultContact = catchAsync(async (req, res, next) => {
-    const user = await User.findOne({ email: req.user.email });
-    user.defaultContact = req.params._id;
-    await user.save({ validateBeforeSave: false });
-    res.status(200).json(user);
-  });
-  delContact = catchAsync(async (req, res, next) => {
-    const user = await User.findOne({ email: req.user.email });
-    if (req.params.contactId == user.defaultContact)
-      next(new appError("Thông tin liên hệ mặc định không được xoá!", 404));
-    user.contact = user.contact.filter(
-      (obj) => obj._id != req.params.contactId
-    );
     await user.save({ validateBeforeSave: false });
     res.status(200).json(user);
   });

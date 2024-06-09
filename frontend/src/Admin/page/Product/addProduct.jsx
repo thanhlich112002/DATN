@@ -1,17 +1,18 @@
-import React, { useState, useEffect } from "react";
-import "./style.css";
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import Image from "./image";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
   getAllCategory,
   getAllBrand,
   addproduct,
 } from "../../service/userService";
+import "./style.css";
+import Image from "../Product/image";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function AddProductForm({ setIsOpen }) {
-  const [brandId, setBrandId] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+function AddCategory() {
   const [product, setProduct] = useState({
     name: "",
     price: "",
@@ -20,10 +21,18 @@ function AddProductForm({ setIsOpen }) {
     IncenseGroup: "",
   });
   const [images, setImages] = useState([]);
-  const [deletedImageUrls, setDeletedImageUrls] = useState([]);
-  const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [categoryId, setCategoryId] = useState("");
+  const [brandId, setBrandId] = useState("");
   const [formData, setFormData] = useState(null);
+  const [deletedImageUrls, setDeletedImageUrls] = useState([]);
+  const navigate = useNavigate();
+
+  const handleBackToCategoryList = () => {
+    navigate("/admin/tableProduct");
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -72,7 +81,6 @@ function AddProductForm({ setIsOpen }) {
     e.preventDefault(); // Prevent the default form submission behavior
     console.log(images.length);
 
-    // Kiểm tra các trường thông tin sản phẩm có được điền đầy đủ không
     if (
       !product.name ||
       !product.price ||
@@ -83,7 +91,7 @@ function AddProductForm({ setIsOpen }) {
       !categoryId ||
       images.length === 0
     ) {
-      console.log("Vui lòng điền đầy đủ thông tin sản phẩm.");
+      toast.error("Vui lòng điền đầy đủ thông tin sản phẩm.");
       return;
     }
 
@@ -99,8 +107,6 @@ function AddProductForm({ setIsOpen }) {
     });
     formData.append("brandId", brandId);
     formData.append("categoryId", categoryId);
-
-    // Gọi hàm addproduct từ service
     try {
       await addproduct(formData);
       setProduct({
@@ -112,163 +118,171 @@ function AddProductForm({ setIsOpen }) {
       });
       setImages([]);
       setDeletedImageUrls([]);
-      console.log("Thêm sản phẩm thành công!");
+      toast.success("Thêm sản phẩm thành công!");
+      navigate("/admin/tableproduct");
     } catch (error) {
       console.log("Đã xảy ra lỗi khi thêm sản phẩm:", error);
+      toast.error("Đã xảy ra lỗi khi thêm sản phẩm!");
     }
   };
 
   return (
-    <div className="full">
-      <div className="Form_Add">
-        <div
-          className="X"
-          onClick={() => {
-            setIsOpen(false);
-          }}
-        >
-          <FontAwesomeIcon icon={faTimes} />
-        </div>
-        <div className="checkout_left_top">
-          <span>Thông tin mua hàng</span>
-        </div>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "center",
-            marginBottom: "10px",
-          }}
-        >
-          <div
-            style={{
-              width: "55%",
-            }}
-          >
-            <Image
-              images={images}
-              setImages={setImages}
-              setDeletedImageUrls={setDeletedImageUrls}
-            />
+    <div>
+      <div className="projects">
+        <div className="_card">
+          <div className="card-header">
+            <span>Thêm Danh mục</span>
+            <button
+              onClick={handleBackToCategoryList}
+              style={{ gap: "5px", display: "flex", fontSize: "16px" }}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} />
+              Qua về sản phẩm
+            </button>
           </div>
-        </div>
-
-        <form
-          onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: "10px" }}
-        >
-          <div className="field__input-wrapper">
-            <label htmlFor="name" className="field__label">
-              Tên sản phẩm
-            </label>
-            <input
-              type="text"
-              className="field__input"
-              name="name"
-              value={product.name}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="field__input-wrapper">
-            <label htmlFor="price" className="field__label">
-              Giá
-            </label>
-            <input
-              type="text"
-              className="field__input"
-              name="price"
-              value={product.price}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="field__input-wrapper">
-            <label htmlFor="description" className="field__label">
-              Mô tả
-            </label>
-            <textarea
-              className="field__input"
-              name="description"
-              value={product.description}
-              onChange={handleChange}
-            />
-          </div>
-          <div style={{ display: "flex", width: "100%", gap: "10px" }}>
-            <div className="field__input-wrapper" style={{ width: "50%" }}>
-              <label htmlFor="origin" className="field__label">
-                Xuất xứ
-              </label>
-              <input
-                type="text"
-                className="field__input"
-                name="origin"
-                value={product.origin}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="field__input-wrapper" style={{ width: "50%" }}>
-              <label htmlFor="IncenseGroup" className="field__label">
-                Nhóm hương
-              </label>
-              <input
-                type="text"
-                className="field__input"
-                name="IncenseGroup"
-                value={product.IncenseGroup}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div style={{ display: "flex", width: "100%", gap: "10px" }}>
-            <div className="field__input-wrapper" style={{ width: "50%" }}>
-              <label htmlFor="brand" className="field__label">
-                Thương hiệu
-              </label>
-              <select
-                name="brandId"
-                id="brand"
-                className="field__input"
-                value={brandId}
-                onChange={(e) => setBrandId(e.target.value)}
+          <div className="_card-body">
+            <table className="add-category-table">
+              <div
+                style={{
+                  marginTop: "30px",
+                  marginBottom: "10px",
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                }}
               >
-                {brands.map((brand) => (
-                  <option key={brand._id} value={brand._id}>
-                    {brand.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="field__input-wrapper" style={{ width: "50%" }}>
-              <label htmlFor="category" className="field__label">
-                Danh mục
-              </label>
-              <select
-                name="categoryId"
-                id="category"
-                className="field__input"
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-              >
-                {categories.map((category) => (
-                  <option key={category._id} value={category._id}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          <div>
-            <div className="cart1_button dmk">
-              <div className="Cart1_item_rigth">
-                <button type="submit">Thêm sản phẩm</button>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    marginBottom: "10px",
+                    padding: "10px 100px",
+                  }}
+                >
+                  <Image
+                    images={images}
+                    setImages={setImages}
+                    setDeletedImageUrls={setDeletedImageUrls}
+                    max={3}
+                  />
+                </div>
               </div>
-            </div>
+              <tbody>
+                <tr className="table-row">
+                  <td className="column-1"> Tên sản phẩm</td>
+                  <td className="column-2">
+                    <input
+                      type="text"
+                      className="field__input"
+                      name="name"
+                      value={product.name}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">Giá</td>
+                  <td className="column-2">
+                    <input
+                      type="text"
+                      className="field__input"
+                      name="price"
+                      value={product.price}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">Xuất xứ</td>
+                  <td className="column-2">
+                    <input
+                      type="text"
+                      className="field__input"
+                      name="origin"
+                      value={product.origin}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1"> Nhóm hương</td>
+                  <td className="column-2">
+                    <input
+                      type="text"
+                      className="field__input"
+                      name="IncenseGroup"
+                      value={product.IncenseGroup}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">Mô tả</td>
+                  <td className="column-2">
+                    <textarea
+                      className="field__input"
+                      name="description"
+                      value={product.description}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">Thương hiệu</td>
+                  <td className="column-2">
+                    <select
+                      name="brandId"
+                      id="brand"
+                      className="field__input"
+                      value={brandId}
+                      onChange={(e) => setBrandId(e.target.value)}
+                    >
+                      {brands.map((brand) => (
+                        <option key={brand._id} value={brand._id}>
+                          {brand.name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1"> Danh mục</td>
+                  <td className="column-2">
+                    <select
+                      name="categoryId"
+                      id="category"
+                      className="field__input"
+                      value={categoryId}
+                      onChange={(e) => setCategoryId(e.target.value)}
+                    >
+                      {categories.map((category) => (
+                        <option key={category._id} value={category._id}>
+                          {category.name}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">
+                    <button className="btn" onClick={handleSubmit}>
+                      Lưu
+                    </button>
+                  </td>
+                  <td className="column-2">
+                    <button className="btn">Xóa</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div></div>
-        </form>
+        </div>
       </div>
     </div>
   );
 }
 
-export default AddProductForm;
+export default AddCategory;

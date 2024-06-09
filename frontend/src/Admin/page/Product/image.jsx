@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./image.css";
+import { faArrowUpFromBracket } from "@fortawesome/free-solid-svg-icons";
 
-function Image({ images, setImages, setDeletedImageUrls }) {
+function Image({ images, setImages, setDeletedImageUrls, max }) {
   const fileInputRef = useRef(null);
   console.log(images);
-  const [imgDelete, setDelete] = useState([]);
   useEffect(() => {
     setDeletedImageUrls([]);
   }, []);
@@ -15,13 +15,13 @@ function Image({ images, setImages, setDeletedImageUrls }) {
   };
   const onFileSelect = (event) => {
     const files = event.target.files;
-    const maxImageCount = 6;
+    const maxImageCount = max;
 
     if (files.length === 0) return;
 
     for (let i = 0; i < files.length; i++) {
       if (images.length >= maxImageCount) {
-        alert("Bạn đã chọn đủ 6 ảnh. Không thể thêm nữa.");
+        alert(`Bạn đã chọn đủ ${max} ảnh. Không thể thêm nữa.`);
         break;
       }
 
@@ -52,7 +52,7 @@ function Image({ images, setImages, setDeletedImageUrls }) {
   };
 
   return (
-    <div className="card">
+    <div className="card5">
       <input
         type="file"
         className="file"
@@ -62,22 +62,23 @@ function Image({ images, setImages, setDeletedImageUrls }) {
         hidden
       ></input>
       <div className="container1">
-        {images.map((image, index) => (
-          <div className="image" key={index}>
-            <span className="delete" onClick={() => deleteImage(index)}>
-              x
-            </span>
-            <img className="anh" src={image.url} alt={image.name} />
-          </div>
-        ))}
-        {images.length < 6 && (
+        {images &&
+          images?.map((image, index) => (
+            <div className="image" key={index}>
+              <span className="delete" onClick={() => deleteImage(index)}>
+                x
+              </span>
+              <img className="anh" src={image.url} alt={image.name} />
+            </div>
+          ))}
+        {images && images.length < max && (
           <div
             className="image"
-            style={{ border: "0.1px dotted #818181", borderRadius: "5px" }}
+            style={{ border: "0.1px soild #818181" }}
             role="button"
             onClick={selectFiles}
           >
-            <i class="fa-solid fa-upload"></i>
+            <FontAwesomeIcon icon={faArrowUpFromBracket} className="poisi" />
           </div>
         )}
       </div>

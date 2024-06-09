@@ -5,7 +5,56 @@ import Category from "../Components/Category/category";
 const url = "http://localhost:3000";
 
 const loginAPI = async (formData) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
   return axios.post(`${url}/api/auths/login`, formData);
+};
+const addContact = async (data) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.post(`${url}/api/users/addContact`, data, config);
+};
+
+const defaultContact = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.post(`${url}/api/users/defaultContact/${id}`, {}, config);
+};
+const delContact = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.delete(`${url}/api/users/delContact/${id}`, config);
+};
+
+const getUser = async () => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return axios.get(`${url}/api/users/getUser`, config);
 };
 const SingupAPI = async (formData) => {
   return axios.post(`${url}/api/users/SingUp`, formData);
@@ -15,29 +64,71 @@ const logoutAPI = async () => {
 };
 
 //Auth
-const token = localStorage.getItem("token");
-const config = {
-  headers: {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json", // Optional: include if your API expects this header
-  },
-};
+
 const GetUserByToken = async () => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
   return axios.get(`${url}/api/auths/getUser`, config);
 };
 const addFavorite = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
   return await axios.post(`${url}/api/favorites/addFavorite/${id}`, {}, config);
 };
 const getFavorite = async () => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
   return await axios.get(`${url}/api/favorites/GetFavorites`, config);
 };
 
 const createComment = async (Form, id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
   return await axios.post(
     `${url}/api/comments/createComment/${id}`,
     Form,
     config
   );
+};
+const getAllComment = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/comments/getAllComment/${id}`, config);
+};
+const updateUser = async (data) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.post(`${url}/api/users/updateUser`, data, config);
 };
 
 const getAllProductsbyCat = async (name, limit, page) => {
@@ -72,7 +163,10 @@ const seachBrands = async (name) => {
   });
 };
 const getOrdersByUserId = async (id) => {
-  return axios.get(`${url}/api/orders/getOrdersByUserId/${id}`, {});
+  return axios.get(
+    `${url}/api/orders/getOrdersByUserId/${id}?limit=100&sort=-dateOrdered`,
+    {}
+  );
 };
 const changepassword = async (
   email,
@@ -87,8 +181,76 @@ const changepassword = async (
   });
 };
 
+const createOrder = async (totalPrice, shipCost, contactId, voucherID) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  const cart = JSON.parse(localStorage.getItem("cartItems"));
+  const products = cart.map((product) => ({
+    quantity: product.quantity,
+    price: product.price,
+    product: product._id,
+    notes: product.specialRequest,
+  }));
+  const orderData = {
+    cart: products,
+    contact: contactId,
+    totalPrice: totalPrice,
+    shipCost: shipCost,
+    voucherID: voucherID ? voucherID : null,
+  };
+  return await axios.post(`${url}/api/orders/createOrder`, orderData, config);
+};
+const createPayment = async (query) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(
+    `${url}/api/orders/after-checkout/payment${query}`,
+    config
+  );
+};
+const getVouchersbyCode = async (code) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(
+    `${url}/api/vouchers/getVouchersbyCode/${code}`,
+    config
+  );
+};
+const chekcomments = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/orders/chekcomments/${id}`, config);
+};
 export {
+  chekcomments,
+  getVouchersbyCode,
+  createPayment,
+  createOrder,
+  defaultContact,
+  delContact,
+  getUser,
   createComment,
+  getAllComment,
   getFavorite,
   addFavorite,
   changepassword,
@@ -104,4 +266,6 @@ export {
   searchProducts,
   getProductsbyID,
   SingupAPI,
+  updateUser,
+  addContact,
 };

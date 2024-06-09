@@ -71,7 +71,7 @@
 }
 
 .color {
-  color: #006a31;
+  color: #007d43;
 }
 .dr_note {
   width: 90%;
@@ -84,13 +84,19 @@
 }
 
 .dr_button {
-  background-color: #007d43;
+  background-color: #07503d;
   padding: 10px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   margin-top: auto;
   cursor: pointer;
+}
+.clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2; /* Số dòng tối đa hiển thị */
+  overflow: hidden;
 }
 
 .dr_button span {

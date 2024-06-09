@@ -1,0 +1,32 @@
+/* Reset CSS */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.containerit {
+  margin-top: 20px;
+}
+.containerit h3 {
+  padding: 16px 0;
+}
+.containerit h4 {
+  padding: 6px 0;
+}
+.containerit li {
+  padding: 6px 0;
+}
+.containerit p {
+  padding: 12px 0;
+}
+
+.image-container {
+  margin: 20px auto;
+  text-align: center;
+}
+.image-container > div > img {
+  width: 70%;
+}
+ul {
+  list-style-type: none;
+}

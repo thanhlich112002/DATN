@@ -87,6 +87,8 @@
   color: #07503d;
 }
 .address-group_ad {
+  font-size: 20px;
+  gap: 10px;
   width: 23%;
   display: flex;
   align-items: center;

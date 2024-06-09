@@ -3,10 +3,9 @@ import "./Login.css";
 import Input from "./Input";
 import Button from "./button";
 import axios from "axios";
-import { SingupAPI } from "../../service/API";
-import { loginAPI } from "../../service/API";
+import { SingupAPI, loginAPI } from "../../service/API";
 import { useAuth } from "../../service/authContext";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
   const [cities, setCities] = useState([]);
@@ -16,11 +15,12 @@ function Register() {
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [firstName, setfisrtname] = useState("");
-  const [lastName, setlastname] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [selectedWard, setSelectedWard] = useState("");
+  const [message, setMessage] = useState(""); // Thêm state để lưu thông báo lỗi
   const navigate = useNavigate();
 
   const { isLoggedIn, setIsLoggedIn, user, setUser } = useAuth();
@@ -55,6 +55,7 @@ function Register() {
       setWards([]);
     }
   }, [selectedDistrict]);
+
   const handle = async () => {
     const selectedCityObj = cities.find((city) => city.Id === selectedCity);
     const selectedDistrictObj = selectedCityObj
@@ -70,12 +71,33 @@ function Register() {
     const districtName = selectedDistrictObj ? selectedDistrictObj.Name : "";
     const wardName = selectedWardObj ? selectedWardObj.Name : "";
 
+    // Validate input
+    if (
+      !email ||
+      !password ||
+      !confirmPassword ||
+      !firstName ||
+      !lastName ||
+      !phoneNumber ||
+      !selectedCity ||
+      !selectedDistrict ||
+      !selectedWard
+    ) {
+      setMessage("Vui lòng điền tất cả các trường.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setMessage("Mật khẩu và xác nhận mật khẩu không khớp.");
+      return;
+    }
+
     try {
       // Register the user
       const signupRes = await SingupAPI({
         email: email,
-        firstName: firstName, // Corrected typo in firstName variable name
-        lastName: lastName, // Corrected typo in lastName variable name
+        firstName: firstName,
+        lastName: lastName,
         password: password,
         passwordConfirm: confirmPassword,
         contact: {
@@ -103,7 +125,10 @@ function Register() {
         }
       }
     } catch (error) {
-      console.error("Error occurred during registration:", error);
+      setMessage(
+        error.response?.data?.message ||
+          "Đã xảy ra lỗi trong quá trình đăng ký."
+      );
     }
   };
 
@@ -116,14 +141,14 @@ function Register() {
           type="text"
           placeholder="Tên"
           value={firstName}
-          setValue={setfisrtname}
+          setValue={setFirstName}
         />
         <Input
           title="Họ"
           type="text"
           placeholder="Họ"
           value={lastName}
-          setValue={setlastname}
+          setValue={setLastName}
         />
         <Input
           title="Số điện thoại"
@@ -166,6 +191,7 @@ function Register() {
               value={selectedCity}
               onChange={(e) => setSelectedCity(e.target.value)}
             >
+              <option value="">Chọn tỉnh</option>
               {cities.map((city) => (
                 <option key={city.Id} value={city.Id}>
                   {city.Name}
@@ -185,6 +211,7 @@ function Register() {
               value={selectedDistrict}
               onChange={(e) => setSelectedDistrict(e.target.value)}
             >
+              <option value="">Chọn huyện</option>
               {districts.map((district) => (
                 <option key={district.Id} value={district.Id}>
                   {district.Name}
@@ -201,8 +228,10 @@ function Register() {
               id="ward"
               className="field__input"
               data-bind="ward"
+              value={selectedWard}
               onChange={(e) => setSelectedWard(e.target.value)}
             >
+              <option value="">Chọn phường xã</option>
               {wards.map((ward) => (
                 <option key={ward.Id} value={ward.Id}>
                   {ward.Name}
@@ -211,7 +240,9 @@ function Register() {
             </select>
           </div>
         </div>
-
+        <div>
+          <div className="thongbao">{message}</div>
+        </div>
         <Button title="Đăng ký" handle={handle} />
       </div>
     </div>

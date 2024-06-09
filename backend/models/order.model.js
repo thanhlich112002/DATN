@@ -34,12 +34,10 @@ const orderSchema = new Schema(
     },
     status: {
       type: String,
-      enum: [
-        "Pending", // when user order
-        "Finished", // when shipper deliveried
-      ],
+      enum: ["Pending", "Confirmed", "Shipped", "Finished", "Cancelled"],
       default: "Pending",
     },
+
     dateOrdered: {
       type: Date,
     },
@@ -48,6 +46,10 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Contact",
       required: true,
+    },
+    notification: {
+      type: String,
+      required: false,
     },
   },
   {

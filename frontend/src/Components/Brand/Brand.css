@@ -1,5 +1,75 @@
-.brand_ {
-  background-color: aquamarine;
-  height: 100px;
-  margin-top: 20px;
+.company-introduction {
+  margin: 50px auto;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.company-info {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  align-items: start;
+  flex-direction: column;
+}
+
+.company-info span {
+  margin-top: 0;
+  font-size: 28px;
+  color: #333;
+}
+
+.company-info p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.company-contact {
+  flex: 1;
+  padding: 20px;
+}
+
+.company-contact img {
+  width: 550px;
+}
+
+.company-contact p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #666;
+}
+
+.view-more-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.view-more-button:hover {
+  background-color: #0056b3;
+}
+
+@media only screen and (max-width: 1000px) {
+  .company-introduction {
+    flex-direction: column;
+  }
+}
+@media only screen and (max-width: 800px) {
+  .company-introduction {
+    flex-direction: column;
+    margin: 0;
+  }
+  .company-contact img {
+    width: 350px;
+  }
 }

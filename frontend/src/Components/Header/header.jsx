@@ -12,7 +12,7 @@ import {
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "../../service/userContext";
-import { useNavigate, useLocation, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function Header() {
   const navigate = useNavigate();
@@ -30,6 +30,9 @@ function Header() {
   const NavF = () => {
     navigate("/Favorite");
   };
+  const NavFa = () => {
+    navigate("/");
+  };
 
   const toggleAccountMenu = () => {
     setIsopen(!isopen);
@@ -45,45 +48,10 @@ function Header() {
     }
   };
 
-  const handleClickOutside = (event) => {
-    if (
-      accountMenuRef.current &&
-      !accountMenuRef.current.contains(event.target)
-    ) {
-      setIsopen(false);
-    }
-    if (cartRef.current && !cartRef.current.contains(event.target)) {
-      setIsopencart(false);
-    }
-  };
-
-  // useEffect(() => {
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, []);
-
   return (
     <div>
       <div className="background_cl">
         <div className="header-top-wrap container ">
-          <div className="header-left-wrap">
-            <div className="">
-              <a className="" style={{ textDecoration: "none" }}>
-                <span
-                  style={{
-                    marginLeft: "20px",
-                    color: "#ffffff",
-                    fontSize: "20px",
-                    fontWeight: "700",
-                  }}
-                >
-                  Luxury perfumes
-                </span>
-              </a>
-            </div>
-          </div>
           <div className="header-right-wrap">
             <div className="header-form-group" style={{ width: "300px" }}>
               <div style={{ borderColor: "gray" }}>
@@ -95,10 +63,28 @@ function Header() {
 
                 <input
                   id="autocomplete-address"
-                  placeholder="Tìm kiếm món ăn"
+                  placeholder="Tìm kiếm sản phẩm"
                   autoComplete="off"
                 />
               </div>
+            </div>
+          </div>
+          <div className="header-left-wrap">
+            <div className="">
+              <a className="" style={{ textDecoration: "none" }}>
+                <span
+                  onClick={() => NavFa()}
+                  style={{
+                    marginLeft: "20px",
+                    color: "#ffffff",
+                    fontSize: "20px",
+                    fontWeight: "700",
+                    cursor: "pointer",
+                  }}
+                >
+                  Luxury perfumes
+                </span>
+              </a>
             </div>
           </div>
           <div className="header-right-wrap">
@@ -179,7 +165,7 @@ function Header() {
             <a href="/" className="header-a" key="Trang chủ">
               <span> Trang chủ </span>
             </a>
-            <a href="/" className="header-a">
+            <a href="/introduce" className="header-a">
               <span>Giới thiệu</span>
             </a>
             <a href="/collections" className="header-a">
