@@ -6,24 +6,37 @@ const Product = require("../models/product.model");
 class commentController {
   createComment = catchAsync(async (req, res, next) => {
     const productID = req.params.productID;
-    const imagePaths = req.file?.path || ""; // Assuming req.files contains an array of uploaded image files
-    const { content } = req.body;
+    const imagePaths = req.file?.path;
+    const { content, rating } = req.body;
     const user = req.user._id;
-
     try {
       const product = await Product.findById(productID);
 
       if (!product) {
         return res.status(404).json({ message: "Product not found" });
       }
+      const existingComment = await Comment.findOne({
+        product: productID,
+        user: user,
+      });
 
+      if (existingComment) {
+        return res
+          .status(400)
+          .json({ message: "You have already reviewed this product" });
+      }
+      product.ratingsAverage =
+        (product.ratingAverage * product.ratingsQuantity + rating) /
+        (product.ratingsQuantity + 1);
+      product.ratingsQuantity = product.ratingsQuantity + 1;
+      product.save();
       const newComment = new Comment({
         product: productID,
         content,
         images: imagePaths,
         user: user,
+        rating: rating,
       });
-
       const savedComment = await newComment.save();
       res.status(201).json(savedComment);
     } catch (error) {

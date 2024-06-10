@@ -12,7 +12,7 @@ const CompanyIntroduction = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container_cus">
       <div className="company-introduction">
         <div className="company-info">
           <h1 style={{ fontSize: "28px" }}>Luxury Perfumes</h1>

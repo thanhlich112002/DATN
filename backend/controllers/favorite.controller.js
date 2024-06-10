@@ -13,15 +13,11 @@ exports.addToFavorites = async (req, res) => {
       if (existingFavorite.isFavorite) {
         existingFavorite.isFavorite = false;
         await existingFavorite.save();
-        return res
-          .status(200)
-          .json({ message: "Sản phẩm đã được bỏ khỏi danh sách yêu thích" });
+        return res.status(200).json(false);
       } else {
         existingFavorite.isFavorite = true;
         await existingFavorite.save();
-        return res.status(200).json({
-          message: "Sản phẩm đã được thêm vào danh sách yêu thích",
-        });
+        return res.status(200).json(true);
       }
     }
 
@@ -31,10 +27,7 @@ exports.addToFavorites = async (req, res) => {
       isFavorite: true,
     });
     await newFavorite.save();
-    res.status(201).json({
-      message: "Sản phẩm đã được thêm vào danh sách yêu thích",
-      favorite: newFavorite,
-    });
+    return res.status(200).json(true);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Lỗi máy chủ" });

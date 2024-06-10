@@ -37,6 +37,9 @@ const Sidebar = ({ children }) => {
 
   const navigate = useNavigate();
   const logout = useLogout();
+  const Nav = (router) => {
+    navigate(`/Admin/${router}`);
+  };
 
   const handleLogout = () => {
     logout();

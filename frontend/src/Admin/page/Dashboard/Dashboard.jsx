@@ -1,36 +1,73 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUsers,
-  faBox,
-  faDollarSign,
-  faReceipt,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUsers, faBookmark } from "@fortawesome/free-solid-svg-icons";
 import "./Dashboard.css";
+import { quantity, getStatistics } from "../../service/userService";
 import {
-  quantity,
-  getAllOrders,
-  getStatistics,
-} from "../../service/userService";
-import { useNavigate, useParams } from "react-router-dom";
+  getOrderRevenueByCategory,
+  getOrderCount,
+  getTopSale,
+  getOrderRevenueByBrand,
+} from "../../service/ApiStic";
+import { useNavigate } from "react-router-dom";
+import Cart from "./card";
+import Car from "./Bar";
+import Pie from "./Pie";
+import Topsale from "./topSale";
+import TopBrand from "./topBrand";
 
 function Dashboard() {
   const [data, setData] = useState({ user: 0, product: 0, order: 0 });
   const [products, setProducts] = useState([]);
   const [revenue, setRevenue] = useState(0);
-  function formatCurrency(price) {
-    return price.toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
-  }
+
+  // State cho từng thành phần với thời gian riêng
+  const [orderCountTime, setOrderCountTime] = useState("month");
+  const [orderRevenueByCategoryTime, setOrderRevenueByCategoryTime] =
+    useState("month");
+  const [orderRevenueByBrandTime, setOrderRevenueByBrandTime] =
+    useState("month");
+  const [topSaleTime, setTopSaleTime] = useState("month");
+
+  const [OrderCount, setOrderCount] = useState([]);
+  const [orderRevenueByCategory, setOrderCountByCategory] = useState([]);
+  const [orderRevenueByBrand, setsetOrderRevenueByBrand] = useState([]);
+
   const navigate = useNavigate();
-  const handleBackToCategoryList = () => {
-    navigate("/admin/manageorder");
-  };
-  const fetchProducts = async (page) => {
+
+  const fetchOrderCount = async (time) => {
     try {
-      const response = await getAllOrders(page);
+      const response = await getOrderCount(time);
+      setOrderCount(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+    }
+  };
+
+  const fetchOrderRevenueByCategory = async (time) => {
+    try {
+      const response = await getOrderRevenueByCategory(time);
+      setOrderCountByCategory(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+    }
+  };
+
+  const fetchOrderRevenueByBrand = async (time) => {
+    try {
+      const response = await getOrderRevenueByBrand(time);
+      setsetOrderRevenueByBrand(response.data.data);
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+    }
+  };
+
+  const fetchProducts = async (time) => {
+    try {
+      const response = await getTopSale(time);
       setProducts(response.data.data);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
@@ -42,117 +79,267 @@ function Dashboard() {
       const req = await getStatistics();
       setRevenue(req.data.totalAmount);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Lỗi khi lấy dữ liệu:", error);
     }
   };
 
   const fetchData = async () => {
     try {
-      const req = await quantity();
+      const req = await quantity("week");
       setData(req.data.data);
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Lỗi khi lấy dữ liệu:", error);
     }
   };
 
   useEffect(() => {
     fetchRevenue();
-    fetchProducts();
+    fetchProducts(topSaleTime);
     fetchData();
+    fetchOrderCount(orderCountTime);
+    fetchOrderRevenueByCategory(orderRevenueByCategoryTime);
+    fetchOrderRevenueByBrand(orderRevenueByBrandTime);
   }, []);
+  useEffect(() => {
+    fetchProducts(topSaleTime);
+  }, [topSaleTime]);
+  useEffect(() => {
+    fetchOrderCount(orderCountTime);
+  }, [orderCountTime]);
+  useEffect(() => {
+    fetchOrderRevenueByCategory(orderRevenueByCategoryTime);
+  }, [orderRevenueByCategoryTime]);
+  useEffect(() => {
+    fetchOrderRevenueByBrand(orderRevenueByBrandTime);
+  }, [orderRevenueByBrandTime]);
 
   return (
-    <div>
+    <div className="projects">
       <div className="card-header">
-        <span>Trang Admin</span>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+            borderRadius: "5px",
+            marginBottom: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              width: "100px",
+              height: "100px",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FontAwesomeIcon icon={faBookmark} fontSize={70} color="#C0C0C0" />
+          </div>
+          <span>Trang Admin</span>
+        </div>
       </div>
       <div className="dashboard_top">
         <div className="dashboard_cards">
-          <div className="dashboard_card-single">
-            <div>
-              <div>{data.user}</div>
-              <span>Khách hàng</span>
+          <Cart
+            value={data.user}
+            title={"Khách hàng"}
+            icon={faUsers}
+            cln={"bcl1"}
+          />
+          <Cart
+            value={data.product}
+            title={"Sản phẩm"}
+            icon={faUsers}
+            cln={"bcl2"}
+          />
+          <Cart
+            value={data.order}
+            title={"Đơn hàng"}
+            icon={faUsers}
+            cln={"bcl3"}
+          />
+          <Cart
+            value={revenue}
+            title={"Doanh thu"}
+            icon={faUsers}
+            cln={"bcl4"}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            gap: "30px",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ width: "60%" }} className="layout">
+            <div className="header_table">
+              <div style={{ fontSize: "30px" }} className="header_table">
+                Doanh thu
+              </div>
+              <div className="title_btn">
+                <ul>
+                  <li
+                    onClick={() => setOrderCountTime("year")}
+                    className={orderCountTime === "year" ? "active" : ""}
+                  >
+                    This year
+                  </li>
+                  <li
+                    onClick={() => setOrderCountTime("month")}
+                    className={orderCountTime === "month" ? "active" : ""}
+                  >
+                    This month
+                  </li>
+                  <li
+                    onClick={() => setOrderCountTime("week")}
+                    className={orderCountTime === "week" ? "active" : ""}
+                  >
+                    This week
+                  </li>
+                  <li
+                    onClick={() => setOrderCountTime("day")}
+                    className={orderCountTime === "day" ? "active" : ""}
+                  >
+                    Today
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div>
-              <FontAwesomeIcon icon={faUsers} className="icon" />
-            </div>
+            <Car data={OrderCount} />
           </div>
-          <div className="dashboard_card-single">
-            <div>
-              <div>{data.product}</div>
-              <span>Sản phẩm</span>
+          <div style={{ width: "40%" }} className="layout">
+            <div className="header_table">
+              <div style={{ fontSize: "30px" }} className="header_table">
+                Thống kê theo danh mục
+              </div>
+              <div className="title_btn">
+                <ul>
+                  <li
+                    onClick={() => setOrderRevenueByCategoryTime("year")}
+                    className={
+                      orderRevenueByCategoryTime === "year" ? "active" : ""
+                    }
+                  >
+                    This year
+                  </li>
+                  <li
+                    onClick={() => setOrderRevenueByCategoryTime("month")}
+                    className={
+                      orderRevenueByCategoryTime === "month" ? "active" : ""
+                    }
+                  >
+                    This month
+                  </li>
+                  <li
+                    onClick={() => setOrderRevenueByCategoryTime("week")}
+                    className={
+                      orderRevenueByCategoryTime === "week" ? "active" : ""
+                    }
+                  >
+                    This week
+                  </li>
+                  <li
+                    onClick={() => setOrderRevenueByCategoryTime("day")}
+                    className={
+                      orderRevenueByCategoryTime === "day" ? "active" : ""
+                    }
+                  >
+                    Today
+                  </li>
+                </ul>
+              </div>
             </div>
-            <div>
-              <FontAwesomeIcon icon={faBox} className="icon" />
-            </div>
-          </div>
-          <div className="dashboard_card-single">
-            <div>
-              <div>{formatCurrency(revenue)}</div>
-              <span>Doanh thu</span>
-            </div>
-            <div>
-              <FontAwesomeIcon icon={faDollarSign} className="icon" />
-            </div>
-          </div>
-          <div className="dashboard_card-single">
-            <div>
-              <div>{data.order}</div>
-              <span>Đơn hàng</span>
-            </div>
-            <div>
-              <FontAwesomeIcon icon={faReceipt} className="icon" />
+            <div style={{ margin: "20px" }}>
+              <Pie data={orderRevenueByCategory} />
             </div>
           </div>
         </div>
-        <div className="recent-grid">
-          <div className="projects">
-            <div className="_card">
-              <div className="card-header">
-                <span>Đơn hàng</span>
-                <button onClick={() => handleBackToCategoryList()}>
-                  Xem thêm
-                </button>
+        <div style={{ display: "flex", gap: "30px" }}>
+          <div style={{ width: "60%" }} className="layout">
+            <div className="header_table">
+              <div style={{ fontSize: "30px" }} className="header_table">
+                Sản phẩm bán chạy nhất
               </div>
-              <div className="card-body">
-                <table>
-                  <thead>
-                    <tr>
-                      <td>ID đơn hàng</td>
-                      <td>ID Khách hàng</td>
-                      <td>Giá</td>
-                      <td>Trạng thái</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {products &&
-                      products.map((product, index) => (
-                        <tr key={index}>
-                          <td>{product._id}</td>
-                          <td>{product.user}</td>
-                          <td>{formatCurrency(product.totalPrice)}</td>
-                          <td>
-                            <span className={`status ${product.status}`}></span>
-                            {product.status}
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+              <div className="title_btn">
+                <ul>
+                  <li
+                    onClick={() => setTopSaleTime("year")}
+                    className={topSaleTime === "year" ? "active" : ""}
+                  >
+                    This year
+                  </li>
+                  <li
+                    onClick={() => setTopSaleTime("month")}
+                    className={topSaleTime === "month" ? "active" : ""}
+                  >
+                    This month
+                  </li>
+                  <li
+                    onClick={() => setTopSaleTime("week")}
+                    className={topSaleTime === "week" ? "active" : ""}
+                  >
+                    This week
+                  </li>
+                  <li
+                    onClick={() => setTopSaleTime("day")}
+                    className={topSaleTime === "day" ? "active" : ""}
+                  >
+                    Today
+                  </li>
+                </ul>
               </div>
             </div>
+            <Topsale products={products} />
           </div>
-          <div className="customers">
-            <div className="card">
-              <div className="card-header">
-                <span>Người dùng mới</span>
+          <div style={{ width: "40%" }} className="layout">
+            <div className="header_table">
+              <div style={{ fontSize: "30px" }} className="header_table">
+                Thống kê theo thương hiệu
+              </div>
+              <div className="title_btn">
+                <ul>
+                  <li
+                    onClick={() => setOrderRevenueByBrandTime("year")}
+                    className={
+                      orderRevenueByBrandTime === "year" ? "active" : ""
+                    }
+                  >
+                    This year
+                  </li>
+                  <li
+                    onClick={() => setOrderRevenueByBrandTime("month")}
+                    className={
+                      orderRevenueByBrandTime === "month" ? "active" : ""
+                    }
+                  >
+                    This month
+                  </li>
+                  <li
+                    onClick={() => setOrderRevenueByBrandTime("week")}
+                    className={
+                      orderRevenueByBrandTime === "week" ? "active" : ""
+                    }
+                  >
+                    This week
+                  </li>
+                  <li
+                    onClick={() => setOrderRevenueByBrandTime("day")}
+                    className={
+                      orderRevenueByBrandTime === "day" ? "active" : ""
+                    }
+                  >
+                    Today
+                  </li>
+                </ul>
               </div>
             </div>
+            <TopBrand data={orderRevenueByBrand} />
           </div>
         </div>
       </div>
     </div>
   );
 }
-
 export default Dashboard;

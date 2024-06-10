@@ -31,7 +31,6 @@ class orderController {
         voucher = await Voucher.findOne({
           _id: voucherID,
         });
-        console.log(voucher);
         if (voucher) {
           if (!voucher.isAvailable) {
             return res.status(400).json({ message: "Mã giảm giá không còn" });
@@ -43,6 +42,10 @@ class orderController {
           }
         }
       }
+      if (voucher) {
+        voucher.quantity -= 1;
+        voucher.save();
+      }
       let productTotal = 0;
       for (const item of cart) {
         const product = await productModel.findById(item.product);
@@ -52,19 +55,20 @@ class orderController {
         if (product.price !== item.price) {
           return next(new appError("Giá sản phẩm không khớp", 400));
         }
+        if (product.quantity < item.quantity) {
+          return next(new appError("Không đủ hàng để", 400));
+        }
+        product.quantity = product.quantity - item.quantity;
+        product.productPurchases = product.productPurchases + item.quantity;
+        product.save();
         productTotal += item.price * item.quantity;
       }
-
-      // Tính tổng tiền cuối cùng của đơn hàng
       const grandTotal =
         productTotal + shipCost - (voucher ? voucher.amount : 0);
-
-      // Kiểm tra tính hợp lệ của tổng tiền
       if (grandTotal !== totalPrice) {
         return next(new appError("Tổng tiền không khớp", 400));
       }
 
-      // Tạo đơn hàng mới
       const newOrder = await Order.create({
         user: userId,
         cart,

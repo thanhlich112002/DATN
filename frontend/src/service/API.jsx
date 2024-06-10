@@ -241,7 +241,48 @@ const chekcomments = async (id) => {
   };
   return await axios.get(`${url}/api/orders/chekcomments/${id}`, config);
 };
+const viewsProduct = async (id) => {
+  return await axios.post(`${url}/api/products/viewsProduct/${id}`);
+};
+const getAllVouchers = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/vouchers/getAllVouchers`, config);
+};
+const addVouchers = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.post(`${url}/api/vouchers/addVouchers/${id}`, {}, config);
+};
+const getVouchersbyUser = async (data) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.post(
+    `${url}/api/vouchers/getVouchersbyUser`,
+    data,
+    config
+  );
+};
 export {
+  getVouchersbyUser,
+  getAllVouchers,
+  addVouchers,
+  viewsProduct,
   chekcomments,
   getVouchersbyCode,
   createPayment,

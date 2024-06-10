@@ -4,6 +4,7 @@ import Category from "../Category/category";
 import "./home.css";
 import Brand from "../Brand/Brand";
 import { Getallcategory } from "../../service/API";
+import Voucher from "../Voucher/Voucher";
 
 function Home() {
   const [cat, setCat] = useState([]);
@@ -31,6 +32,7 @@ function Home() {
       <div>
         <SimpleSlider arrImages={images} />
         <Brand />
+        <Voucher />
         {cat.map((category, index) => (
           <Category key={index} Category={category} />
         ))}

@@ -12,7 +12,6 @@ const productSchema = new Schema(
       ref: "Category",
       required: true,
     },
-
     name: {
       type: String,
       required: [true, "Tên sản phẩm là bắt buộc"],
@@ -40,6 +39,17 @@ const productSchema = new Schema(
         message: (props) => `${props.value} không hợp lệ.`,
       },
     },
+    inputprice: {
+      type: Number,
+      required: true,
+      default: 100000,
+      validate: {
+        validator: function (v) {
+          return v >= 0 && Number.isInteger(v);
+        },
+        message: (props) => `${props.value} không hợp lệ.`,
+      },
+    },
     ratingAverage: {
       type: Number,
       required: true,
@@ -47,11 +57,11 @@ const productSchema = new Schema(
     },
     description: {
       type: String,
-      maxLength: [2000, "Mô tả chỉ được tối da 200 kí tự"],
+      maxLength: [2000, "Mô tả chỉ được tối đa 2000 kí tự"],
     },
     origin: {
       type: String,
-      maxLength: [2000, "Xuất xứ chỉ được tối da 200 kí tự"],
+      maxLength: [2000, "Xuất xứ chỉ được tối đa 2000 kí tự"],
     },
     isOutofOrder: {
       type: Boolean,
@@ -78,11 +88,21 @@ const productSchema = new Schema(
     },
     IncenseGroup: {
       type: String,
-      maxLength: [2000, "Nhóm hương chỉ được tối da 200 kí tự"],
+      maxLength: [2000, "Nhóm hương chỉ được tối đa 2000 kí tự"],
     },
     isAvailable: {
       type: Boolean,
-      default: false,
+      default: true,
+    },
+    quantity: {
+      type: Number,
+      default: true,
+      validate: {
+        validator: function (v) {
+          return v >= 0 && Number.isInteger(v);
+        },
+        message: (props) => `${props.value} không hợp lệ.`,
+      },
     },
   },
   {
@@ -91,12 +111,7 @@ const productSchema = new Schema(
   }
 );
 
-productSchema.virtual("ratings", {
-  ref: "Rating",
-  foreignField: "reference",
-  localField: "_id",
-});
-productSchema.pre(`/^find/`, function (next) {
+productSchema.pre(/^find/, function (next) {
   if (!this.isAvailable) {
     this.isAvailable = true;
   }

@@ -36,7 +36,7 @@ function Cart({ setIsopencart }) {
               {cart.map((product, index) => (
                 <div className="cart" key={index}>
                   <div className="item0">
-                    <img src={product.images} alt="" />
+                    <img src={product.images[0]} alt="" />
                   </div>
                   <div className="item2">
                     {product.name}

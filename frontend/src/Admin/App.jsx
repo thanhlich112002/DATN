@@ -5,8 +5,9 @@ import TableProduct from "./page/Product/TableProduct";
 import Order from "./page/Order/TableProduct";
 import TableCategory from "./page/Category/Category";
 import AddCategory from "./page/Category/addCatrgory";
+import EditCategory from "./page/Category/Up";
 import AddProduct from "./page/Product/addProduct";
-import UpProduct from "./page/Product/add";
+import UpProduct from "./page/Product/Upproduct";
 import Voucher from "./page/Voucher/Voucher";
 
 const App = () => {
@@ -16,6 +17,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/tablecategory/add" element={<AddCategory />} />
+          <Route path="/tablecategory/:id" element={<EditCategory />} />
           <Route path="/tableCategory" element={<TableCategory />} />
           <Route path="/tableproduct" element={<TableProduct />} />
           <Route path="/tableproduct/add" element={<AddProduct />} />

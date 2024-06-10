@@ -4,6 +4,7 @@ import { getAllOrders, upStatus } from "../../service/userService";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBookmark,
   faChevronLeft,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
@@ -34,9 +35,30 @@ const TableProduct = () => {
     navigate(`/admin/tableProduct/add`);
   };
   return (
-    <div>
+    <div className="projects">
       <div className="card-header">
-        <span>Danh sách đơn hàng</span>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            borderRadius: "5px",
+            marginBottom: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              width: "100px",
+              height: "100px",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FontAwesomeIcon icon={faBookmark} fontSize={70} color="#C0C0C0" />
+          </div>
+          <span>Quản lý đơn hàng</span>
+        </div>
       </div>
       <div className="ReactPaginate">
         <div

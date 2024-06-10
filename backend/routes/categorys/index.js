@@ -8,6 +8,11 @@ router
     CategoryController.updatePhoto,
     CategoryController.createCategory
   )
+  .put(
+    "/updateCategory/:id",
+    CategoryController.updatePhoto,
+    CategoryController.updateCategory
+  )
   .get("/getCategoryById/:id", CategoryController.getCategoryById)
   .get("/getAllCategory", CategoryController.getAllCategory);
 

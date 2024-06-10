@@ -28,7 +28,7 @@ class VoucherController {
 
   getAllVouchers = catchAsync(async (req, res) => {
     try {
-      const vouchers = await Voucher.find();
+      const vouchers = await Voucher.find({ isAvailable: "true" });
       res.status(200).json(vouchers);
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -41,7 +41,7 @@ class VoucherController {
       const voucher = await Voucher.findById(voucherID);
       const isUserExist = voucher.user.some((user) => user.userId === userId);
       if (isUserExist) {
-        return res.status(400).json({ message: "Phiếu giảm giá đã được lưu" });
+        return res.status(400).json({ message: "Phiếu được lưu từ trước" });
       }
       voucher.user.push({ userId: userId });
       const updatedVoucher = await voucher.save();
@@ -57,13 +57,15 @@ class VoucherController {
       if (voucher) {
         return res.status(200).json(voucher);
       } else {
-        return res.status(404).json({ message: "Không tìm thấy phiếu giảm giá" }); // Trả về lỗi 404 nếu không tìm thấy
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy phiếu giảm giá" }); // Trả về lỗi 404 nếu không tìm thấy
       }
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
   });
-  
+
   getVouchersbyUser = catchAsync(async (req, res) => {
     try {
       const tatolprice = req.body.tatolprice;

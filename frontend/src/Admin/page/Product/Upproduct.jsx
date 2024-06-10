@@ -1,7 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowLeft,
+  faShoppingBag,
+  faStar,
+  faHeart,
+  faBookmark,
+} from "@fortawesome/free-solid-svg-icons"; // Sửa icon của thẻ Card
 import {
   getAllCategory,
   getAllBrand,
@@ -9,9 +15,10 @@ import {
   getProductsbyID,
 } from "../../service/userService";
 import "./style.css";
-import Image from "../Product/image";
+import Image from "./image";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Card from "../Dashboard/card";
 
 function AddCategory() {
   const [item, setItem] = useState([]);
@@ -24,13 +31,14 @@ function AddCategory() {
   const [brandId, setBrandId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [product, setProduct] = useState({});
+
   const navigate = useNavigate();
   const { id } = useParams();
   const fetchProduct = async () => {
     try {
       const productData = await getProductsbyID(id);
       console.log(productData.data.data[0]);
-      setItem(productData.data.data[0]);
+      setItem(productData.data.favorites);
       const newImages = productData.data.data[0]?.images.map((image) => ({
         url: image,
       }));
@@ -41,6 +49,10 @@ function AddCategory() {
         description: productData.data.data[0]?.description,
         origin: productData.data.data[0]?.origin,
         IncenseGroup: productData.data.data[0]?.IncenseGroup,
+        inputprice: productData.data.data[0]?.inputprice,
+        quantity: productData.data.data[0]?.quantity,
+        productPurchases: productData.data.data[0]?.productPurchases,
+        ratingsAverage: productData.data.data[0]?.ratingsAverage,
       });
       setBrandId(productData.data.data[0].Brand._id);
       setCategoryId(productData.data.data[0].Category._id);
@@ -100,7 +112,7 @@ function AddCategory() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
     console.log(images.length);
 
     if (
@@ -128,6 +140,8 @@ function AddCategory() {
     formData.append("description", product.description);
     formData.append("origin", product.origin);
     formData.append("IncenseGroup", product.IncenseGroup);
+    formData.append("inputprice", product.inputprice);
+    formData.append("quantity", product.quantity);
     images.forEach((image) => {
       if (image.file) {
         formData.append("images", image.file);
@@ -158,20 +172,80 @@ function AddCategory() {
     }
   };
 
+
   return (
     <div>
       <div className="projects">
         <div className="_card">
           <div className="card-header">
-            <span>Thêm Danh mục</span>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                borderRadius: "5px",
+                marginBottom: "20px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  width: "100px",
+                  height: "100px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faBookmark}
+                  fontSize={70}
+                  color="#C0C0C0"
+                />
+              </div>
+              <span>Thông tin sản phẩm</span>
+            </div>
             <button
               onClick={handleBackToCategoryList}
-              style={{ gap: "5px", display: "flex", fontSize: "16px" }}
+              style={{
+                gap: "5px",
+                display: "flex",
+                fontSize: "16px",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              className="background_cl"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Qua về sản phẩm
             </button>
           </div>
+          <div className="dashboard_cards">
+            <Card
+              value={product.productPurchases}
+              title={"Sản phẩm đã bán"}
+              icon={faShoppingBag}
+              cln={"bcl1"}
+            />
+            <Card
+              value={product.quantity}
+              title={"Sản phẩm còn lại"}
+              icon={faShoppingBag}
+              cln={"bcl2"}
+            />
+            <Card
+              value={product.ratingsAverage}
+              title={"Đánh giá"}
+              icon={faStar}
+              cln={"bcl3"}
+            />
+            <Card
+              value={item}
+              title={"Yêu thích"}
+              icon={faHeart}
+              cln={"bcl4"}
+            />
+          </div>
+
           <div className="_card-body">
             <table className="add-category-table">
               <div
@@ -216,13 +290,37 @@ function AddCategory() {
                   </td>
                 </tr>
                 <tr className="table-row">
-                  <td className="column-1">Giá</td>
+                  <td className="column-1">Giá nhập vào</td>
+                  <td className="column-2">
+                    <input
+                      type="text"
+                      className="field__input"
+                      name="inputprice"
+                      value={product.inputprice}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">Giá bán ra</td>
                   <td className="column-2">
                     <input
                       type="text"
                       className="field__input"
                       name="price"
                       value={product.price}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">Số lượng</td>
+                  <td className="column-2">
+                    <input
+                      type="text"
+                      className="field__input"
+                      name="quantity"
+                      value={product.quantity}
                       onChange={handleChange}
                     />
                   </td>

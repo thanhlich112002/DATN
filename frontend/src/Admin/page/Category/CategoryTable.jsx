@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useTable } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faBookmark, faEdit, faUsers } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
 import { getAllCategory } from "../../service/userService";
-import DeleteCategoryForm from "./DeleteCategoryForm"; // Đảm bảo bạn đã import đúng đường dẫn
+import DeleteCategoryForm from "./Up"; // Đảm bảo bạn đã import đúng đường dẫn
 import { useNavigate } from "react-router-dom";
+import Card from "../Dashboard/card";
 
 const CategoryTable = ({ onDelete }) => {
   const [categories, setCategories] = useState([]);
@@ -55,10 +56,7 @@ const CategoryTable = ({ onDelete }) => {
         accessor: "actions",
         Cell: ({ row }) => (
           <div className="btn_tab">
-            <button
-              className="btn-edit"
-              onClick={() => console.log("Chỉnh sửa:", row.original)}
-            >
+            <button className="btn-edit" onClick={() => Add(row.original._id)}>
               <FontAwesomeIcon icon={faEdit} fontSize={20} />
             </button>
           </div>
@@ -74,15 +72,55 @@ const CategoryTable = ({ onDelete }) => {
   const handleBackToCategoryList = () => {
     navigate("/admin/tableCategory/add");
   };
+  const Add = (id) => {
+    navigate(`/admin/tableCategory/${id}`);
+  };
 
   return (
     <div>
       <div className="projects">
         <div className="_card">
           <div className="card-header">
-            <span>Danh mục</span>
-            <button onClick={handleBackToCategoryList}>Thêm</button>
+            {" "}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                borderRadius: "5px",
+                marginBottom: "20px",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  width: "100px",
+                  height: "100px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <FontAwesomeIcon
+                  icon={faBookmark}
+                  fontSize={70}
+                  color="#C0C0C0"
+                />
+              </div>
+              <span>Quản lý danh mục</span>
+            </div>
+            <button
+              onClick={handleBackToCategoryList}
+              className="background_cl"
+            >
+              Thêm danh mục
+            </button>
           </div>
+          {/* <div className="dashboard_cards">
+            <Card value={5} title={"Danh mục"} icon={faUsers} cln={"bcl1"} />
+            <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl2"} />
+            <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl3"} />
+            <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl4"} />
+          </div> */}
           <div className="_card-body">
             {deletingCategory && (
               <DeleteCategoryForm

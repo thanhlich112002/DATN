@@ -3,18 +3,19 @@ import axios from "axios";
 import styles from "./Checkout.css";
 import { useUser } from "../../service/userContext";
 import { useAuth } from "../../service/authContext";
-import { getUser, createOrder, getVouchersbyCode } from "../../service/API";
+import {
+  getUser,
+  createOrder,
+  getVouchersbyCode,
+  getVouchersbyUser,
+} from "../../service/API";
 import { toast } from "react-toastify";
 
 function Checkout() {
-  const [cities, setCities] = useState([]);
-  const [districts, setDistricts] = useState([]);
-  const [wards, setWards] = useState([]);
-  const [selectedCity, setSelectedCity] = useState("");
-  const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedPayment, setSelectedPayment] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
+  const [listVouchers, setListVouchers] = useState([]);
   const { cart } = useUser();
   const [user, setUser] = useState();
   const [address, setAddress] = useState(null);
@@ -39,6 +40,15 @@ function Checkout() {
       console.error("Error fetching user data:", error);
     }
   };
+  // const getListVouchers = async (data) => {
+  //   try {
+  //     setVouchers(null);
+  //     const res = await getVouchersbyUser(data);
+  //     setListVouchers(res.data);
+  //   } catch (error) {
+  //     console.error("Error fetching user data:", error);
+  //   }
+  // };
   const Order = async () => {
     try {
       if (vouchers) {
@@ -53,7 +63,7 @@ function Checkout() {
         window.open(req.data.url);
       }
     } catch (error) {
-      toast.error("Lỗi khi tạo đơn hàng");
+      toast.error(error.response.data.message);
     }
   };
 
@@ -68,7 +78,8 @@ function Checkout() {
   };
   useEffect(() => {
     getUserData();
-  }, []);
+    // getListVouchers({ tatolprice: total });
+  }, [total]);
   useEffect(() => {
     getAddress(user?.defaultContact);
   }, [user]);
@@ -79,7 +90,7 @@ function Checkout() {
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    const shippingFee = 29000; // Shipping fee in VND
+    const shippingFee = 29000;
     const newTotal =
       newSubtotal + shippingFee - (vouchers ? vouchers.amount : 0);
     setSubtotal(newSubtotal);
@@ -269,6 +280,29 @@ function Checkout() {
             >
               Áp dụng
             </div>
+            <div
+              className="btn_code cursor"
+              onClick={() => {
+                getVoucher(code);
+              }}
+            >
+              Chọn mã
+            </div>
+          </div>
+          <div
+            class="field__input-wrapper"
+            style={{ marginTop: "10px", cursor: "pointer" }}
+          >
+            <label for="province" class="field__label">
+              Chọn mã giảm giá
+            </label>
+            <select name="" id="" class="field__input" data-bind="">
+              {listVouchers.map((contact) => (
+                <option key={contact._id} value={contact._id}>
+                  {contact.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 

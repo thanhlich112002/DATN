@@ -19,10 +19,11 @@ function AddCategory() {
     description: "",
     origin: "",
     IncenseGroup: "",
+    quantity: "",
+    inputprice: "",
   });
   const [images, setImages] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
   const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState("");
   const [brandId, setBrandId] = useState("");
@@ -63,6 +64,8 @@ function AddCategory() {
       formData.append("description", product.description);
       formData.append("origin", product.origin);
       formData.append("IncenseGroup", product.IncenseGroup);
+      formData.append("inputprice", product.inputprice);
+      formData.append("quantity", product.quantity);
       images.forEach((image) => {
         formData.append("images", image.file);
       });
@@ -78,7 +81,7 @@ function AddCategory() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent the default form submission behavior
+    e.preventDefault();
     console.log(images.length);
 
     if (
@@ -102,6 +105,8 @@ function AddCategory() {
     formData.append("description", product.description);
     formData.append("origin", product.origin);
     formData.append("IncenseGroup", product.IncenseGroup);
+    formData.append("inputprice", product.inputprice);
+    formData.append("quantity", product.quantity);
     images.forEach((image) => {
       formData.append("images", image.file);
     });
@@ -115,6 +120,8 @@ function AddCategory() {
         description: "",
         origin: "",
         IncenseGroup: "",
+        quantity: "",
+        inputprice: "",
       });
       setImages([]);
       setDeletedImageUrls([]);
@@ -134,7 +141,14 @@ function AddCategory() {
             <span>Thêm Danh mục</span>
             <button
               onClick={handleBackToCategoryList}
-              style={{ gap: "5px", display: "flex", fontSize: "16px" }}
+              style={{
+                gap: "5px",
+                display: "flex",
+                fontSize: "16px",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              className="background_cl"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Qua về sản phẩm
@@ -184,13 +198,37 @@ function AddCategory() {
                   </td>
                 </tr>
                 <tr className="table-row">
-                  <td className="column-1">Giá</td>
+                  <td className="column-1">Giá nhập vào</td>
+                  <td className="column-2">
+                    <input
+                      type="text"
+                      className="field__input"
+                      name="inputprice"
+                      value={product.inputprice}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">Giá bán ra</td>
                   <td className="column-2">
                     <input
                       type="text"
                       className="field__input"
                       name="price"
                       value={product.price}
+                      onChange={handleChange}
+                    />
+                  </td>
+                </tr>
+                <tr className="table-row">
+                  <td className="column-1">Số lượng</td>
+                  <td className="column-2">
+                    <input
+                      type="text"
+                      className="field__input"
+                      name="quantity"
+                      value={product.quantity}
                       onChange={handleChange}
                     />
                   </td>

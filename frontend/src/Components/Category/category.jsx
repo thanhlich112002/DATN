@@ -26,7 +26,7 @@ function Category({ Category }) {
   }, []);
 
   return (
-    <div className="container" style={{ border: "0.1px solid #cdcdcd" }}>
+    <div className="container_cus" style={{ border: "0.1px solid #cdcdcd" }}>
       <div className="cat">
         <div className="cat_title background_cl">{Category.name}</div>
         <div className="cat_img">

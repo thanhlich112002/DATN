@@ -5,6 +5,7 @@ const catchAsync = require("../utils/catchAsync.utlis");
 const Products = require("../models/product.model");
 const Brand = require("../models/brand.model");
 const UploadImage = require("../utils/uploadConfig.utlis");
+const favoriteModel = require("../models/favorite.model");
 const cloudinary = require("cloudinary").v2;
 
 class productsController {
@@ -13,13 +14,9 @@ class productsController {
   createProduct = catchAsync(async (req, res, next) => {
     const category = await Category.findById(req.body.categoryId);
     const brand = await Brand.findById(req.body.brandId);
-
-    // Kiểm tra xem danh mục có tồn tại không
     if (!category) {
       return next(new appError("Không tìm thấy danh mục", 404));
     }
-
-    // Kiểm tra xem nhãn hiệu có tồn tại không
     if (!brand) {
       return next(new appError("Không tìm thấy nhãn hiệu", 404));
     }
@@ -47,10 +44,17 @@ class productsController {
       .filter()
       .search()
       .sort()
-      // .limitFields()
       .paginate();
+    const favorites = await favoriteModel.find({
+      product: req.params.id,
+      isFavorite: true,
+    });
     const products = await features.query;
-    return res.status(200).json({ message: "success", data: products });
+    return res.status(200).json({
+      message: "success",
+      data: products,
+      favorites: favorites.length,
+    });
   });
   getAllProducts = catchAsync(async (req, res, next) => {
     const features = new ApiFeatures(
@@ -68,7 +72,6 @@ class productsController {
       .filter()
       .search()
       .sort()
-      // .limitFields()
       .paginate();
     const products = await features.query;
     return res.status(200).json({ message: "success", data: products });
@@ -222,6 +225,23 @@ class productsController {
     });
 
     res.status(200).json("Đã xoá thành công");
+  });
+  viewsProduct = catchAsync(async (req, res, next) => {
+    try {
+      const product = await Products.findById(req.params.id);
+      if (!product) {
+        return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
+      }
+
+      // Tăng số lượt xem của sản phẩm
+      product.productViews += 1;
+      await product.save();
+
+      res.status(200).json({ message: "Đã tăng số lượt xem thành công" });
+    } catch (error) {
+      console.error("Lỗi khi tăng số lượt xem của sản phẩm:", error);
+      res.status(500).json({ message: "Lỗi server" });
+    }
   });
 }
 module.exports = new productsController();

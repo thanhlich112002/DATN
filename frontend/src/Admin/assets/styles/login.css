@@ -348,7 +348,7 @@ select {
     height: 45px;
     padding: 0 25px;
     border-radius: 3px;
-    background-color: #007d43;
+    background-color: #07503d;;
     color: #fff;
     font-weight: 700;
     text-transform: uppercase;
@@ -488,7 +488,7 @@ select {
     position: absolute;
     top: 0;
     left: 0;
-    background: #006a31;
+    background: #07503d;;
     width: 24px;
     height: 2px;
     content: "";

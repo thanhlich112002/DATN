@@ -34,7 +34,7 @@ const ProductTable = ({ products, fetchProducts, currentPage }) => {
             <span
               style={{
                 padding: "5px 10px",
-                color: "#fff",
+                color: "#000000",
                 borderRadius: "10px",
               }}
               className={`status ${value}`}
@@ -49,7 +49,7 @@ const ProductTable = ({ products, fetchProducts, currentPage }) => {
         accessor: "",
         Cell: ({ row }) => (
           <button
-            style={{ padding: "5px 10px" }}
+            style={{ width: "100px", padding: "5px", borderRadius: "5px" }}
             onClick={() => handleDetail(row.original)}
           >
             Chi tiết

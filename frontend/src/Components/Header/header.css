@@ -10,7 +10,7 @@ body {
   -webkit-text-size-adjust: 100%;
 }
 @media (min-width: 1400px) {
-  .container,
+  .container_cus,
   .container-lg,
   .container-md,
   .container-sm,
@@ -19,7 +19,7 @@ body {
     max-width: 1140px !important;
   }
 }
-.container {
+.container_cus {
   max-width: 1140px !important;
   margin: 0 auto !important;
 }

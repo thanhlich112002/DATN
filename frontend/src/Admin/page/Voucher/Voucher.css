@@ -42,7 +42,8 @@
   flex-wrap: wrap;
   justify-content: start;
 }
-.form-container {
+.form-container1 {
+  width: 40%;
   border: 1px solid #ccc;
   padding: 16px;
   border-radius: 8px;
@@ -82,4 +83,13 @@
 
 .add-button:hover {
   background-color: #1e88e5;
+}
+.vouadd {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu xám semi-transparent */
+  z-index: 999999999; /* Đảm bảo nằm phía dưới của form */
 }

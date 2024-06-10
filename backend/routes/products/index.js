@@ -8,4 +8,5 @@ router.post("/searchProducts", products.searchProducts);
 router.post("/getAllProductsbyCat", products.getAllProductsbyCat);
 router.put("/:id", products.UpImage, products.updateProduct);
 router.delete("/:id", products.deleteProduct);
+router.post("/viewsProduct/:id", products.viewsProduct);
 module.exports = router;

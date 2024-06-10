@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useTable } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import "./style.css"; // Import the CSS file with the dot styles
-import UpdateProduct from "./UpdateProduct";
+import "./style.css";
 import DeleteProductForm from "./detate";
 import { useNavigate } from "react-router-dom";
 

@@ -21,9 +21,14 @@ function Item({ product }) {
 
   const [detail, setDetail] = useState(false);
 
-  const handleAddToFavorites = (productId) => {
-    addFavorite(productId);
-    toast.success("Đã thêm vào yêu thích!");
+  const handleAddToFavorites = async (productId) => {
+    const favorites = await addFavorite(productId);
+    console.log(favorites.data);
+    if (favorites.data) {
+      toast.success("Đã thêm vào yêu thích!");
+    } else {
+      toast.success("Đã xóa yêu thích!");
+    }
   };
   const formatPrice = (price) => {
     // Sử dụng hàm Intl.NumberFormat để định dạng số tiền với ngôn ngữ và kiểu định dạng mong muốn

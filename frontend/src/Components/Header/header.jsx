@@ -51,7 +51,7 @@ function Header() {
   return (
     <div>
       <div className="background_cl">
-        <div className="header-top-wrap container ">
+        <div className="header-top-wrap container_cus">
           <div className="header-right-wrap">
             <div className="header-form-group" style={{ width: "300px" }}>
               <div style={{ borderColor: "gray" }}>
@@ -160,7 +160,7 @@ function Header() {
       </div>
 
       <div className="">
-        <div className="container header-bottom-wrap">
+        <div className="container_cus header-bottom-wrap">
           <div className="header-left-wrap">
             <a href="/" className="header-a" key="Trang chủ">
               <span> Trang chủ </span>

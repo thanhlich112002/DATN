@@ -1,33 +1,40 @@
-import React, { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { createCategory } from "../../service/userService";
+import { getCategoryById, updateCategory } from "../../service/userService";
 import "./style.css";
 import Image from "../Product/image";
 import { toast } from "react-toastify";
 
-function AddCategory() {
+function EditCategory() {
+  const { id } = useParams();
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const inputRef = useRef(null);
-  const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [deletedImageUrls, setDeletedImageUrls] = useState([]);
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
+  const navigate = useNavigate();
+
+  const fetchData = async () => {
+    try {
+      const res = await getCategoryById(id);
+      setCategoryName(res.data.data.name);
+      setCategoryDescription(res.data.data.description);
+      setImages([{ url: res.data.data.images }]);
+    } catch (error) {
+      console.error("Đã xảy ra lỗi khi lấy dữ liệu danh mục:", error);
+    }
   };
 
-  const handleChooseImage = () => {
-    inputRef.current.click();
-  };
+  useEffect(() => {
+    fetchData();
+  }, [id]);
 
   const handleSubmit = async () => {
-    if (!categoryName || !categoryDescription || !images[0]?.file) {
+    if (!categoryName || !categoryDescription || selectedImage?.file) {
       alert("Vui lòng điền đầy đủ thông tin và chọn hình ảnh");
       return;
     }
@@ -36,18 +43,26 @@ function AddCategory() {
     setError(null);
 
     const formData = new FormData();
-
     formData.append("name", categoryName);
+    console.log(deletedImageUrls, categoryDescription, categoryName);
     formData.append("description", categoryDescription);
-    formData.append("images", images[0]?.file);
-
+    console.log(images.file);
+    images.forEach((image) => {
+      if (image.file) {
+        formData.append("images", image.file);
+      }
+    });
+    deletedImageUrls.forEach((imageUrl) => {
+      console.log(imageUrl);
+      formData.append("dels", imageUrl.url);
+    });
     try {
-      const res = await createCategory(formData);
-      toast.success("Danh mục đã được tạo thành công!");
+      const res = await updateCategory(formData, id);
+      toast.success("Danh mục đã được cập nhật thành công!");
       navigate("/admin/tableCategory");
     } catch (error) {
-      console.error("Đã xảy ra lỗi khi tạo danh mục:", error);
-      setError(error.message || "Đã xảy ra lỗi khi tạo danh mục");
+      console.error("Đã xảy ra lỗi khi cập nhật danh mục:", error);
+      setError(error.message || "Đã xảy ra lỗi khi cập nhật danh mục");
     } finally {
       setLoading(false);
     }
@@ -68,7 +83,7 @@ function AddCategory() {
       <div className="projects">
         <div className="_card">
           <div className="card-header">
-            <span>Thêm Danh mục</span>
+            <span>Chỉnh sửa Danh mục</span>
             <button
               onClick={handleBackToCategoryList}
               style={{
@@ -81,7 +96,7 @@ function AddCategory() {
               className="background_cl"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
-              Qua về danh mục
+              Quay về danh mục
             </button>
           </div>
           <div className="_card-body">
@@ -156,4 +171,4 @@ function AddCategory() {
   );
 }
 
-export default AddCategory;
+export default EditCategory;

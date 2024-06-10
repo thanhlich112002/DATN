@@ -20,6 +20,16 @@ const commentSchema = new Schema(
     images: {
       type: String,
     },
+    rating: {
+      type: Number,
+      validate: {
+        validator: function (v) {
+          return v >= 1 && v <= 5;
+        },
+        message: (props) =>
+          `${props.value} không hợp lệ. Đánh giá phải từ 1 đến 5 sao.`,
+      },
+    },
     createdAt: {
       type: Date,
       default: moment().tz("Asia/Ho_Chi_Minh").format(),

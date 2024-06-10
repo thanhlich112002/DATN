@@ -17,12 +17,12 @@ class AuthController {
         photo: process.env.DEFAULT_AVATAR,
       };
       const doc = await Model.create(body);
-      const signUpToken = doc.createSignUpToken();
+      // const signUpToken = doc.createSignUpToken();
 
       await doc.save({ validateBeforeSave: false });
       // 3) Gửi email chứa mã token tới email của doc
       req.doc = doc;
-      req.signUpToken = signUpToken;
+      // req.signUpToken = signUpToken;
       res.status(200).json({ status: "success", data: doc });
     });
   login = catchAsync(async (req, res, next) => {

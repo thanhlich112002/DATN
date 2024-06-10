@@ -4,9 +4,12 @@ import { getAllProducts } from "../../service/userService";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faBookmark,
   faChevronLeft,
   faChevronRight,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
+import Card from "../Dashboard/card";
 
 const TableProduct = () => {
   const [products, setProducts] = useState([]);
@@ -35,10 +38,39 @@ const TableProduct = () => {
     navigate(`/admin/tableProduct/add`);
   };
   return (
-    <div>
+    <div className="projects">
       <div className="card-header">
-        <span>Danh sách sản phẩm</span>
-        <button onClick={handleAddProductClick}>Thêm sản phẩm</button>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            borderRadius: "5px",
+            marginBottom: "20px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              width: "100px",
+              height: "100px",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FontAwesomeIcon icon={faBookmark} fontSize={70} color="#C0C0C0" />
+          </div>
+          <span>Quản lý sản phẩm</span>
+        </div>
+        <button className="background_cl" onClick={handleAddProductClick}>
+          Thêm sản phẩm
+        </button>
+      </div>
+      <div className="dashboard_cards">
+        <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl1"} />
+        <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl2"} />
+        <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl3"} />
+        <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl4"} />
       </div>
       <div className="ReactPaginate">
         <div

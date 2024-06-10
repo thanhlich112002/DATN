@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./Voucher.css";
 import { getAllVouchers, createVoucher } from "../../service/userService";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
 const VoucherDisplay = ({ voucher, onSave }) => {
   return (
@@ -63,8 +65,8 @@ const VoucherForm = ({ onSave, setIsOpen }) => {
   };
 
   return (
-    <div className="full">
-      <div className="form-container" style={{ position: "relative" }}>
+    <div className="vouadd">
+      <div className="form-container1" style={{ position: "relative" }}>
         <div className="X" onClick={() => setIsOpen(false)}>
           x
         </div>
@@ -152,20 +154,51 @@ function Voucher() {
   };
 
   return (
-    <div className="voucher_contai">
-      <div className="card-header">
-        <span>Danh sách phiếu giảm giá</span>
-        <button onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? "Đóng form" : "Thêm phiếu giảm giá"}
-        </button>
-      </div>
-      {isOpen && <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />}
-      <div className="voucher-grid">
-        {vouchers?.map((voucher, index) => (
-          <div>
-            <VoucherDisplay key={index} voucher={voucher} onSave={handleSave} />
+    <div className="projects">
+      <div className="voucher_contai">
+        <div className="card-header">
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              borderRadius: "5px",
+              marginBottom: "20px",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                width: "100px",
+                height: "100px",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <FontAwesomeIcon
+                icon={faBookmark}
+                fontSize={70}
+                color="#C0C0C0"
+              />
+            </div>
+            <span>Quản lý giảm giá</span>
           </div>
-        ))}
+          <button className="background_cl" onClick={() => setIsOpen(!isOpen)}>
+            {isOpen ? "Đóng form" : "Thêm phiếu giảm giá"}
+          </button>
+        </div>
+        {isOpen && <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />}
+        <div className="voucher-grid">
+          {vouchers?.map((voucher, index) => (
+            <div>
+              <VoucherDisplay
+                key={index}
+                voucher={voucher}
+                onSave={handleSave}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

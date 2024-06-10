@@ -96,7 +96,7 @@ const getAllBrand = async (page) => {
 };
 const quantity = async (page) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/admin/quantity`, {
+  return axios.get(`${url}/api/admin/quantity/${page}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       ContentType: "multipart/form-data",
@@ -139,7 +139,27 @@ const createVoucher = async (data) => {
     },
   });
 };
+const getCategoryById = async (data) => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/categorys/getCategoryById/${data}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const updateCategory = async (data, id) => {
+  const token = localStorage.getItem("token");
+  return axios.put(`${url}/api/categorys/updateCategory/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
 export {
+  updateCategory,
+  getCategoryById,
   createVoucher,
   getAllVouchers,
   upStatus,

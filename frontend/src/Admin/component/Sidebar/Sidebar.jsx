@@ -9,6 +9,7 @@ import {
   faSignOutAlt,
   faChevronLeft,
   faBars,
+  faExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useLocation } from "react-router-dom";
 import "./style.css";
@@ -17,7 +18,6 @@ import { useNavigate } from "react-router-dom";
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const toggle = () => setIsOpen(!isOpen);
-  const location = useLocation();
   const navigate = useNavigate();
 
   const menuItem = [
@@ -41,11 +41,6 @@ const Sidebar = ({ children }) => {
       name: "QL giảm giá",
       icon: faTags,
     },
-    // {
-    //   path: "/admin/manageuser",
-    //   name: "Danh sách khách hàng",
-    //   icon: faUsers,
-    // },
     {
       path: "/admin/manageorder",
       name: "Đơn hàng",
@@ -62,52 +57,32 @@ const Sidebar = ({ children }) => {
 
   return (
     <div className="container-admin">
-      <div
-        style={{
-          width: isOpen ? "260px" : "60px",
-          minWidth: isOpen ? "260px" : "60px",
-        }}
-        className="sidebar-admin"
-      >
-        <div className="top_section">
-          <div className="bars">
-            {isOpen ? (
-              <FontAwesomeIcon icon={faChevronLeft} onClick={toggle} />
-            ) : (
-              <FontAwesomeIcon icon={faBars} onClick={toggle} />
-            )}
-          </div>
+      <aside id="sidebar" className={isOpen ? "expand" : ""}>
+        <div className="sidebar-link" onClick={toggle}>
+          <FontAwesomeIcon icon={faBars} />
+          {isOpen ? <span>Admin</span> : <></>}
         </div>
-        {menuItem.map((item, index) => (
-          <NavLink to={item.path} key={index} className={`link`}>
-            <div className="icon">
-              <FontAwesomeIcon icon={item.icon} />
-            </div>
-            <div
-              style={{ display: isOpen ? "inline" : "none" }}
-              className="link_text"
+        <ul className="sidebar-nav">
+          {menuItem.map((item, index) => (
+            <li
+              key={index}
+              className="sidebar-item"
+              onClick={() => navigate(`${item.path}`)}
             >
-              {item.name}
-            </div>
-          </NavLink>
-        ))}
-
-        <div
-          className="link"
-          style={{ cursor: "pointer" }}
-          onClick={handleLogout}
-        >
-          <div className="icon">
-            <FontAwesomeIcon icon={faSignOutAlt} />
-          </div>
-          <div
-            style={{ display: isOpen ? "inline" : "none" }}
-            className="link_text"
-          >
-            Đăng xuất
+              <div className="sidebar-link">
+                <FontAwesomeIcon icon={item.icon} />
+                {isOpen ? <span>{item.name}</span> : <></>}
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div className="sidebar-footer">
+          <div href="#" className="sidebar-link" onClick={handleLogout}>
+            <FontAwesomeIcon icon={faExclamationTriangle} />
+            {isOpen ? <span>Logout</span> : <></>}
           </div>
         </div>
-      </div>
+      </aside>
       <main-sider>{children}</main-sider>
     </div>
   );

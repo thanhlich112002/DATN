@@ -1,0 +1,82 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins:wght@300;400;500;600& display=swap");
+
+.coupon-card {
+  background: linear-gradient(135deg, #7158fe, #9d4de6);
+  color: #fff;
+  text-align: center;
+  padding: 20px 50px;
+  border-radius: 15px;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
+}
+
+.coupon-card h3 {
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 30px;
+}
+.coupon-card h4 {
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 30px;
+}
+.logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+.coupon-card p {
+  font-size: 15px;
+}
+
+.coupon-row {
+  display: flex;
+  align-items: center;
+  margin: 10px auto;
+  width: fit-content;
+}
+.cpnCode {
+  border: 1px dashed #fff;
+  padding: 10px 20px;
+  border-right: 0;
+}
+
+.cpnBtn {
+  border: 1px solid #fff;
+  background: #fff;
+  padding: 10px 20px;
+  color: #7158fe;
+  cursor: pointer;
+}
+.listVoucher {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  margin-top: 10px;
+  gap: 10px;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.cirl1,
+.cirl2 {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #a494ff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50px;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cirl1 {
+  left: 22px;
+}
+
+.cirl2 {
+  right: -5px;
+}

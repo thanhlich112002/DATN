@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AuthProvider } from "./service/authContext";
 import { UserProvider } from "./service/userContext";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
