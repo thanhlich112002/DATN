@@ -9,6 +9,10 @@ const BrandSchema = new Schema({
     type: String,
     maxLength: [200, "Mô tả chỉ được tối da 200 kí tự"],
   },
+  images: {
+    type: String,
+    required: [true, "Hình ảnh là bắt buộc"],
+  },
 });
 
 module.exports = mongoose.model("Brand", BrandSchema);

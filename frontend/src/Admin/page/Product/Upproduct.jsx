@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons"; // Sửa icon của thẻ Card
 import {
   getAllCategory,
-  getAllBrand,
+  getAllBrands,
   upproduct,
   getProductsbyID,
 } from "../../service/userService";
@@ -65,7 +65,7 @@ function AddCategory() {
   }, [id]);
 
   const handleBackToCategoryList = () => {
-    navigate("/admin/tableProduct");
+    navigate("/admin/product");
   };
 
   useEffect(() => {
@@ -78,7 +78,7 @@ function AddCategory() {
     };
 
     const fetchBrands = async () => {
-      const brandsData = await getAllBrand();
+      const brandsData = await getAllBrands();
       setBrands(brandsData.data.data);
       if (brandsData.data.data.length > 0) {
         setBrandId(brandsData.data.data[0]._id);
@@ -171,7 +171,6 @@ function AddCategory() {
       toast.error("Đã xảy ra lỗi khi thêm sản phẩm!");
     }
   };
-
 
   return (
     <div>

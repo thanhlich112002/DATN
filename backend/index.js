@@ -9,10 +9,7 @@ require("dotenv").config();
 const errorHandler = require("./utils/errorHandler");
 
 mongoose
-  .connect(
-    "mongodb+srv://ThanhLich:thanhlich@thanhlich.vk4rcrb.mongodb.net/DATN?retryWrites=true&w=majority&appName=ThanhLich",
-    {}
-  )
+  .connect(process.env.DATABASE, {})
   .then(() => {
     console.log("connected to MongoDB");
   })

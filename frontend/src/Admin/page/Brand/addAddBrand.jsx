@@ -1,75 +1,42 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { getCategoryById, updateCategory } from "../../service/userService";
+import { createBrand } from "../../service/userService";
 import "./style.css";
 import Image from "../Product/image";
 import { toast } from "react-toastify";
 
-function EditCategory() {
-  const { id } = useParams();
+function AddCategory() {
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [deletedImageUrls, setDeletedImageUrls] = useState([]);
-  const navigate = useNavigate();
-
-  const fetchData = async () => {
-    try {
-      const res = await getCategoryById(id);
-      setCategoryName(res.data.data.name);
-      setCategoryDescription(res.data.data.description);
-      setImages([{ url: res.data.data.images }]);
-    } catch (error) {
-      console.error("Đã xảy ra lỗi khi lấy dữ liệu danh mục:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [id]);
-
   const handleSubmit = async () => {
-    if (!categoryName || !categoryDescription || selectedImage?.file) {
-      alert("Vui lòng điền đầy đủ thông tin và chọn hình ảnh");
+    if (!categoryName || !categoryDescription || !images[0]?.file) {
+      toast.error("Vui lòng điền đầy đủ thông tin và chọn hình ảnh");
       return;
     }
-
-    setLoading(true);
-    setError(null);
-
     const formData = new FormData();
+
     formData.append("name", categoryName);
-    console.log(deletedImageUrls, categoryDescription, categoryName);
     formData.append("description", categoryDescription);
-    console.log(images.file);
-    images.forEach((image) => {
-      if (image.file) {
-        formData.append("images", image.file);
-      }
-    });
-    deletedImageUrls.forEach((imageUrl) => {
-      console.log(imageUrl);
-      formData.append("dels", imageUrl.url);
-    });
+    formData.append("images", images[0]?.file);
+
     try {
-      const res = await updateCategory(formData, id);
-      toast.success("Danh mục đã được cập nhật thành công!");
-      navigate("/admin/category");
+      const res = await createBrand(formData);
+      toast.success("Tạo thành công!");
+      navigate("/admin/brand");
     } catch (error) {
-      console.error("Đã xảy ra lỗi khi cập nhật danh mục:", error);
-      setError(error.message || "Đã xảy ra lỗi khi cập nhật danh mục");
+      toast.error("Đã sảy ra lỗi thửu lại sau");
     } finally {
-      setLoading(false);
     }
   };
 
   const handleBackToCategoryList = () => {
-    navigate("/admin/category");
+    navigate("/admin/brand");
   };
 
   const handleResetForm = () => {
@@ -83,7 +50,7 @@ function EditCategory() {
       <div className="projects">
         <div className="_card">
           <div className="card-header">
-            <span>Chỉnh sửa Danh mục</span>
+            <span>Thêm Danh mục</span>
             <button
               onClick={handleBackToCategoryList}
               style={{
@@ -96,7 +63,7 @@ function EditCategory() {
               className="background_cl"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
-              Quay về danh mục
+              Qua về danh mục
             </button>
           </div>
           <div className="_card-body">
@@ -171,4 +138,4 @@ function EditCategory() {
   );
 }
 
-export default EditCategory;
+export default AddCategory;

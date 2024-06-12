@@ -2,6 +2,7 @@ import axios from "axios";
 import Category from "../Components/Category/category";
 
 //
+// const url = "https://datn-ten-zeta.vercel.app";
 const url = "http://localhost:3000";
 
 const loginAPI = async (formData) => {
@@ -154,8 +155,8 @@ const searchProducts = async (object) => {
 const Getallcategory = async () => {
   return axios.get(`${url}/api/categorys/getAllCategory`);
 };
-const getAllBrand = async () => {
-  return axios.get(`${url}/api/brands/getAllBrand`);
+const getAllBrands = async () => {
+  return axios.get(`${url}/api/brands/getAllBrands`);
 };
 const seachBrands = async (name) => {
   return axios.post(`${url}/api/brands/seachBands`, {
@@ -302,7 +303,7 @@ export {
   getAllProductsbyCat,
   Getallcategory,
   getAllProducts,
-  getAllBrand,
+  getAllBrands,
   seachBrands,
   searchProducts,
   getProductsbyID,

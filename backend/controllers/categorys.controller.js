@@ -1,4 +1,5 @@
 const Category = require("../models/category.model");
+const ApiFeatures = require("../utils/ApiFeatures.utlis");
 const appError = require("../utils/appError.utlis");
 const catchAsync = require("../utils/catchAsync.utlis");
 const parser = require("../utils/uploadConfig.utlis");
@@ -12,13 +13,11 @@ class CategoryController {
         message: "Category already exists",
       });
     }
-    console.log(req.file);
     const imagePath = req.file.path;
     const categoryData = {
       ...req.body,
       images: imagePath,
     };
-
     const doc = await Category.create(categoryData);
     res.status(200).json({
       data: doc,
@@ -31,11 +30,6 @@ class CategoryController {
     if (!cat) {
       return res.status(404).json({ message: "Category not found" });
     }
-    return res.status(200).json({ message: "success", data: cat });
-  });
-  getAllCategory = catchAsync(async (req, res, next) => {
-    const cat = await Category.find();
-    console.log(cat);
     return res.status(200).json({ message: "success", data: cat });
   });
   updateCategory = catchAsync(async (req, res, next) => {
@@ -86,6 +80,72 @@ class CategoryController {
       });
     } catch (err) {
       next(err);
+    }
+  });
+  getAllCategory = catchAsync(async (req, res, next) => {
+    const features = new ApiFeatures(Category.find(), req.query)
+      .filter()
+      .search()
+      .sort();
+
+    try {
+      const totalResults = await Category.countDocuments(features.query); // Sử dụng countDocuments để đếm số lượng tài liệu
+      const pageSize = parseInt(req.query.limit) || 7;
+      const totalPages = Math.ceil(totalResults / pageSize);
+      const currentPage = parseInt(req.query.page) || 1;
+      const cate = await features.query
+        .skip((currentPage - 1) * pageSize)
+        .limit(pageSize);
+
+      return res.status(200).json({
+        message: "Thành công",
+        data: cate,
+        totalResults,
+        totalPages,
+        currentPage,
+      });
+    } catch (error) {
+      return res.status(500).json({ message: "Lỗi server" });
+    }
+  });
+
+  seachCategory = catchAsync(async (req, res, next) => {
+    try {
+      const nameCategory = req.body.nameCategory;
+      if (!nameCategory) {
+        return res
+          .status(400)
+          .json({ message: "Yêu cầu nhập tên thương hiệu" });
+      }
+
+      const features = new ApiFeatures(
+        Category.find({
+          name: new RegExp(nameCategory, "i"),
+        }),
+        req.query
+      )
+        .filter()
+        .search()
+        .sort();
+
+      const totalResults = await Category.countDocuments(features.query);
+      const pageSize = parseInt(req.query.limit) || 7;
+      const totalPages = Math.ceil(totalResults / pageSize);
+      const currentPage = parseInt(req.query.page) || 1;
+      const cate = await features.query
+        .skip((currentPage - 1) * pageSize)
+        .limit(pageSize);
+
+      return res.status(200).json({
+        message: "Thành công",
+        data: cate,
+        totalResults,
+        totalPages,
+        currentPage,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Lỗi máy chủ" });
     }
   });
 

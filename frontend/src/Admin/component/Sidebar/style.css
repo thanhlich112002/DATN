@@ -8,7 +8,8 @@ main-sider {
   overflow-y: auto;
   min-height: 100vh;
   max-height: 100vh;
-  background-color: #ffffff;
+  background-color: #ffffff4e;
+  z-index: 0;
 }
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
@@ -27,8 +28,6 @@ main-sider {
 .main {
   min-height: 100vh;
   width: 100%;
-  overflow: hidden;
-  transition: all 0.35s ease-in-out;
   background-color: #fafbfe;
 }
 
@@ -37,7 +36,6 @@ main-sider {
   min-width: 70px;
   z-index: 1000;
   transition: all 0.25s ease-in-out;
-  background-color: #07503d;
   display: flex;
   flex-direction: column;
 }
@@ -56,7 +54,7 @@ main-sider {
 
 .toggle-btn i {
   font-size: 1.5rem;
-  color: #fff;
+  color: #000000;
 }
 
 .sidebar-logo {
@@ -64,7 +62,7 @@ main-sider {
 }
 
 .sidebar-logo div {
-  color: #fff;
+  color: #000000;
   font-size: 1.15rem;
   font-weight: 600;
 }
@@ -78,7 +76,7 @@ main-sider {
   display: flex;
   padding: 0.625rem 1.625rem;
   gap: 20px;
-  color: #fff;
+  color: #000000;
   font-size: 1.2rem;
   white-space: nowrap;
   border-left: 3px solid transparent;
@@ -91,8 +89,12 @@ main-sider {
 }
 
 div.sidebar-link:hover {
-  background-color: rgba(255, 255, 255, 0.075);
+  background-color: rgba(42, 7, 7, 0.075);
   border-left: 3px solid #3b7ddd;
+}
+.ATV {
+  background-color: rgba(42, 7, 7, 0.075) !important;
+  border-left: 3px solid #3b7ddd !important;
 }
 
 .sidebar-item {

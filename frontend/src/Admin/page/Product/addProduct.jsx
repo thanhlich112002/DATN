@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import {
   getAllCategory,
-  getAllBrand,
+  getAllBrands,
   addproduct,
 } from "../../service/userService";
 import "./style.css";
@@ -45,7 +45,7 @@ function AddCategory() {
     };
 
     const fetchBrands = async () => {
-      const brandsData = await getAllBrand();
+      const brandsData = await getAllBrands();
       setBrands(brandsData.data.data);
       if (brandsData.data.data.length > 0) {
         setBrandId(brandsData.data.data[0]._id);

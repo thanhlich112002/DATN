@@ -7,7 +7,7 @@ import { SingupAPI, loginAPI } from "../../service/API";
 import { useAuth } from "../../service/authContext";
 import { useNavigate } from "react-router-dom";
 
-function Register() {
+function Register({ setIsLoading }) {
   const [cities, setCities] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -23,7 +23,7 @@ function Register() {
   const [message, setMessage] = useState(""); // Thêm state để lưu thông báo lỗi
   const navigate = useNavigate();
 
-  const { isLoggedIn, setIsLoggedIn, user, setUser } = useAuth();
+  const { setIsLoggedIn, setUser } = useAuth();
 
   useEffect(() => {
     axios
@@ -93,7 +93,7 @@ function Register() {
     }
 
     try {
-      // Register the user
+      setIsLoading(true);
       const signupRes = await SingupAPI({
         email: email,
         firstName: firstName,
@@ -107,7 +107,6 @@ function Register() {
       });
 
       if (signupRes.data.status === "success") {
-        // If signup successful, login the user
         const loginRes = await loginAPI({
           email: email,
           password: password,
@@ -121,7 +120,7 @@ function Register() {
           JSON.stringify(loginRes.data.data.user)
         );
         if (loginRes.data.data.user.role === "User") {
-          navigate("/"); // Redirect user to home page
+          navigate("/");
         }
       }
     } catch (error) {
@@ -129,6 +128,8 @@ function Register() {
         error.response?.data?.message ||
           "Đã xảy ra lỗi trong quá trình đăng ký."
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 

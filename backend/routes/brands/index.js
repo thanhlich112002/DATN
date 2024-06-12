@@ -3,8 +3,18 @@ const router = express.Router();
 const BrandsController = require("../../controllers/brand.controller");
 
 router
-  .post("/createCategory", BrandsController.createCategory)
-  .get("/getAllBrand", BrandsController.getAllBrand)
-  .post("/seachBands", BrandsController.seachBrands);
+  .post(
+    "/createBrand",
+    BrandsController.updatePhoto,
+    BrandsController.createBrand
+  )
+  .get("/getAllBrands", BrandsController.getAllBrands)
+  .post("/seachBands", BrandsController.seachBrands)
+  .put(
+    "/updateBrand/:id",
+    BrandsController.updatePhoto,
+    BrandsController.updateBrand
+  )
+  .get("/getBrandById/:id", BrandsController.getBrandById);
 
 module.exports = router;

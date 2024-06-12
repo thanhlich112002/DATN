@@ -44,7 +44,7 @@ function AddCategory() {
     try {
       const res = await createCategory(formData);
       toast.success("Danh mục đã được tạo thành công!");
-      navigate("/admin/tableCategory");
+      navigate("/admin/category");
     } catch (error) {
       console.error("Đã xảy ra lỗi khi tạo danh mục:", error);
       setError(error.message || "Đã xảy ra lỗi khi tạo danh mục");
@@ -54,7 +54,7 @@ function AddCategory() {
   };
 
   const handleBackToCategoryList = () => {
-    navigate("/admin/tableCategory");
+    navigate("/admin/category");
   };
 
   const handleResetForm = () => {
@@ -120,6 +120,7 @@ function AddCategory() {
                   <td className="column-2">
                     <input
                       type="text"
+                      className="field__input"
                       value={categoryName}
                       onChange={(e) => setCategoryName(e.target.value)}
                     />
@@ -130,6 +131,7 @@ function AddCategory() {
                   <td className="column-2">
                     <textarea
                       type="text"
+                      className="field__input"
                       value={categoryDescription}
                       onChange={(e) => setCategoryDescription(e.target.value)}
                     />

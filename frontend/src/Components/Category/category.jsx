@@ -8,20 +8,17 @@ function Category({ Category }) {
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState(null);
-
+  const fetchProducts = async () => {
+    try {
+      const productsData = await getAllProductsbyCat(Category.name, "5", "1");
+      setProducts(productsData.data.data);
+      setLoading(false);
+    } catch (error) {
+      setError("Failed to fetch products. Please try again later.");
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const productsData = await getAllProductsbyCat(Category.name, "5", "1");
-        setProducts(productsData.data.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch products:", error);
-        setError("Failed to fetch products. Please try again later.");
-        setLoading(false);
-      }
-    };
-
     fetchProducts();
   }, []);
 

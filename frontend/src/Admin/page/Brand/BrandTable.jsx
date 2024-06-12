@@ -3,12 +3,12 @@ import { useTable } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
-import { getAllCategory, seachCategorys } from "../../service/userService";
-import DeleteCategoryForm from "./Up";
+import { getAllBrands, searchBrands } from "../../service/userService";
+import UpBrand from "./UpBrand";
 import { useNavigate } from "react-router-dom";
 import TopTable from "../component/TopTable/TopTable";
 
-const CategoryTable = () => {
+const BrandTable = ({ onDelete }) => {
   const [categories, setCategories] = useState([]);
   const [deletingCategory, setDeletingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,12 +18,12 @@ const CategoryTable = () => {
 
   const fetchCategories = async (page) => {
     try {
-      const response = await getAllCategory(page);
+      const response = await getAllBrands(page);
       setCategories(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
     } catch (error) {
-      console.log("Lỗi khi lấy danh sách danh mục:", error);
+      console.log("Lỗi khi lấy danh sách thương hiệu:", error);
     }
   };
 
@@ -35,6 +35,7 @@ const CategoryTable = () => {
   };
 
   const data = React.useMemo(() => categories, [categories]);
+
   const columns = React.useMemo(
     () => [
       { Header: "ID", accessor: "_id" },
@@ -57,7 +58,7 @@ const CategoryTable = () => {
         Header: "Hành Động",
         accessor: "actions",
         Cell: ({ row }) => (
-          <div className="btn_tab">
+          <div className="btn_tab" width={150}>
             <button className="btn-edit" onClick={() => Add(row.original._id)}>
               <FontAwesomeIcon icon={faEdit} fontSize={20} />
             </button>
@@ -70,12 +71,12 @@ const CategoryTable = () => {
 
   const fetchSProducts = async (searchTerm, page) => {
     try {
-      const response = await seachCategorys(searchTerm, page); // Sửa thành searchCategorys
+      const response = await searchBrands(searchTerm, page);
       setCategories(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
     } catch (error) {
-      console.error("Lỗi khi tìm kiếm sản phẩm:", error);
+      console.error("Lỗi khi tìm kiếm thương hiệu:", error);
     }
   };
 
@@ -83,14 +84,17 @@ const CategoryTable = () => {
     useTable({ columns, data });
 
   const handleBackToCategoryList = () => {
-    navigate("/admin/category/add");
+    navigate("/admin/brand/add");
   };
+
   const Add = (id) => {
-    navigate(`/admin/category/${id}`);
+    navigate(`/admin/brand/${id}`);
   };
+
   const handleSearch = (name) => {
     setName(name);
   };
+
   useEffect(() => {
     console.log(name);
     if (name) {
@@ -105,6 +109,7 @@ const CategoryTable = () => {
       <div className="projects">
         <div className="_card">
           <div className="card-header">
+            {" "}
             <div
               style={{
                 display: "flex",
@@ -129,20 +134,21 @@ const CategoryTable = () => {
                   color="#C0C0C0"
                 />
               </div>
-              <span>Quản lý danh mục</span>
+              <span>Quản lý thương hiệu</span>
             </div>
             <button
               onClick={handleBackToCategoryList}
               className="background_cl"
             >
-              Thêm danh mục
+              Thêm danh thương hiệu
             </button>
           </div>
           <div className="_card-body">
             {deletingCategory && (
-              <DeleteCategoryForm
+              <UpBrand
                 setIsOpen={() => setDeletingCategory(null)}
                 category={deletingCategory}
+                onDelete={onDelete}
               />
             )}
             <div className="styled-table">
@@ -192,4 +198,4 @@ const CategoryTable = () => {
   );
 };
 
-export default CategoryTable;
+export default BrandTable;

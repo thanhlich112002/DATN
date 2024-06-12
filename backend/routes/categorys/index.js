@@ -8,6 +8,8 @@ router
     CategoryController.updatePhoto,
     CategoryController.createCategory
   )
+
+  .post("/seachCategory", CategoryController.seachCategory)
   .put(
     "/updateCategory/:id",
     CategoryController.updatePhoto,

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { getCategoryById, updateCategory } from "../../service/userService";
+import { getBrandById, updateBrand } from "../../service/userService";
 import "./style.css";
 import Image from "../Product/image";
 import { toast } from "react-toastify";
@@ -20,7 +20,7 @@ function EditCategory() {
 
   const fetchData = async () => {
     try {
-      const res = await getCategoryById(id);
+      const res = await getBrandById(id);
       setCategoryName(res.data.data.name);
       setCategoryDescription(res.data.data.description);
       setImages([{ url: res.data.data.images }]);
@@ -57,19 +57,18 @@ function EditCategory() {
       formData.append("dels", imageUrl.url);
     });
     try {
-      const res = await updateCategory(formData, id);
-      toast.success("Danh mục đã được cập nhật thành công!");
-      navigate("/admin/category");
+      const res = await updateBrand(formData, id);
+      toast.success("Cập nhật thành công!");
+      navigate("/admin/brand");
     } catch (error) {
-      console.error("Đã xảy ra lỗi khi cập nhật danh mục:", error);
-      setError(error.message || "Đã xảy ra lỗi khi cập nhật danh mục");
+      toast.error(error.reponse.data.message);
     } finally {
       setLoading(false);
     }
   };
 
   const handleBackToCategoryList = () => {
-    navigate("/admin/category");
+    navigate("/admin/tableCategory");
   };
 
   const handleResetForm = () => {
@@ -83,7 +82,7 @@ function EditCategory() {
       <div className="projects">
         <div className="_card">
           <div className="card-header">
-            <span>Chỉnh sửa Danh mục</span>
+            <span>Chỉnh sửa thương hiệu</span>
             <button
               onClick={handleBackToCategoryList}
               style={{
@@ -96,7 +95,7 @@ function EditCategory() {
               className="background_cl"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
-              Quay về danh mục
+              Quay về thương hiệu
             </button>
           </div>
           <div className="_card-body">

@@ -1,13 +1,15 @@
 import axios from "axios";
+// const url = "https://datn-ten-zeta.vercel.app";
+
 const url = "http://localhost:3000";
 
 const getAllProducts = async (page) => {
   return axios.get(`${url}/api/products/getAllProducts?limit=7&page=${page}`);
 };
-const getAllOrders = async (page) => {
+const getAllOrders = async (page, status, start, end) => {
   const token = localStorage.getItem("token");
   return axios.get(
-    `${url}/api/orders/getAllOrders?limit=10&page=${page}&sort=-dateOrdered`,
+    `${url}/api/orders/getAllOrders?limit=10&page=${page}&sort=-dateOrdered&`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -67,9 +69,11 @@ const upproduct = async (formData, id) => {
   });
 };
 
+// Phần dành cho danh mục
+
 const getAllCategory = async (page) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/categorys/getAllCategory`, {
+  return axios.get(`${url}/api/categorys/getAllCategory?limit=7&page=${page}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       ContentType: "multipart/form-data",
@@ -85,15 +89,64 @@ const createCategory = async (data) => {
     },
   });
 };
-const getAllBrand = async (page) => {
+const updateCategory = async (data, id) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/brands/getAllBrand`, {
+  return axios.put(`${url}/api/categorys/updateCategory/${id}`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
       ContentType: "multipart/form-data",
     },
   });
 };
+const getCategoryById = async (data) => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/categorys/getCategoryById/${data}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+
+// phần dánh cho Brand
+const getAllBrands = async (page) => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/brands/getAllBrands?page=${page}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const createBrand = async (data) => {
+  const token = localStorage.getItem("token");
+  return axios.post(`${url}/api/brands/createBrand`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const updateBrand = async (data, id) => {
+  const token = localStorage.getItem("token");
+  return axios.put(`${url}/api/brands/updateBrand/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const getBrandById = async (data) => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/brands/getBrandById/${data}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+////////////////////////////////////////////////////////////
+
 const quantity = async (page) => {
   const token = localStorage.getItem("token");
   return axios.get(`${url}/api/admin/quantity/${page}`, {
@@ -139,26 +192,53 @@ const createVoucher = async (data) => {
     },
   });
 };
-const getCategoryById = async (data) => {
+const searchProducts = async (data, page) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/categorys/getCategoryById/${data}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      ContentType: "multipart/form-data",
-    },
-  });
+  return axios.post(
+    `${url}/api/products/searchProducts?limit=7&page=${page}`,
+    { search: data },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+    }
+  );
 };
-const updateCategory = async (data, id) => {
+const searchBrands = async (data, page) => {
   const token = localStorage.getItem("token");
-  return axios.put(`${url}/api/categorys/updateCategory/${id}`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      ContentType: "multipart/form-data",
-    },
-  });
+  return axios.post(
+    `${url}/api/brands/seachBands?limit=7&page=${page}`,
+    { nameBrand: data },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+    }
+  );
+};
+const seachCategorys = async (data, page) => {
+  const token = localStorage.getItem("token");
+  return axios.post(
+    `${url}/api/categorys/seachCategory?limit=7&page=${page}`,
+    { nameCategory: data },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+    }
+  );
 };
 export {
+  seachCategorys,
+  searchBrands,
+  searchProducts,
+  getBrandById,
+  updateBrand,
   updateCategory,
+  createBrand,
   getCategoryById,
   createVoucher,
   getAllVouchers,
@@ -170,7 +250,7 @@ export {
   getAllProducts,
   getAllUser,
   getAllCategory,
-  getAllBrand,
+  getAllBrands,
   addproduct,
   deleteproduct,
   getAllOrders,

@@ -15,24 +15,59 @@ import Product from "../Components/Product/Product";
 import Checkout from "../Components/Checkout/Checkout";
 import Account from "../Components/Account/Account";
 import Favorite from "../Components/Favorite/Favorite";
+import LoadingModal from "../Components/Loading/Loading";
+import { useState } from "react";
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <div style={{ height: "100vh" }}>
+      {isLoading ? <LoadingModal /> : <></>}
+
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/collections" element={<Collections />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgetpassword" element={<Forgetpassword />} />
-        <Route path="/product/:id" element={<Product />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/favorite" element={<Favorite />} />
-        <Route path="/account/:i" element={<Account />} />
-        <Route path="/logout" element={<Forgetpassword />} />
-        <Route path="/introduce" element={<Introduce />} />
+        <Route path="/" element={<Home setIsLoading={setIsLoading} />} />
+        <Route path="/login" element={<Login setIsLoading={setIsLoading} />} />
+        <Route
+          path="/collections"
+          element={<Collections setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/cart"
+          element={<Cart Collections setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/register"
+          element={<Register Collections setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/forgetpassword"
+          element={<Forgetpassword setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/product/:id"
+          element={<Product setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/checkout"
+          element={<Checkout setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/favorite"
+          element={<Favorite setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/account/:i"
+          element={<Account setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/logout"
+          element={<Forgetpassword setIsLoading={setIsLoading} />}
+        />
+        <Route
+          path="/introduce"
+          element={<Introduce setIsLoading={setIsLoading} />}
+        />
       </Routes>
       <Footer />
     </div>

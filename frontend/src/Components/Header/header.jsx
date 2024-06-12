@@ -47,6 +47,10 @@ function Header() {
       setIsopen(false);
     }
   };
+  const handleNavClick = () => {
+    const searchTerm = "giày thể thao"; // Thay đổi thành giá trị của ô input hoặc từ bất kỳ nguồn dữ liệu nào bạn muốn
+    navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+  };
 
   return (
     <div>
@@ -55,7 +59,7 @@ function Header() {
           <div className="header-right-wrap">
             <div className="header-form-group" style={{ width: "300px" }}>
               <div style={{ borderColor: "gray" }}>
-                <label>
+                <label onClick={handleNavClick}>
                   <em>
                     <FontAwesomeIcon icon={faSearch} />
                   </em>

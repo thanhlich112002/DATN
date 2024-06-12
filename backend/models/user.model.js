@@ -104,24 +104,15 @@ const userSchema = new Schema(
       },
       select: false,
     },
-    isVerified: {
-      type: Boolean,
-      default: false,
-      select: false,
-    },
   },
   {
     timestamps: true,
   }
 );
 userSchema.pre("save", async function (next) {
-  // Only run this function if password was actually modified
   if (!this.isModified("password")) return next();
 
-  // Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
-
-  // Delete passwordConfirm field
   this.passwordConfirm = undefined;
   next();
 });
@@ -140,9 +131,7 @@ userSchema.methods.createSignUpToken = function () {
     .createHash("sha256")
     .update(resetToken.toString())
     .digest("hex");
-
   this.signUpToken = resetTokenHex;
-
   this.signUpExpires = new Date(Date.now() + 30 * 1000 * 1000);
   return resetToken;
 };

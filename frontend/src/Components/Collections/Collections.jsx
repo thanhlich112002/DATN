@@ -5,18 +5,16 @@ import style from "./Collections.css";
 import Item from "../Category/item";
 import {
   getAllProducts,
-  getAllBrand,
+  getAllBrands,
   seachBrands,
   Getallcategory,
   searchProducts,
 } from "../../service/API";
 
-function Collections() {
+function Collections({ setIsLoading }) {
   const [products, setProducts] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [cat, setCat] = useState([]);
-  const [error, setError] = useState(null);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const searchInputRef = useRef();
@@ -28,7 +26,6 @@ function Collections() {
       setBrands(brandsResponse.data.data);
     } catch (error) {
       console.error("Failed to search brands:", error);
-      setError("Failed to search brands. Please try again later.");
     }
   };
 
@@ -41,32 +38,34 @@ function Collections() {
       setProducts(productsResponse.data.data);
     } catch (error) {
       console.error("Failed to search products:", error);
-      setError("Failed to search products. Please try again later.");
     }
   };
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const brandsResponse = await getAllBrand();
+        setIsLoading(true);
+        const brandsResponse = await getAllBrands();
         setBrands(brandsResponse.data.data);
         const productsResponse = await getAllProducts();
         setProducts(productsResponse.data.data);
-        setLoading(false);
+        setIsLoading(false);
       } catch (error) {
         console.error("Failed to fetch products:", error);
-        setError("Failed to fetch products. Please try again later.");
-        setLoading(false);
+        setIsLoading(false);
       }
     };
 
     const fetchCategories = async () => {
       try {
+        setIsLoading(true);
         const res = await Getallcategory();
         console.log(res.data);
         setCat(res.data.data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 

@@ -13,16 +13,10 @@ class AuthController {
       let body = {
         ...req.body,
         role,
-        isVerified: false,
         photo: process.env.DEFAULT_AVATAR,
       };
       const doc = await Model.create(body);
-      // const signUpToken = doc.createSignUpToken();
-
       await doc.save({ validateBeforeSave: false });
-      // 3) Gửi email chứa mã token tới email của doc
-      req.doc = doc;
-      // req.signUpToken = signUpToken;
       res.status(200).json({ status: "success", data: doc });
     });
   login = catchAsync(async (req, res, next) => {
@@ -67,7 +61,9 @@ class AuthController {
   });
   forgetPassword = catchAsync(async (req, res, next) => {
     const email = req.params.email;
+    console.log(email);
     const user = await User.findOne({ email: email });
+    console.log(user);
     if (!user) {
       return next(new appError("Không tìm thấy Email", 401));
     }

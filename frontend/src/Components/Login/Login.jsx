@@ -5,8 +5,9 @@ import Input from "./Input";
 import Button from "./button";
 import { loginAPI } from "../../service/API";
 import { useAuth } from "../../service/authContext";
+import { toast } from "react-toastify";
 
-function Login() {
+function Login({ setIsLoading }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ function Login() {
         setMessage("Vui lòng nhập mật khẩu");
         return;
       }
+
+      setIsLoading(true);
 
       let res = await loginAPI({
         password: password,
@@ -46,8 +49,10 @@ function Login() {
         navigate("/");
       }
     } catch (e) {
-      // setMessage(e.Error);
+      toast.error(e.response.data.message);
       console.error(e.response.data.message);
+    } finally {
+      setIsLoading(false); // Kết thúc loading
     }
   };
 

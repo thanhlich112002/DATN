@@ -298,13 +298,20 @@ class orderController {
       .limitFields()
       .paginate();
     const orders = await features.query;
+    const totalResults = await Order.countDocuments(obj);
+    const pageSize = parseInt(req.query.limit) || 2;
+    const totalPages = Math.ceil(totalResults / pageSize);
+    const currentPage = parseInt(req.query.page) || 1;
 
     res.status(200).json({
       status: "success",
       length: orders.length,
       data: orders,
+      totalPages,
+      currentPage,
     });
   });
+
   checkComments = catchAsync(async (req, res, next) => {
     try {
       const productId = req.params.productId;

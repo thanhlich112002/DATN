@@ -10,139 +10,6 @@ const cloudinary = require("cloudinary").v2;
 
 class productsController {
   UpImage = UploadImage.array("images", 10);
-
-  createProduct = catchAsync(async (req, res, next) => {
-    const category = await Category.findById(req.body.categoryId);
-    const brand = await Brand.findById(req.body.brandId);
-    if (!category) {
-      return next(new appError("Không tìm thấy danh mục", 404));
-    }
-    if (!brand) {
-      return next(new appError("Không tìm thấy nhãn hiệu", 404));
-    }
-    if (!req.files) return next(new appError("Vui longf theem anhe", 404));
-    console.log(req.files);
-    req.body.Category = category._id;
-    req.body.Brand = brand._id;
-    req.body.images = req.files.map((file) => file.path);
-    const product = await Products.create(req.body);
-    return res.status(200).json(product);
-  });
-  getProductsbyID = catchAsync(async (req, res, next) => {
-    const features = new ApiFeatures(
-      Products.findOne({ _id: req.params.id })
-        .populate({
-          path: "Category",
-          select: "name",
-        })
-        .populate({
-          path: "Brand",
-          select: "name",
-        }),
-      req.query
-    )
-      .filter()
-      .search()
-      .sort()
-      .paginate();
-    const favorites = await favoriteModel.find({
-      product: req.params.id,
-      isFavorite: true,
-    });
-    const products = await features.query;
-    return res.status(200).json({
-      message: "success",
-      data: products,
-      favorites: favorites.length,
-    });
-  });
-  getAllProducts = catchAsync(async (req, res, next) => {
-    const features = new ApiFeatures(
-      Products.find()
-        .populate({
-          path: "Category",
-          select: "name",
-        })
-        .populate({
-          path: "Brand",
-          select: "name",
-        }),
-      req.query
-    )
-      .filter()
-      .search()
-      .sort()
-      .paginate();
-    const products = await features.query;
-    return res.status(200).json({ message: "success", data: products });
-  });
-
-  getAllProductsbyCat = catchAsync(async (req, res, next) => {
-    const nameCat = req.body.Category || req.query.Category;
-    const category = await Category.findOne({ name: nameCat });
-    const features = new ApiFeatures(
-      Products.find({ Category: category._id })
-        .populate({
-          path: "Category",
-          select: "name",
-        })
-        .populate({
-          path: "Brand",
-          select: "name",
-        }),
-      req.query
-    )
-      .filter()
-      .search()
-      .sort()
-      .paginate();
-    const products = await features.query;
-    return res.status(200).json({ message: "success", data: products });
-  });
-  searchProducts = catchAsync(async (req, res, next) => {
-    const { search, CategoryID, BrandID } = req.body;
-    console.log(req.body);
-    let conditions = [];
-
-    if (search) {
-      conditions.push({ name: { $regex: search, $options: "i" } });
-    }
-
-    if (CategoryID && CategoryID.length > 0) {
-      conditions.push({ Category: { $in: CategoryID } });
-    }
-
-    if (BrandID && BrandID.length > 0) {
-      conditions.push({ Brand: { $in: BrandID } });
-    }
-
-    const query = conditions.length > 0 ? { $and: conditions } : {};
-    console.log(query);
-    const features = new ApiFeatures(
-      Products.find(query)
-        .populate({
-          path: "Category",
-          select: "name",
-        })
-        .populate({
-          path: "Brand",
-          select: "name",
-        }),
-      req.query
-    )
-      .filter()
-      .search()
-      .sort()
-      .paginate();
-
-    const products = await features.query;
-
-    res.status(200).json({
-      status: "success",
-      results: products.length,
-      data: products,
-    });
-  });
   updateProduct = catchAsync(async (req, res, next) => {
     try {
       console.log(req.body.categoryId);
@@ -242,6 +109,177 @@ class productsController {
       console.error("Lỗi khi tăng số lượt xem của sản phẩm:", error);
       res.status(500).json({ message: "Lỗi server" });
     }
+  });
+  createProduct = catchAsync(async (req, res, next) => {
+    const category = await Category.findById(req.body.categoryId);
+    const brand = await Brand.findById(req.body.brandId);
+    if (!category) {
+      return next(new appError("Không tìm thấy danh mục", 404));
+    }
+    if (!brand) {
+      return next(new appError("Không tìm thấy nhãn hiệu", 404));
+    }
+    if (!req.files) return next(new appError("Vui longf theem anhe", 404));
+    console.log(req.files);
+    req.body.Category = category._id;
+    req.body.Brand = brand._id;
+    req.body.images = req.files.map((file) => file.path);
+    const product = await Products.create(req.body);
+    return res.status(200).json(product);
+  });
+  getProductsbyID = catchAsync(async (req, res, next) => {
+    const features = new ApiFeatures(
+      Products.findOne({ _id: req.params.id })
+        .populate({
+          path: "Category",
+          select: "name",
+        })
+        .populate({
+          path: "Brand",
+          select: "name",
+        }),
+      req.query
+    )
+      .filter()
+      .search()
+      .sort()
+      .paginate();
+    const favorites = await favoriteModel.find({
+      product: req.params.id,
+      isFavorite: true,
+    });
+    const products = await features.query;
+    return res.status(200).json({
+      message: "success",
+      data: products,
+      favorites: favorites.length,
+    });
+  });
+  getAllProducts = catchAsync(async (req, res, next) => {
+    const pageSize = parseInt(req.query.limit) || 7;
+    const currentPage = parseInt(req.query.page) || 1; // Trang hiện tại
+
+    const features = new ApiFeatures(
+      Products.find()
+        .populate({
+          path: "Category",
+          select: "name",
+        })
+        .populate({
+          path: "Brand",
+          select: "name",
+        }),
+      req.query
+    )
+      .filter()
+      .search()
+      .sort();
+
+    // Đếm tổng số kết quả trước khi phân trang
+    const totalResults = await Products.countDocuments(features.query);
+    const totalPages = Math.ceil(totalResults / pageSize);
+    const products = await features.query
+      .skip((currentPage - 1) * pageSize)
+      .limit(pageSize);
+    return res.status(200).json({
+      message: "success",
+      data: products,
+      totalResults,
+      totalPages,
+      currentPage,
+    });
+  });
+
+  getAllProductsbyCat = catchAsync(async (req, res, next) => {
+    const nameCat = req.body.Category || req.query.Category;
+    const category = await Category.findOne({ name: nameCat });
+
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    const features = new ApiFeatures(
+      Products.find({ Category: category._id })
+        .populate({
+          path: "Category",
+          select: "name",
+        })
+        .populate({
+          path: "Brand",
+          select: "name",
+        }),
+      req.query
+    )
+      .filter()
+      .search()
+      .sort()
+      .paginate();
+
+    const totalResults = await Products.countDocuments(features.query);
+    const pageSize = parseInt(req.query.limit) || 7; // Số sản phẩm mỗi trang
+    const totalPages = Math.ceil(totalResults / pageSize);
+    const products = await features.query;
+
+    return res.status(200).json({
+      message: "success",
+      data: products,
+      totalResults,
+      totalPages,
+      currentPage: parseInt(req.query.page) || 1,
+    });
+  });
+  searchProducts = catchAsync(async (req, res, next) => {
+    const { search, CategoryID, BrandID } = req.body;
+    console.log(req.body);
+
+    let conditions = [];
+    if (search) {
+      conditions.push({ name: { $regex: search, $options: "i" } });
+    }
+
+    if (CategoryID && CategoryID.length > 0) {
+      conditions.push({ Category: { $in: CategoryID } });
+    }
+
+    if (BrandID && BrandID.length > 0) {
+      conditions.push({ Brand: { $in: BrandID } });
+    }
+
+    const query = conditions.length > 0 ? { $and: conditions } : {};
+    console.log(query);
+
+    const pageSize = parseInt(req.query.limit) || 7; // Số sản phẩm mỗi trang
+    const currentPage = parseInt(req.query.page) || 1;
+
+    const features = new ApiFeatures(
+      Products.find(query)
+        .populate({
+          path: "Category",
+          select: "name",
+        })
+        .populate({
+          path: "Brand",
+          select: "name",
+        }),
+      req.query
+    )
+      .filter()
+      .search()
+      .sort()
+      .paginate();
+
+    const products = await features.query;
+    const totalResults = await Products.countDocuments(query);
+    const totalPages = Math.ceil(totalResults / pageSize);
+
+    res.status(200).json({
+      status: "success",
+      results: products.length,
+      totalResults,
+      totalPages,
+      currentPage,
+      data: products,
+    });
   });
 }
 module.exports = new productsController();

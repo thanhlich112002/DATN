@@ -1,21 +1,21 @@
 const nodemailer = require("nodemailer");
-// const pug = require("pug");
 const { google } = require("googleapis");
 
 const oAuth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.REDIRECT_URI
+  "101226702177-ok6d8e86stk9c1g3dom21u07jitqja4m.apps.googleusercontent.com",
+  "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",
+  "https://developers.google.com/oauthplayground"
 );
-oAuth2Client.setCredentials({ refresh_token: process.env.REFRESEH_TOKEN });
+oAuth2Client.setCredentials({
+  refresh_token:
+    "1//04YxabYLAYDylCgYIARAAGAQSNwF-L9IrDlvULsrHj26hY_DRCmi4oPJ68--O3kgmulSgcTerSVkdiD0qrXR7m6S_dkmu2-ZrlLE",
+});
 
 module.exports = class Email {
-  constructor(user, token, url) {
+  constructor(user, toke, d) {
     this.to = user.email;
     this.firstName = user.firstName;
     this.from = `FALTH`;
-    this.url = url;
-    this.token = token;
   }
 
   async newTransport() {
@@ -25,9 +25,11 @@ module.exports = class Email {
       auth: {
         type: "OAuth2",
         user: "nguyenthanhlich112002@gmail.com",
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        refreshToken: process.env.REFRESEH_TOKEN,
+        clientId:
+          "101226702177-ok6d8e86stk9c1g3dom21u07jitqja4m.apps.googleusercontent.com",
+        clientSecret: "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",
+        refreshToken:
+          "1//04YxabYLAYDylCgYIARAAGAQSNwF-L9IrDlvULsrHj26hY_DRCmi4oPJ68--O3kgmulSgcTerSVkdiD0qrXR7m6S_dkmu2-ZrlLE",
         accessToken: accessToken,
       },
     });
@@ -36,21 +38,12 @@ module.exports = class Email {
   // Send the actual email
 
   async send(template, subject) {
-    // 1) Render HTML based on a pug template
-    // const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
-    //   firstName: this.firstName,
-    //   url: this.url,
-    //   subject,
-    //   token: this.token,
-    // });
-    // 2) Define email options
     const mailOptions = {
       from: this.from,
       to: this.to,
       subject,
       html: `${this.token}`,
     };
-    // 3) Create a transport and send email
     const transport = await this.newTransport();
     await transport.sendMail(mailOptions);
   }

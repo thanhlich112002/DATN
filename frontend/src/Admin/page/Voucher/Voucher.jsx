@@ -4,6 +4,7 @@ import { getAllVouchers, createVoucher } from "../../service/userService";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import TopTable from "../component/TopTable/TopTable";
 
 const VoucherDisplay = ({ voucher, onSave }) => {
   return (
@@ -187,6 +188,7 @@ function Voucher() {
             {isOpen ? "Đóng form" : "Thêm phiếu giảm giá"}
           </button>
         </div>
+        <TopTable />
         {isOpen && <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />}
         <div className="voucher-grid">
           {vouchers?.map((voucher, index) => (

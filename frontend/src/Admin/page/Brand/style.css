@@ -25,7 +25,6 @@
   width: 80%;
   border-radius: 5px;
   color: #4a4a4a;
-  border-color: none;
 }
 .table-row .column-2 select {
   padding: 10px 10px;
@@ -33,6 +32,7 @@
   width: 80%;
   border-radius: 5px;
   color: #4a4a4a;
+  border-color: #d6d6d6 !important;
 }
 .table-row .column-2 textarea {
   padding: 10px 10px;
@@ -40,6 +40,7 @@
   width: 80%;
   border-radius: 5px;
   color: #4a4a4a;
+  border-color: #d6d6d6 !important;
   min-height: 80px;
 }
 .table-row .column-2 input:focus {

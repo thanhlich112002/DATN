@@ -15,7 +15,6 @@ function Voucher() {
       console.log(response.data);
     } catch (error) {
       console.error("Lỗi khi tải danh sách phiếu giảm giá:", error);
-      throw error;
     }
   };
 

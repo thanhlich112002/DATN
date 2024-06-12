@@ -19,6 +19,7 @@ const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const toggle = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
+  const [active, setActive] = useState("/admin");
 
   const menuItem = [
     {
@@ -27,22 +28,27 @@ const Sidebar = ({ children }) => {
       icon: faHouse,
     },
     {
-      path: "/admin/tableProduct",
+      path: "/admin/product",
       name: "Danh sách sản phẩm",
       icon: faPizzaSlice,
     },
     {
-      path: "/admin/tableCategory",
+      path: "/admin/category",
       name: "Danh mục",
       icon: faListAlt,
     },
     {
-      path: "/admin/managevoucher",
+      path: "/admin/voucher",
       name: "QL giảm giá",
       icon: faTags,
     },
     {
-      path: "/admin/manageorder",
+      path: "/admin/brand",
+      name: "Thương hiệu",
+      icon: faTags,
+    },
+    {
+      path: "/admin/order",
       name: "Đơn hàng",
       icon: faShoppingBasket,
     },
@@ -59,18 +65,25 @@ const Sidebar = ({ children }) => {
     <div className="container-admin">
       <aside id="sidebar" className={isOpen ? "expand" : ""}>
         <div className="sidebar-link" onClick={toggle}>
-          <FontAwesomeIcon icon={faBars} />
-          {isOpen ? <span>Admin</span> : <></>}
+          <i>
+            {" "}
+            <FontAwesomeIcon icon={faBars} />
+          </i>
         </div>
         <ul className="sidebar-nav">
           {menuItem.map((item, index) => (
             <li
               key={index}
-              className="sidebar-item"
-              onClick={() => navigate(`${item.path}`)}
+              className={`sidebar-item ${active === item.path ? "ATV" : ""}`}
+              onClick={() => {
+                navigate(`${item.path}`);
+                setActive(item.path);
+              }}
             >
               <div className="sidebar-link">
-                <FontAwesomeIcon icon={item.icon} />
+                <i>
+                  <FontAwesomeIcon icon={item.icon} />
+                </i>
                 {isOpen ? <span>{item.name}</span> : <></>}
               </div>
             </li>

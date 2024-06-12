@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import ProductTable from "./ProductTable";
-import { getAllOrders, upStatus } from "../../service/userService";
+import ProductTable from "./OrderTable";
+import { getAllOrders } from "../../service/userService";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBookmark,
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
-const TableProduct = () => {
+const TableOrder = () => {
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
+  const [name, setName] = useState("");
+  const [status, setStatus] = useState("");
   const fetchProducts = async (page) => {
     try {
       const response = await getAllOrders(page);
@@ -25,18 +23,16 @@ const TableProduct = () => {
   };
 
   useEffect(() => {
-    fetchProducts(currentPage);
-  }, [currentPage]);
-  const handlePageChange = (selectedPage) => {
-    fetchProducts(selectedPage);
-  };
-  const navigate = useNavigate();
-  const handleAddProductClick = () => {
-    navigate(`/admin/tableProduct/add`);
-  };
+    fetchProducts(currentPage, status);
+  }, [currentPage, status]);
+
+  useEffect(() => {
+    fetchProducts(currentPage, status, name);
+  }, [currentPage, name, status]);
+
   return (
     <div className="projects">
-      <div className="card-header">
+      {/* <div className="card-header">
         <div
           style={{
             display: "flex",
@@ -59,29 +55,16 @@ const TableProduct = () => {
           </div>
           <span>Quản lý đơn hàng</span>
         </div>
-      </div>
-      <div className="ReactPaginate">
-        <div
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </div>
-        <div>{currentPage}</div>
-        <div
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === pageCount}
-        >
-          <FontAwesomeIcon icon={faChevronRight} />
-        </div>
-      </div>
+      </div> */}
       <ProductTable
         products={products}
         fetchProducts={fetchProducts}
         currentPage={currentPage}
+        pageCount={pageCount}
+        setName={setName}
       />
     </div>
   );
 };
 
-export default TableProduct;
+export default TableOrder;
