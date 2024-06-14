@@ -2,7 +2,18 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { getBrandById, updateBrand } from "../../service/userService";
+import {
+  getBrandById,
+  updateBrand,
+  getStatisticsBrandbyId,
+} from "../../service/userService";
+import {
+  faListAlt,
+  faBoxOpen,
+  faBan,
+  faExclamationTriangle,
+} from "@fortawesome/free-solid-svg-icons";
+import Card from "../Dashboard/card";
 import "./style.css";
 import Image from "../Product/image";
 import { toast } from "react-toastify";
@@ -16,6 +27,15 @@ function EditCategory() {
   const [error, setError] = useState(null);
   const [images, setImages] = useState([]);
   const [deletedImageUrls, setDeletedImageUrls] = useState([]);
+  const [statisticsCategory, setStatisticsCategory] = useState([]);
+  const fetchStatisticsCategory = async () => {
+    try {
+      const response = await getStatisticsBrandbyId(id);
+      setStatisticsCategory(response.data.data);
+    } catch (error) {
+      console.log("Lỗi khi lấy danh sách danh mục:", error);
+    }
+  };
   const navigate = useNavigate();
 
   const fetchData = async () => {
@@ -31,6 +51,7 @@ function EditCategory() {
 
   useEffect(() => {
     fetchData();
+    fetchStatisticsCategory();
   }, [id]);
 
   const handleSubmit = async () => {
@@ -92,13 +113,39 @@ function EditCategory() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              className="background_cl"
+              className="addbut"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Quay về thương hiệu
             </button>
           </div>
-          <div className="_card-body">
+          <div className="_card-body BrP5">
+            <div className="dashboard_cards">
+              <Card
+                value={statisticsCategory.totalProducts}
+                title={"Tổng số sản phẩm"}
+                icon={faListAlt}
+                cln={"bcl1"}
+              />
+              <Card
+                value={statisticsCategory.totalAvailableProducts}
+                title={"Sản phẩm còn bán"}
+                icon={faBoxOpen}
+                cln={"bcl2"}
+              />
+              <Card
+                value={statisticsCategory.totalOutOfOrderProducts}
+                title={"Sản phẩm hết hàng"}
+                icon={faBan}
+                cln={"bcl3"}
+              />
+              <Card
+                value={statisticsCategory.totalSalesRevenue}
+                title={"Doanh thu theo tháng"}
+                icon={faExclamationTriangle}
+                cln={"bcl4"}
+              />
+            </div>
             <table className="add-category-table">
               <div
                 style={{

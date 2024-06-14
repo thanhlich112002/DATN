@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUsers, faBookmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUsers,
+  faBookmark,
+  faBox,
+  faShoppingCart,
+  faMoneyBill,
+} from "@fortawesome/free-solid-svg-icons";
 import "./Dashboard.css";
 import { quantity, getStatistics } from "../../service/userService";
 import {
@@ -123,20 +129,10 @@ function Dashboard() {
             gap: "20px",
             borderRadius: "5px",
             marginBottom: "20px",
+            marginLeft: "20px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              width: "100px",
-              height: "100px",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FontAwesomeIcon icon={faBookmark} fontSize={70} color="#C0C0C0" />
-          </div>
-          <span>Trang Admin</span>
+          <span>Thông kê</span>
         </div>
       </div>
       <div className="dashboard_top">
@@ -150,19 +146,19 @@ function Dashboard() {
           <Cart
             value={data.product}
             title={"Sản phẩm"}
-            icon={faUsers}
+            icon={faBox}
             cln={"bcl2"}
           />
           <Cart
             value={data.order}
-            title={"Đơn hàng"}
-            icon={faUsers}
+            title={"Đơn hàng trong ngày"}
+            icon={faShoppingCart}
             cln={"bcl3"}
           />
           <Cart
             value={revenue}
-            title={"Doanh thu"}
-            icon={faUsers}
+            title={"Doanh thu trong ngày"}
+            icon={faMoneyBill}
             cln={"bcl4"}
           />
         </div>
@@ -172,8 +168,9 @@ function Dashboard() {
             gap: "30px",
             justifyContent: "space-between",
           }}
+          className=""
         >
-          <div style={{ width: "60%" }} className="layout">
+          <div style={{ width: "60%" }} className="layout BrP5">
             <div className="header_table">
               <div style={{ fontSize: "30px" }} className="header_table">
                 Doanh thu
@@ -182,25 +179,25 @@ function Dashboard() {
                 <ul>
                   <li
                     onClick={() => setOrderCountTime("year")}
-                    className={orderCountTime === "year" ? "active" : ""}
+                    className={orderCountTime === "year" ? "ATV" : ""}
                   >
                     This year
                   </li>
                   <li
                     onClick={() => setOrderCountTime("month")}
-                    className={orderCountTime === "month" ? "active" : ""}
+                    className={orderCountTime === "month" ? "ATV" : ""}
                   >
                     This month
                   </li>
                   <li
                     onClick={() => setOrderCountTime("week")}
-                    className={orderCountTime === "week" ? "active" : ""}
+                    className={orderCountTime === "week" ? "ATV" : ""}
                   >
                     This week
                   </li>
                   <li
                     onClick={() => setOrderCountTime("day")}
-                    className={orderCountTime === "day" ? "active" : ""}
+                    className={orderCountTime === "day" ? "ATV" : ""}
                   >
                     Today
                   </li>
@@ -209,7 +206,7 @@ function Dashboard() {
             </div>
             <Car data={OrderCount} />
           </div>
-          <div style={{ width: "40%" }} className="layout">
+          <div style={{ width: "40%" }} className="layout BrP5">
             <div className="header_table">
               <div style={{ fontSize: "30px" }} className="header_table">
                 Thống kê theo danh mục
@@ -219,7 +216,7 @@ function Dashboard() {
                   <li
                     onClick={() => setOrderRevenueByCategoryTime("year")}
                     className={
-                      orderRevenueByCategoryTime === "year" ? "active" : ""
+                      orderRevenueByCategoryTime === "year" ? "ATV" : ""
                     }
                   >
                     This year
@@ -227,7 +224,7 @@ function Dashboard() {
                   <li
                     onClick={() => setOrderRevenueByCategoryTime("month")}
                     className={
-                      orderRevenueByCategoryTime === "month" ? "active" : ""
+                      orderRevenueByCategoryTime === "month" ? "ATV" : ""
                     }
                   >
                     This month
@@ -235,7 +232,7 @@ function Dashboard() {
                   <li
                     onClick={() => setOrderRevenueByCategoryTime("week")}
                     className={
-                      orderRevenueByCategoryTime === "week" ? "active" : ""
+                      orderRevenueByCategoryTime === "week" ? "ATV" : ""
                     }
                   >
                     This week
@@ -243,7 +240,7 @@ function Dashboard() {
                   <li
                     onClick={() => setOrderRevenueByCategoryTime("day")}
                     className={
-                      orderRevenueByCategoryTime === "day" ? "active" : ""
+                      orderRevenueByCategoryTime === "day" ? "ATV" : ""
                     }
                   >
                     Today
@@ -257,7 +254,7 @@ function Dashboard() {
           </div>
         </div>
         <div style={{ display: "flex", gap: "30px" }}>
-          <div style={{ width: "60%" }} className="layout">
+          <div style={{ width: "60%" }} className="layout BrP5">
             <div className="header_table">
               <div style={{ fontSize: "30px" }} className="header_table">
                 Sản phẩm bán chạy nhất
@@ -266,25 +263,25 @@ function Dashboard() {
                 <ul>
                   <li
                     onClick={() => setTopSaleTime("year")}
-                    className={topSaleTime === "year" ? "active" : ""}
+                    className={topSaleTime === "year" ? "ATV" : ""}
                   >
                     This year
                   </li>
                   <li
                     onClick={() => setTopSaleTime("month")}
-                    className={topSaleTime === "month" ? "active" : ""}
+                    className={topSaleTime === "month" ? "ATV" : ""}
                   >
                     This month
                   </li>
                   <li
                     onClick={() => setTopSaleTime("week")}
-                    className={topSaleTime === "week" ? "active" : ""}
+                    className={topSaleTime === "week" ? "ATV" : ""}
                   >
                     This week
                   </li>
                   <li
                     onClick={() => setTopSaleTime("day")}
-                    className={topSaleTime === "day" ? "active" : ""}
+                    className={topSaleTime === "day" ? "ATV" : ""}
                   >
                     Today
                   </li>
@@ -293,7 +290,7 @@ function Dashboard() {
             </div>
             <Topsale products={products} />
           </div>
-          <div style={{ width: "40%" }} className="layout">
+          <div style={{ width: "40%" }} className="layout BrP5">
             <div className="header_table">
               <div style={{ fontSize: "30px" }} className="header_table">
                 Thống kê theo thương hiệu
@@ -302,33 +299,25 @@ function Dashboard() {
                 <ul>
                   <li
                     onClick={() => setOrderRevenueByBrandTime("year")}
-                    className={
-                      orderRevenueByBrandTime === "year" ? "active" : ""
-                    }
+                    className={orderRevenueByBrandTime === "year" ? "ATV" : ""}
                   >
                     This year
                   </li>
                   <li
                     onClick={() => setOrderRevenueByBrandTime("month")}
-                    className={
-                      orderRevenueByBrandTime === "month" ? "active" : ""
-                    }
+                    className={orderRevenueByBrandTime === "month" ? "ATV" : ""}
                   >
                     This month
                   </li>
                   <li
                     onClick={() => setOrderRevenueByBrandTime("week")}
-                    className={
-                      orderRevenueByBrandTime === "week" ? "active" : ""
-                    }
+                    className={orderRevenueByBrandTime === "week" ? "ATV" : ""}
                   >
                     This week
                   </li>
                   <li
                     onClick={() => setOrderRevenueByBrandTime("day")}
-                    className={
-                      orderRevenueByBrandTime === "day" ? "active" : ""
-                    }
+                    className={orderRevenueByBrandTime === "day" ? "ATV" : ""}
                   >
                     Today
                   </li>

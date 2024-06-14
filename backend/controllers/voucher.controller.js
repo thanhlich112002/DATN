@@ -1,4 +1,5 @@
 const Voucher = require("../models/voucher.model");
+const ApiFeatures = require("../utils/ApiFeatures.utlis");
 const catchAsync = require("../utils/catchAsync.utlis");
 
 class VoucherController {
@@ -14,26 +15,48 @@ class VoucherController {
         expiryDate: localExpiryDate,
         quantity,
       });
-
-      // Lưu phiếu giảm giá vào cơ sở dữ liệu
       const savedVoucher = await newVoucher.save();
-
-      // Trả về phiếu giảm giá đã lưu với mã trạng thái HTTP 201 (Created)
       res.status(201).json(savedVoucher);
     } catch (err) {
-      // Xử lý lỗi nếu có
       res.status(400).json({ message: err.message });
     }
   });
-
   getAllVouchers = catchAsync(async (req, res) => {
     try {
-      const vouchers = await Voucher.find({ isAvailable: "true" });
-      res.status(200).json(vouchers);
+      const { status } = req.body;
+      let queryObj = {};
+      if (status != null) {
+        queryObj.isAvaliable = status;
+      }
+      console.log(queryObj);
+      const pageSize = parseInt(req.query.limit, 10) || 7;
+      const currentPage = parseInt(req.query.page, 10) || 1;
+      let query = Voucher.find(queryObj);
+      if (req.query.search) {
+        query = new ApiFeatures(query, req.query).filter().search().sort();
+      } else {
+        query = new ApiFeatures(query, req.query).filter().sort().query;
+      }
+      const totalResults = await Voucher.countDocuments(query);
+      const totalPages = Math.ceil(totalResults / pageSize);
+      const vouchers = await query
+        .skip((currentPage - 1) * pageSize)
+        .limit(pageSize);
+      return res.status(200).json({
+        message: "Thành công",
+        data: vouchers,
+        totalResults,
+        totalPages,
+        currentPage,
+      });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      console.error(err);
+      return res
+        .status(500)
+        .json({ message: "Thất bại", error: "Lỗi máy chủ" });
     }
   });
+
   addVouchers = catchAsync(async (req, res) => {
     try {
       const userId = req.body.userId;

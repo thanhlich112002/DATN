@@ -6,11 +6,11 @@ const List = ({ title, value, icon, cln }) => {
     <>
       <div className={`dashboard_card-single ${cln}`}>
         <div>
-          <div>{value}</div>
-          <span>{title}</span>
+          <FontAwesomeIcon icon={icon} className="icon" />
         </div>
         <div>
-          <FontAwesomeIcon icon={icon} className="icon" />
+          <span>{title}</span>
+          <div>{value}</div>
         </div>
       </div>
     </>

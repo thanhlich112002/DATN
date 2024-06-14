@@ -13,6 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "../../service/userContext";
 import { useNavigate } from "react-router-dom";
+import myImage from "../../Components/assets/imgs/95cb7bec-2941-4e11-a47e-1d456f78d912.jpg";
 
 function Header() {
   const navigate = useNavigate();
@@ -64,7 +65,6 @@ function Header() {
                     <FontAwesomeIcon icon={faSearch} />
                   </em>
                 </label>
-
                 <input
                   id="autocomplete-address"
                   placeholder="Tìm kiếm sản phẩm"
@@ -75,20 +75,7 @@ function Header() {
           </div>
           <div className="header-left-wrap">
             <div className="">
-              <a className="" style={{ textDecoration: "none" }}>
-                <span
-                  onClick={() => NavFa()}
-                  style={{
-                    marginLeft: "20px",
-                    color: "#ffffff",
-                    fontSize: "20px",
-                    fontWeight: "700",
-                    cursor: "pointer",
-                  }}
-                >
-                  Luxury perfumes
-                </span>
-              </a>
+              <img src={myImage} alt="" style={{ height: "60px" }} />
             </div>
           </div>
           <div className="header-right-wrap">
@@ -148,13 +135,13 @@ function Header() {
                   >
                     Đăng nhập
                   </a>
-                  <span>/</span>
+                  <span style={{ color: "#ffffff", margin: "0px 3px" }}>/</span>
                   <a
                     href="/register"
                     className="header-login"
                     style={{ textDecoration: "none" }}
                   >
-                    Tạo tài khoản
+                    Đăng ký
                   </a>
                 </div>
               </div>
@@ -163,7 +150,7 @@ function Header() {
         </div>
       </div>
 
-      <div className="">
+      <div style={{ boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
         <div className="container_cus header-bottom-wrap">
           <div className="header-left-wrap">
             <a href="/" className="header-a" key="Trang chủ">

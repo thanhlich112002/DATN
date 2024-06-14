@@ -136,7 +136,7 @@ function Register({ setIsLoading }) {
   return (
     <div className="container">
       <div className="form-group w50">
-        <h2 className="lineup">Tạo tài khoản</h2>
+        <h2 className="lineup">Đăng ký</h2>
         <Input
           title="Tên"
           type="text"

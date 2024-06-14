@@ -163,12 +163,34 @@ const seachBrands = async (name) => {
     nameBrand: name,
   });
 };
-const getOrdersByUserId = async (id) => {
-  return axios.get(
-    `${url}/api/orders/getOrdersByUserId/${id}?limit=100&sort=-dateOrdered`,
-    {}
-  );
+const getOrdersByUserId = async (
+  id,
+  currentPage,
+  status,
+  startDate,
+  endDate
+) => {
+  const token = localStorage.getItem("token");
+  const params = {
+    userId: id,
+    limit: 7,
+    page: currentPage,
+    sort: "-dateOrdered",
+    start: startDate,
+    end: endDate,
+  };
+  if (status !== "all") {
+    params.status = status;
+  }
+  return axios.get(`${url}/api/orders/getOrdersByUserId`, {
+    params,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
+
 const changepassword = async (
   email,
   oldPassword,
@@ -279,7 +301,29 @@ const getVouchersbyUser = async (data) => {
     config
   );
 };
+const ReturnOrder = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/orders/ReturnOrder/${id}`, config);
+};
+const cancelOrder = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/orders/cancelOrder/${id}`, config);
+};
 export {
+  cancelOrder,
+  ReturnOrder,
   getVouchersbyUser,
   getAllVouchers,
   addVouchers,

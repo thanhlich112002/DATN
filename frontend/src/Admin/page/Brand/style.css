@@ -51,7 +51,6 @@
   font-weight: 500;
   font-size: 16px;
   color: #fff;
-  background-color: #07503d;
   border-radius: 3px;
   border: none;
 }
@@ -63,7 +62,16 @@
   font-weight: 500;
   font-size: 16px;
   color: #fff;
-  background-color: #07503d;
   border-radius: 3px;
   border: none;
+}
+.addbut {
+  display: flex;
+  background-color: #e0e0e0 !important;
+  color: black !important;
+  font-size: 16px;
+  margin: 0px !important;
+  padding: 5px 10px !important;
+  gap: 5px;
+  align-items: center;
 }

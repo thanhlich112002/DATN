@@ -6,9 +6,6 @@ function Footer() {
   return (
     <div class="Footer_container">
       <div class="container">
-        <div class="Footer_logo">
-          <img alt="" />
-        </div>
         <div class="Pooter_infor">
           <div class="Item_Footer">
             <div class="t_h5">Giới Thiệu</div>

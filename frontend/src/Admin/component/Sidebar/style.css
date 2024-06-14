@@ -34,10 +34,11 @@ main-sider {
 #sidebar {
   width: 70px;
   min-width: 70px;
-  z-index: 1000;
+  z-index: 1;
   transition: all 0.25s ease-in-out;
   display: flex;
   flex-direction: column;
+  /* border: 0.1px solid #ebebeb; */
 }
 
 #sidebar.expand {

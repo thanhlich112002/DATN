@@ -7,33 +7,46 @@ import {
   faStar,
   faHeart,
   faBookmark,
-} from "@fortawesome/free-solid-svg-icons"; // Sửa icon của thẻ Card
+} from "@fortawesome/free-solid-svg-icons";
 import {
   getAllCategory,
   getAllBrands,
   upproduct,
   getProductsbyID,
+  getAllComment,
 } from "../../service/userService";
 import "./style.css";
 import Image from "./image";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Card from "../Dashboard/card";
+import RatingStars from "./RatingStars";
 
 function AddCategory() {
+  const { id } = useParams();
   const [item, setItem] = useState([]);
   const [images, setImages] = useState([]);
   const [brands, setBrands] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [listComment, setListComment] = useState(null);
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState(null);
   const [deletedImageUrls, setDeletedImageUrls] = useState([]);
   const [brandId, setBrandId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [product, setProduct] = useState({});
-
+  const fetchComment = async () => {
+    try {
+      const Comment = await getAllComment(id);
+      setListComment(Comment.data.data);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    }
+  };
+  useEffect(() => {
+    fetchComment();
+  }, [id]);
   const navigate = useNavigate();
-  const { id } = useParams();
+
   const fetchProduct = async () => {
     try {
       const productData = await getProductsbyID(id);
@@ -53,6 +66,8 @@ function AddCategory() {
         quantity: productData.data.data[0]?.quantity,
         productPurchases: productData.data.data[0]?.productPurchases,
         ratingsAverage: productData.data.data[0]?.ratingsAverage,
+        isAvailable: productData.data.data[0]?.isAvailable,
+        isOutofOrder: productData.data.data[0]?.isOutofOrder,
       });
       setBrandId(productData.data.data[0].Brand._id);
       setCategoryId(productData.data.data[0].Category._id);
@@ -70,7 +85,7 @@ function AddCategory() {
 
   useEffect(() => {
     const fetchCategories = async () => {
-      const categoriesData = await getAllCategory();
+      const categoriesData = await getAllCategory("", 100);
       setCategories(categoriesData.data.data);
       if (categoriesData.data.data.length > 0) {
         setCategoryId(categoriesData.data.data[0]._id);
@@ -78,7 +93,7 @@ function AddCategory() {
     };
 
     const fetchBrands = async () => {
-      const brandsData = await getAllBrands();
+      const brandsData = await getAllBrands("", 100);
       setBrands(brandsData.data.data);
       if (brandsData.data.data.length > 0) {
         setBrandId(brandsData.data.data[0]._id);
@@ -97,6 +112,7 @@ function AddCategory() {
       formData.append("description", product.description);
       formData.append("origin", product.origin);
       formData.append("IncenseGroup", product.IncenseGroup);
+      formData.append("isAvailable", product.isAvailable);
       images.forEach((image) => {
         formData.append("images", image.file);
       });
@@ -142,6 +158,7 @@ function AddCategory() {
     formData.append("IncenseGroup", product.IncenseGroup);
     formData.append("inputprice", product.inputprice);
     formData.append("quantity", product.quantity);
+    formData.append("isAvailable", product.isAvailable);
     images.forEach((image) => {
       if (image.file) {
         formData.append("images", image.file);
@@ -165,7 +182,7 @@ function AddCategory() {
       setImages([]);
       setDeletedImageUrls([]);
       toast.success("Cập nhật thành công!");
-      navigate("/admin/tableproduct");
+      navigate("/admin/product");
     } catch (error) {
       console.log("Đã xảy ra lỗi khi thêm sản phẩm:", error);
       toast.error("Đã xảy ra lỗi khi thêm sản phẩm!");
@@ -186,21 +203,6 @@ function AddCategory() {
                 marginBottom: "20px",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  width: "100px",
-                  height: "100px",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faBookmark}
-                  fontSize={70}
-                  color="#C0C0C0"
-                />
-              </div>
               <span>Thông tin sản phẩm</span>
             </div>
             <button
@@ -212,7 +214,7 @@ function AddCategory() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              className="background_cl"
+              className="addbut"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Qua về sản phẩm
@@ -245,7 +247,25 @@ function AddCategory() {
             />
           </div>
 
-          <div className="_card-body">
+          <div className="_card-body BrP5">
+            {product.isOutofOrder ? (
+              <>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                    fontSize: "20px",
+                    color: "red",
+                  }}
+                >
+                  Lưu ý :Sản phẩm này đang hết hàng
+                </div>
+              </>
+            ) : (
+              <></>
+            )}
+            <div></div>
             <table className="add-category-table">
               <div
                 style={{
@@ -360,6 +380,21 @@ function AddCategory() {
                   </td>
                 </tr>
                 <tr className="table-row">
+                  <td className="column-1">Trạng thái</td>
+                  <td className="column-2">
+                    <select
+                      name="isAvailable"
+                      id="isAvailable"
+                      className="field__input"
+                      value={product.isAvailable}
+                      onChange={handleChange}
+                    >
+                      <option value={true}>Đang bán</option>
+                      <option value={false}>Ngừng bán</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr className="table-row">
                   <td className="column-1">Thương hiệu</td>
                   <td className="column-2">
                     <select
@@ -407,6 +442,48 @@ function AddCategory() {
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div className="comments-section">
+            <h2 className="comments-title">Đánh giá sản phẩm</h2>
+            <div>
+              {listComment &&
+                listComment.map((comment, key) => {
+                  return (
+                    <div className="comment" key={key}>
+                      <div className="comment-header">
+                        <img
+                          className="comment-avatar"
+                          src="https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-1/341567992_189194443477447_7522191387098263235_n.jpg?stp=cp6_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEarTZE1aOvAEMKCFgm0iyGwIk906XKCkTAiT3TpcoKRF6DzDf_rTfilFbZ4fh7aLieJ-YbdEzNf9h1RH7jnDvV&_nc_ohc=9wgj3DPaut0Q7kNvgHTlYj1&_nc_ht=scontent.fdad1-4.fna&oh=00_AYCWXjvjWodp66otNOxgqb4FY1ZCXIeiQMDsaykFLSwuZg&oe=666FD5B9"
+                          alt="User1 Avatar"
+                        />
+                      </div>
+                      <div className="comment-body">
+                        <div className="comment-info">
+                          <span className="comment-user">
+                            {comment.user.lastName +
+                              " " +
+                              comment.user.firstName}
+                          </span>
+                          <span className="comment-date">
+                            {comment.createdAt}
+                          </span>
+                        </div>
+                        <RatingStars num={comment.rating} />
+                        <p>{comment.content}</p>
+                        {comment.images ? (
+                          <img
+                            className="comment-img"
+                            src={comment.images}
+                            alt="Comment Image"
+                          />
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
           </div>
         </div>
       </div>

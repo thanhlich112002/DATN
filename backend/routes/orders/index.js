@@ -10,10 +10,11 @@ router.post(
 );
 router.get("/after-checkout/payment", orderController.payment);
 router.get(
-  "/getOrdersByUserId/:userId",
+  "/getOrdersByUserId",
   // AuthController.restrict("User"),
   orderController.getOrdersByUserId
 );
+
 router.get(
   "/getOrdersByOrderId/:orderId",
   // AuthController.restrict("User"),
@@ -24,6 +25,22 @@ router.get(
   // AuthController.restrict("User"),
   orderController.getAllOrders
 );
+router.get(
+  "/getStatisticsOrders",
+  // AuthController.restrict("User"),
+  orderController.getStatisticsOrders
+);
+router.get(
+  "/cancelOrder/:orderId",
+  // AuthController.restrict("User"),
+  orderController.cancelOrder
+);
+router.get(
+  "/ReturnOrder/:orderId",
+  // AuthController.restrict("User"),
+  orderController.ReturnOrder
+);
+
 router.get(
   "/chekcomments/:productId",
   AuthController.protect,

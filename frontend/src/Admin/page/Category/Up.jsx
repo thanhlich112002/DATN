@@ -2,21 +2,39 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { getCategoryById, updateCategory } from "../../service/userService";
+import Card from "../Dashboard/card";
+import {
+  getCategoryById,
+  updateCategory,
+  getStatisticsCategorybyId,
+} from "../../service/userService";
 import "./style.css";
 import Image from "../Product/image";
 import { toast } from "react-toastify";
+import {
+  faListAlt,
+  faBoxOpen,
+  faBan,
+  faExclamationTriangle,
+} from "@fortawesome/free-solid-svg-icons";
 
 function EditCategory() {
   const { id } = useParams();
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [images, setImages] = useState([]);
   const [deletedImageUrls, setDeletedImageUrls] = useState([]);
   const navigate = useNavigate();
+  const [statisticsCategory, setStatisticsCategory] = useState([]);
+  const fetchStatisticsCategory = async () => {
+    try {
+      const response = await getStatisticsCategorybyId(id);
+      setStatisticsCategory(response.data.data);
+    } catch (error) {
+      console.log("Lỗi khi lấy danh sách danh mục:", error);
+    }
+  };
 
   const fetchData = async () => {
     try {
@@ -31,6 +49,7 @@ function EditCategory() {
 
   useEffect(() => {
     fetchData();
+    fetchStatisticsCategory();
   }, [id]);
 
   const handleSubmit = async () => {
@@ -39,32 +58,26 @@ function EditCategory() {
       return;
     }
 
-    setLoading(true);
-    setError(null);
-
     const formData = new FormData();
     formData.append("name", categoryName);
-    console.log(deletedImageUrls, categoryDescription, categoryName);
     formData.append("description", categoryDescription);
-    console.log(images.file);
+
     images.forEach((image) => {
       if (image.file) {
         formData.append("images", image.file);
       }
     });
+
     deletedImageUrls.forEach((imageUrl) => {
-      console.log(imageUrl);
       formData.append("dels", imageUrl.url);
     });
+
     try {
       const res = await updateCategory(formData, id);
       toast.success("Danh mục đã được cập nhật thành công!");
       navigate("/admin/category");
     } catch (error) {
       console.error("Đã xảy ra lỗi khi cập nhật danh mục:", error);
-      setError(error.message || "Đã xảy ra lỗi khi cập nhật danh mục");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -93,14 +106,40 @@ function EditCategory() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              className="background_cl"
+              className="addbut"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Quay về danh mục
             </button>
           </div>
-          <div className="_card-body">
-            <table className="add-category-table">
+          <div className="_card-body ">
+            <div className="dashboard_cards">
+              <Card
+                value={statisticsCategory.totalProducts}
+                title={"Tổng số sản phẩm"}
+                icon={faListAlt}
+                cln={"bcl1"}
+              />
+              <Card
+                value={statisticsCategory.totalAvailableProducts}
+                title={"Sản phẩm còn bán"}
+                icon={faBoxOpen}
+                cln={"bcl2"}
+              />
+              <Card
+                value={statisticsCategory.totalOutOfOrderProducts}
+                title={"Sản phẩm hết hàng"}
+                icon={faBan}
+                cln={"bcl3"}
+              />
+              <Card
+                value={statisticsCategory.totalSalesRevenue}
+                title={"Doanh thu theo tháng"}
+                icon={faExclamationTriangle}
+                cln={"bcl4"}
+              />
+            </div>
+            <table className="add-category-table BrP5">
               <div
                 style={{
                   marginTop: "30px",

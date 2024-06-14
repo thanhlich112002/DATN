@@ -18,12 +18,14 @@ function Account() {
   };
 
   return (
-    <div className="container">
+    <div className="container_cus">
       <div className="account">
         <div className="account_left">
           <span className="checkout_left_span">TRANG TÀI KHOẢN</span>
           <div onClick={() => handleNav("info")}>Thông tin tài khoản</div>
-          <div onClick={() => handleNav("orders")}>Đơn hàng của bạn</div>
+          <div onClick={() => handleNav("orders")} className="ATV">
+            Đơn hàng của bạn
+          </div>
           <div onClick={() => handleNav("changepassword")}>Đổi mật khẩu</div>
           <div onClick={() => handleNav("addresses")}>Địa chỉ</div>
         </div>

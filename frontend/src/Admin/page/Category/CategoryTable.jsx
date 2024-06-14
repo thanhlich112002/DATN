@@ -1,20 +1,41 @@
 import React, { useEffect, useState } from "react";
 import { useTable } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
-import { getAllCategory, seachCategorys } from "../../service/userService";
+import {
+  getAllCategory,
+  searchCategorys,
+  getStatisticsCategory,
+} from "../../service/userService";
 import DeleteCategoryForm from "./Up";
 import { useNavigate } from "react-router-dom";
 import TopTable from "../component/TopTable/TopTable";
+import Card from "../Dashboard/card";
+import {
+  faListAlt,
+  faBoxOpen,
+  faBan,
+  faExclamationTriangle,
+} from "@fortawesome/free-solid-svg-icons";
 
 const CategoryTable = () => {
   const [categories, setCategories] = useState([]);
   const [deletingCategory, setDeletingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageCount, setPageCount] = useState(0);
+
   const [name, setName] = useState("");
   const navigate = useNavigate();
+  const [statisticsCategory, setStatisticsCategory] = useState([]);
+  const fetchStatisticsCategory = async () => {
+    try {
+      const response = await getStatisticsCategory();
+      setStatisticsCategory(response.data.data);
+    } catch (error) {
+      console.log("Lỗi khi lấy danh sách danh mục:", error);
+    }
+  };
 
   const fetchCategories = async (page) => {
     try {
@@ -35,6 +56,7 @@ const CategoryTable = () => {
   };
 
   const data = React.useMemo(() => categories, [categories]);
+
   const columns = React.useMemo(
     () => [
       { Header: "ID", accessor: "_id" },
@@ -58,7 +80,10 @@ const CategoryTable = () => {
         accessor: "actions",
         Cell: ({ row }) => (
           <div className="btn_tab">
-            <button className="btn-edit" onClick={() => Add(row.original._id)}>
+            <button
+              className="btn-edit"
+              onClick={() => handleEdit(row.original._id)}
+            >
               <FontAwesomeIcon icon={faEdit} fontSize={20} />
             </button>
           </div>
@@ -70,7 +95,7 @@ const CategoryTable = () => {
 
   const fetchSProducts = async (searchTerm, page) => {
     try {
-      const response = await seachCategorys(searchTerm, page); // Sửa thành searchCategorys
+      const response = await searchCategorys(searchTerm, page);
       setCategories(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
@@ -85,12 +110,15 @@ const CategoryTable = () => {
   const handleBackToCategoryList = () => {
     navigate("/admin/category/add");
   };
-  const Add = (id) => {
-    navigate(`/admin/category/${id}`);
-  };
+
   const handleSearch = (name) => {
     setName(name);
   };
+
+  useEffect(() => {
+    fetchStatisticsCategory();
+  }, []);
+
   useEffect(() => {
     console.log(name);
     if (name) {
@@ -99,6 +127,10 @@ const CategoryTable = () => {
       fetchCategories(currentPage);
     }
   }, [currentPage, name]);
+
+  const handleEdit = (id) => {
+    navigate(`/admin/category/${id}`);
+  };
 
   return (
     <div>
@@ -114,31 +146,39 @@ const CategoryTable = () => {
                 marginBottom: "20px",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  width: "100px",
-                  height: "100px",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faBookmark}
-                  fontSize={70}
-                  color="#C0C0C0"
-                />
-              </div>
               <span>Quản lý danh mục</span>
             </div>
-            <button
-              onClick={handleBackToCategoryList}
-              className="background_cl"
-            >
+            <button onClick={handleBackToCategoryList} className="addbut">
               Thêm danh mục
             </button>
           </div>
-          <div className="_card-body">
+          <div className="dashboard_cards">
+            <Card
+              value={statisticsCategory.totalCategories}
+              title={"Tổng danh mục"}
+              icon={faListAlt} 
+              cln={"bcl1"}
+            />
+            <Card
+              value={statisticsCategory.totalCategoriesWithAvailableProducts}
+              title={"Danh mục còn hàng"}
+              icon={faBoxOpen}
+              cln={"bcl2"}
+            />
+            <Card
+              value={statisticsCategory.totalCategoriesWithZeroProducts}
+              title={"Danh mục hết hàng"}
+              icon={faBan} 
+              cln={"bcl3"}
+            />
+            <Card
+              value={statisticsCategory.totalCategoriesOutOfStock}
+              title={"Danh mục hết hàng"}
+              icon={faExclamationTriangle} 
+              cln={"bcl4"}
+            />
+          </div>
+          <div className="_card-body BrP5" style={{ marginTop: "10px" }}>
             {deletingCategory && (
               <DeleteCategoryForm
                 setIsOpen={() => setDeletingCategory(null)}

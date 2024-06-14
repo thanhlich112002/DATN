@@ -1,15 +1,19 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faChartBar,
   faPizzaSlice,
   faListAlt,
   faTags,
-  faHouse,
+  faHome,
+  faUser,
+  faPercent,
   faShoppingBasket,
   faSignOutAlt,
   faChevronLeft,
   faBars,
   faExclamationTriangle,
+  faFlask,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useLocation } from "react-router-dom";
 import "./style.css";
@@ -24,32 +28,37 @@ const Sidebar = ({ children }) => {
   const menuItem = [
     {
       path: "/admin",
-      name: "Danh sách",
-      icon: faHouse,
+      name: "Thống kê",
+      icon: faChartBar,
     },
     {
       path: "/admin/product",
-      name: "Danh sách sản phẩm",
-      icon: faPizzaSlice,
+      name: "QL Sản phẩm",
+      icon: faFlask,
     },
     {
       path: "/admin/category",
-      name: "Danh mục",
+      name: "QL Danh mục",
       icon: faListAlt,
     },
     {
-      path: "/admin/voucher",
-      name: "QL giảm giá",
+      path: "/admin/brand",
+      name: "QL Thương hiệu",
       icon: faTags,
     },
     {
-      path: "/admin/brand",
-      name: "Thương hiệu",
-      icon: faTags,
+      path: "/admin/user",
+      name: "QL Người dùng",
+      icon: faUser,
+    },
+    {
+      path: "/admin/voucher",
+      name: "QL Giảm giá",
+      icon: faPercent,
     },
     {
       path: "/admin/order",
-      name: "Đơn hàng",
+      name: "QL Đơn hàng",
       icon: faShoppingBasket,
     },
   ];
@@ -91,8 +100,8 @@ const Sidebar = ({ children }) => {
         </ul>
         <div className="sidebar-footer">
           <div href="#" className="sidebar-link" onClick={handleLogout}>
-            <FontAwesomeIcon icon={faExclamationTriangle} />
-            {isOpen ? <span>Logout</span> : <></>}
+            <FontAwesomeIcon icon={faSignOutAlt} />
+            {isOpen ? <span>Đăng xuất</span> : <></>}
           </div>
         </div>
       </aside>

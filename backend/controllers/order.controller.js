@@ -9,9 +9,11 @@ const catchAsync = require("../utils/catchAsync.utlis");
 const ApiFeatures = require("../utils/ApiFeatures.utlis");
 const axios = require("axios");
 const Voucher = require("../models/voucher.model");
+const CryptoJS = require("crypto-js"); // npm install crypto-js
+const Email = require("../utils/email");
 
 class orderController {
-  createOrder = catchAsync(async (req, res, next) => {
+  createOrder1 = catchAsync(async (req, res, next) => {
     const userId = req.user._id;
     const { cart, totalPrice, contact, shipCost, voucherID } = req.body;
 
@@ -147,6 +149,130 @@ class orderController {
       return next(new appError("Không thể tạo yêu cầu thanh toán", 500));
     }
   });
+  createOrder = catchAsync(async (req, res, next) => {
+    const userId = req.user._id;
+    const { cart, totalPrice, contact, shipCost, voucherID } = req.body;
+
+    try {
+      let voucher = null;
+      if (voucherID) {
+        voucher = await Voucher.findOne({
+          _id: voucherID,
+          "user.userId": userId,
+          "user.isUse": true,
+        });
+        if (voucher) {
+          return res
+            .status(404)
+            .json({ message: "Mã giảm giá đã được sử dụng" });
+        }
+        voucher = await Voucher.findOne({
+          _id: voucherID,
+        });
+        if (voucher) {
+          if (!voucher.isAvailable) {
+            return res.status(400).json({ message: "Mã giảm giá không còn" });
+          }
+          if (voucher.conditions > totalPrice) {
+            return res
+              .status(400)
+              .json({ message: "Mã giảm giá Không hợp lệ" });
+          }
+        }
+      }
+      if (voucher) {
+        voucher.quantity -= 1;
+        voucher.save();
+      }
+      let productTotal = 0;
+      for (const item of cart) {
+        const product = await productModel.findById(item.product);
+        if (!product) {
+          return next(new appError("Không tìm thấy sản phẩm", 404));
+        }
+        if (product.price !== item.price) {
+          return next(new appError("Giá sản phẩm không khớp", 400));
+        }
+        if (product.quantity < item.quantity) {
+          return next(new appError("Không đủ hàng để", 400));
+        }
+        product.quantity = product.quantity - item.quantity;
+        product.productPurchases = product.productPurchases + item.quantity;
+        product.save();
+        productTotal += item.price * item.quantity;
+      }
+      const grandTotal =
+        productTotal + shipCost - (voucher ? voucher.amount : 0);
+      if (grandTotal !== totalPrice) {
+        return next(new appError("Tổng tiền không khớp", 400));
+      }
+
+      const newOrder = await Order.create({
+        user: userId,
+        cart,
+        totalPrice: grandTotal,
+        shipCost,
+        contact,
+        dateOrdered: new Date(Date.now() + process.env.UTC * 60 * 60 * 1000),
+      });
+      if (voucher) {
+        voucher.user.push({ userId, orderId: newOrder._id, isUse: "true" });
+        await voucher.save();
+      }
+      const config = {
+        app_id: "2553",
+        key1: "PcY4iZIKFCIdgZvA6ueMcMHHUbRLYjPL",
+        key2: "kLtgPl8HHhfvMuDHPwKfgfsY4Ydm9eIz",
+        endpoint: "https://sb-openapi.zalopay.vn/v2/create",
+      };
+      const items = [];
+      const transID = Math.floor(Math.random() * 1000000);
+      const embed_data = {
+        redirecturl: `http://localhost:3001/account/orders?requestId=${newOrder._id}`,
+      };
+      const order = {
+        app_id: config.app_id,
+        app_trans_id: `${moment().format("YYMMDD")}_${transID}`, // translation missing: vi.docs.shared.sample_code.comments.app_trans_id
+        app_user: newOrder._id,
+
+        app_time: Date.now(), // miliseconds
+        item: JSON.stringify(items),
+        embed_data: JSON.stringify(embed_data),
+        amount: newOrder.totalPrice,
+        description: `Luxyry - Payment for the order ${newOrder._id}`,
+        bank_code: "",
+      };
+
+      const data =
+        config.app_id +
+        "|" +
+        order.app_trans_id +
+        "|" +
+        order.app_user +
+        "|" +
+        order.amount +
+        "|" +
+        order.app_time +
+        "|" +
+        order.embed_data +
+        "|" +
+        order.item;
+      order.mac = CryptoJS.HmacSHA256(data, config.key1).toString();
+
+      try {
+        const result = await axios.post(config.endpoint, null, {
+          params: order,
+        });
+
+        return res.status(200).json(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.error("Lỗi khi tạo đơn hàng:", error);
+      return next(new appError("Không thể tạo yêu cầu thanh toán", 500));
+    }
+  });
   payment = catchAsync(async (req, res, next) => {
     const MoMo_Params = req.query;
     const requestId = MoMo_Params.requestId;
@@ -158,42 +284,34 @@ class orderController {
     }
 
     try {
-      // Tìm đơn hàng dựa trên requestId
-      let order = await Order.findById(requestId);
+      let order = await Order.findById(requestId)
+        .populate("user")
+        .populate("cart.product");
 
-      // Kiểm tra xem đơn hàng có tồn tại không
       if (!order) {
         return res.status(404).json({
           status: "error",
           message: "Order not found",
         });
       }
-
-      // Kiểm tra trạng thái của đơn hàng
       if (order.status === "Pending") {
-        // Cập nhật trạng thái của đơn hàng thành "Confirmed"
         order.status = "Confirmed";
         order.dateCheckout = new Date(
           Date.now() + process.env.UTC * 60 * 60 * 1000
         );
-
-        // Lưu thay đổi vào cơ sở dữ liệu
         await order.save();
-
-        // Trả về kết quả thành công và dữ liệu MoMo_Params
+        new Email().sendOrderCancel(order, "Thông báo xác nhận đơn hàng");
         return res.status(200).json({
           status: "success",
           data: MoMo_Params,
         });
       } else {
-        // Trả về lỗi nếu đơn hàng không ở trạng thái "Pending"
         return res.status(400).json({
           status: "error",
           message: "Order is not in pending state",
         });
       }
     } catch (error) {
-      // Xử lý lỗi nếu có bất kỳ lỗi nào xảy ra
       console.error("Error processing payment:", error);
       return res.status(500).json({
         status: "error",
@@ -202,9 +320,10 @@ class orderController {
     }
   });
   getOrdersByUserId = catchAsync(async (req, res, next) => {
-    const user = await User.findById(req.params.userId);
-    if (!user) return next(new appError("Không tìm thấy người dùng", 404));
+    console.log(req.query);
+    const user = await User.findById(req.query.userId);
 
+    if (!user) return next(new appError("Không tìm thấy người dùng", 404));
     let start, end;
     if (!req.query.start) {
       start = moment()
@@ -212,25 +331,31 @@ class orderController {
         .add(process.env.UTC, "hours")
         .toDate();
     } else {
-      start = moment(req.query.start, "DD-MM-YYYY")
+      start = moment(req.query.start, "YYYY-MM-DD")
         .add(process.env.UTC, "hours")
         .toDate();
     }
-
     if (!req.query.end) {
       end = moment().add(process.env.UTC, "hours").toDate();
     } else {
-      end = moment(req.query.end, "DD-MM-YYYY").add(31, "hours").toDate();
+      end = moment(req.query.end, "YYYY-MM-DD").add(31, "hours").toDate();
     }
 
     let obj = {
-      user: req.params.userId,
+      user: req.query.userId,
       dateOrdered: {
         $gte: start,
         $lt: end,
       },
     };
+    if (req.query.status) {
+      obj = {
+        ...obj,
+        status: req.query.status,
+      };
+    }
 
+    console.log(obj);
     const features = new ApiFeatures(
       Order.find(obj).populate({ path: "contact" }).populate("cart.product"),
       req.query
@@ -239,11 +364,16 @@ class orderController {
       .limitFields()
       .paginate();
     const orders = await features.query;
-
+    const totalResults = await Order.countDocuments(obj);
+    const pageSize = parseInt(req.query.limit) || 7;
+    const totalPages = Math.ceil(totalResults / pageSize);
+    const currentPage = parseInt(req.query.page) || 1;
     res.status(200).json({
       status: "success",
       length: orders.length,
       data: orders,
+      totalPages,
+      currentPage,
     });
   });
   getOrdersByOrderId = catchAsync(async (req, res, next) => {
@@ -265,15 +395,14 @@ class orderController {
         .add(process.env.UTC, "hours")
         .toDate();
     } else {
-      start = moment(req.query.start, "DD-MM-YYYY")
+      start = moment(req.query.start, "YYYY-MM-DD")
         .add(process.env.UTC, "hours")
         .toDate();
     }
-
     if (!req.query.end) {
       end = moment().add(process.env.UTC, "hours").toDate();
     } else {
-      end = moment(req.query.end, "DD-MM-YYYY").add(31, "hours").toDate(); // process.env.UTC + 24 hours
+      end = moment(req.query.end, "YYYY-MM-DD").add(31, "hours").toDate(); // process.env.UTC + 24 hours
     }
 
     let obj = {
@@ -311,7 +440,61 @@ class orderController {
       currentPage,
     });
   });
+  getStatisticsOrders = catchAsync(async (req, res, next) => {
+    let start, end;
+    if (!req.query.start) {
+      start = moment()
+        .subtract(30, "days")
+        .add(process.env.UTC, "hours")
+        .toDate();
+    } else {
+      start = moment(req.query.start, "YYYY-MM-DD")
+        .add(process.env.UTC, "hours")
+        .toDate();
+    }
+    if (!req.query.end) {
+      end = moment().add(process.env.UTC, "hours").toDate();
+    } else {
+      end = moment(req.query.end, "YYYY-MM-DD").add(31, "hours").toDate();
+    }
 
+    let obj = {
+      dateOrdered: {
+        $gte: start,
+        $lt: end,
+      },
+    };
+
+    if (req.query.status) {
+      obj = {
+        ...obj,
+        status: req.query.status,
+      };
+    }
+
+    const orderStats = await Order.aggregate([
+      { $match: obj },
+      {
+        $group: {
+          _id: "$status",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const totalOrders = await Order.countDocuments(obj);
+
+    let formattedStats = {};
+    orderStats.forEach((stat) => {
+      formattedStats[stat._id] = stat.total;
+    });
+    formattedStats["totalOrders"] = totalOrders;
+
+    res.status(200).json({
+      status: "success",
+      data: formattedStats,
+    });
+  });
   checkComments = catchAsync(async (req, res, next) => {
     try {
       const productId = req.params.productId;
@@ -327,22 +510,62 @@ class orderController {
       return res.status(500).json("");
     }
   });
-}
-
-function sortObject(obj) {
-  let sorted = {};
-  let str = [];
-  let key;
-  for (key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      str.push(encodeURIComponent(key));
+  ReturnOrder = catchAsync(async (req, res, next) => {
+    try {
+      const orders = await Order.findById(req.params.orderId)
+        .populate("user")
+        .populate("cart.product");
+      orders.status = "Cancelled";
+      console.log(orders);
+      await orders.save();
+      if (orders.status === "Cancelled") {
+        new Email().sendOrderCancel(orders, "Thông báo hoàn trả đơn hàng");
+      }
+      return res.status(200).json({
+        success: true,
+        message: "Hoàn đơn thành công",
+        data: orders.status,
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "Đã xảy ra lỗi khi hoàn đơn trạng thái đơn hàng",
+        error: error.message,
+      });
     }
-  }
-  str.sort();
-  for (key = 0; key < str.length; key++) {
-    sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
-  }
-  return sorted;
+  });
+  cancelOrder = async (req, res, next) => {
+    try {
+      const { orderId } = req.params;
+      const order = await Order.findById(orderId)
+        .populate("user")
+        .populate("cart.product");
+      if (!order) {
+        return res.status(404).json({ message: "Không tìm thấy đơn hàng" });
+      }
+      if (order.status !== "Pending" && order.status !== "Confirmed") {
+        return res
+          .status(404)
+          .json({ message: "Không thể hủy đơn hàng trạng thái này" });
+      }
+      for (const item of order.cart) {
+        const product = await productModel.findById(item.product);
+        if (product) {
+          product.quantity += item.quantity;
+          await product.save();
+        }
+      }
+      order.status = "Cancelled";
+      await order.save();
+      if (order.status === "Cancelled") {
+        new Email().sendOrderCancel(order, "Thông báo hủy đơn hàng");
+      }
+      res.status(200).json({ message: "Đơn hàng đã được hủy" });
+    } catch (error) {
+      console.error("Lỗi khi hủy đơn hàng:", error);
+      return res.status(404).json({ message: "Lỗi hủy đơn hàng" });
+    }
+  };
 }
 
 module.exports = new orderController();

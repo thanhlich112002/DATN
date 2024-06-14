@@ -1,13 +1,24 @@
 import React, { useEffect, useState } from "react";
 import ProductTable from "./ProductTable";
-import { getAllProducts, searchProducts } from "../../service/userService";
+import {
+  getAllProducts,
+  searchProducts,
+  getStatisticsProduct,
+} from "../../service/userService";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBoxes,
+  faTags,
+  faBan,
+  faExclamationCircle,
+  faPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import Card from "../Dashboard/card";
 
 const TableProduct = () => {
   const [products, setProducts] = useState([]);
+  const [statistics, setStatistics] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [name, setName] = useState("");
@@ -19,6 +30,14 @@ const TableProduct = () => {
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+    }
+  };
+  const fetchStatistics = async () => {
+    try {
+      const response = await getStatisticsProduct();
+      setStatistics(response.data.data);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
     }
@@ -42,6 +61,9 @@ const TableProduct = () => {
       fetchProducts(currentPage);
     }
   }, [currentPage, name]);
+  useEffect(() => {
+    fetchStatistics();
+  }, []);
 
   const handleAddProductClick = () => {
     navigate(`/admin/tableProduct/add`);
@@ -59,28 +81,38 @@ const TableProduct = () => {
             marginBottom: "20px",
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              width: "100px",
-              height: "100px",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FontAwesomeIcon icon={faBookmark} fontSize={70} color="#C0C0C0" />
-          </div>
           <span>Quản lý sản phẩm</span>
         </div>
-        <button className="background_cl" onClick={handleAddProductClick}>
-          Thêm sản phẩm
+        <button className="addbut" onClick={handleAddProductClick}>
+          <div>Thêm sản phẩm </div>
+          <FontAwesomeIcon icon={faPlus}></FontAwesomeIcon>
         </button>
       </div>
       <div className="dashboard_cards">
-        <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl1"} />
-        <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl2"} />
-        <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl3"} />
-        <Card value={5} title={"Khách hàng"} icon={faUsers} cln={"bcl4"} />
+        <Card
+          value={statistics?.totalQuantity}
+          title={"Tổng lượng hàng"}
+          icon={faBoxes} // Biểu tượng cho Tổng lượng hàng
+          cln={"bcl1"}
+        />
+        <Card
+          value={statistics?.countavailable}
+          title={"Số sản phẩm đang bán"}
+          icon={faTags}
+          cln={"bcl2"}
+        />
+        <Card
+          value={statistics.countUnavailable}
+          title={"Ngừng kinh doanh"}
+          icon={faBan}
+          cln={"bcl3"}
+        />
+        <Card
+          value={statistics.countOutofOrder}
+          title={"Đã đang hết hàng"}
+          icon={faExclamationCircle}
+          cln={"bcl4"}
+        />
       </div>
       <ProductTable
         products={products}

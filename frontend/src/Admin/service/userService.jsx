@@ -6,17 +6,54 @@ const url = "http://localhost:3000";
 const getAllProducts = async (page) => {
   return axios.get(`${url}/api/products/getAllProducts?limit=7&page=${page}`);
 };
-const getAllOrders = async (page, status, start, end) => {
+const getStatisticsOrders = async (start, end) => {
   const token = localStorage.getItem("token");
-  return axios.get(
-    `${url}/api/orders/getAllOrders?limit=10&page=${page}&sort=-dateOrdered&`,
-    {
+  const url1 = `${url}/api/orders/getStatisticsOrders`;
+  const params = {
+    start: start,
+    end: end,
+  };
+  try {
+    const response = await axios.get(url1, {
+      params: params,
       headers: {
         Authorization: `Bearer ${token}`,
-        ContentType: "multipart/form-data",
+        "Content-Type": "multipart/form-data",
       },
-    }
-  );
+    });
+    return response;
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách đơn hàng:", error);
+    throw error;
+  }
+};
+const getAllOrders = async (page, status, start, end) => {
+  const token = localStorage.getItem("token");
+  const url1 = `${url}/api/orders/getAllOrders`;
+  const params = {
+    limit: 7,
+    page: page,
+    sort: "-dateOrdered",
+    start: start,
+    end: end,
+  };
+  if (status !== "all") {
+    params.status = status;
+  }
+
+  try {
+    const response = await axios.get(url1, {
+      params: params,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Lỗi khi lấy danh sách đơn hàng:", error);
+    throw error;
+  }
 };
 const getOrdersByOrderId = async (id) => {
   const token = localStorage.getItem("token");
@@ -27,12 +64,27 @@ const getOrdersByOrderId = async (id) => {
     },
   });
 };
-const getAllUser = async (page) => {
+const getAllUser = async (page, status, role) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/user?page=${page}`, {
+  console.log(status);
+  return axios.post(
+    `${url}/api/admin/getAllUser?page=${page}`,
+    { status: status, role: role },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};
+const getStatisticsUser = async (page, status, role) => {
+  const token = localStorage.getItem("token");
+  console.log(status);
+  return axios.get(`${url}/api/admin/getStatisticsUser?page=${page}`, {
     headers: {
       Authorization: `Bearer ${token}`,
-      ContentType: "multipart/form-data",
+      "Content-Type": "application/json",
     },
   });
 };
@@ -71,14 +123,17 @@ const upproduct = async (formData, id) => {
 
 // Phần dành cho danh mục
 
-const getAllCategory = async (page) => {
+const getAllCategory = async (page, limit) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/categorys/getAllCategory?limit=7&page=${page}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      ContentType: "multipart/form-data",
-    },
-  });
+  return axios.get(
+    `${url}/api/categorys/getAllCategory?limit=${limit}&page=${page}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+    }
+  );
 };
 const createCategory = async (data) => {
   const token = localStorage.getItem("token");
@@ -109,14 +164,17 @@ const getCategoryById = async (data) => {
 };
 
 // phần dánh cho Brand
-const getAllBrands = async (page) => {
+const getAllBrands = async (page, limit) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/brands/getAllBrands?page=${page}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      ContentType: "multipart/form-data",
-    },
-  });
+  return axios.get(
+    `${url}/api/brands/getAllBrands?limit=${limit}page=${page}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+    }
+  );
 };
 const createBrand = async (data) => {
   const token = localStorage.getItem("token");
@@ -174,9 +232,9 @@ const upStatus = async (data, id) => {
     },
   });
 };
-const getAllVouchers = async () => {
+const getAllVouchers = async (page) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/vouchers/getAllVouchers`, {
+  return axios.get(`${url}/api/vouchers/getAllVouchers?page=${page}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       ContentType: "multipart/form-data",
@@ -192,6 +250,7 @@ const createVoucher = async (data) => {
     },
   });
 };
+const deleteVoucher = async (req, res, next) => {};
 const searchProducts = async (data, page) => {
   const token = localStorage.getItem("token");
   return axios.post(
@@ -218,7 +277,7 @@ const searchBrands = async (data, page) => {
     }
   );
 };
-const seachCategorys = async (data, page) => {
+const searchCategorys = async (data, page) => {
   const token = localStorage.getItem("token");
   return axios.post(
     `${url}/api/categorys/seachCategory?limit=7&page=${page}`,
@@ -231,8 +290,82 @@ const seachCategorys = async (data, page) => {
     }
   );
 };
+const getStatisticsProduct = async () => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/admin/getStatisticsProduct`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const getAllComment = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/comments/getAllComment/${id}`, config);
+};
+const getStatisticsCategory = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/admin/getStatisticsCategory`, config);
+};
+const getStatisticsCategorybyId = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(
+    `${url}/api/admin/getStatisticsCategorybyId/${id}`,
+    config
+  );
+};
+
+const getStatisticsBrand = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/admin/getStatisticsBrand`, config);
+};
+const getStatisticsBrandbyId = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(
+    `${url}/api/admin/getStatisticsBrandbyId/${id}`,
+    config
+  );
+};
 export {
-  seachCategorys,
+  deleteVoucher,
+  getStatisticsUser,
+  getStatisticsBrandbyId,
+  getStatisticsCategorybyId,
+  getStatisticsBrand,
+  getStatisticsCategory,
+  getAllComment,
+  getStatisticsProduct,
+  searchCategorys,
   searchBrands,
   searchProducts,
   getBrandById,
@@ -256,4 +389,5 @@ export {
   getAllOrders,
   getOrdersByOrderId,
   getStatistics,
+  getStatisticsOrders,
 };

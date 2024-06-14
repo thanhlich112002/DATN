@@ -69,8 +69,7 @@ class AuthController {
     }
     const resetToken = user.createSignUpToken();
     await user.save({ validateBeforeSave: false });
-
-    await new Email(user, resetToken, "").sendPasswordReset();
+    await new Email().sendOrderConfirmation(user);
     res.status(200).json({
       message: "Mã đã được gửi đến email!",
     });

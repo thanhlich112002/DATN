@@ -33,6 +33,7 @@ class productsController {
       if (!product) {
         return next(new appError("Không thể tìm thấy sản phẩm", 404));
       }
+      console.log(req.body);
 
       let images = [...product.images];
       let dels = req.body.dels;

@@ -11,7 +11,7 @@ function Voucher() {
   const fetchAllVouchers = async () => {
     try {
       const response = await getAllVouchers();
-      setVouchers(response.data);
+      setVouchers(response.data.data);
       console.log(response.data);
     } catch (error) {
       console.error("Lỗi khi tải danh sách phiếu giảm giá:", error);

@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { useTable } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheckCircle,
+  faEdit,
+  faShoppingCart,
+  faTrashAlt,
+  faTruck,
+} from "@fortawesome/free-solid-svg-icons";
 import "./style.css"; // Import file CSS chứa các kiểu dáng
 import { useNavigate } from "react-router-dom";
-import { getAllOrders, upStatus } from "../../service/userService";
 import Form from "./formdetaidonhang";
 import TopTable from "../component/TopTable/TopTable";
 import OrderBar from "../component/TopTable/orderBar";
+import Card from "../Dashboard/card";
+import { faBan } from "@fortawesome/free-solid-svg-icons";
 
 const ProductTable = ({
   products,
@@ -15,10 +22,19 @@ const ProductTable = ({
   currentPage,
   pageCount,
   setName,
+  status,
+  setStatus,
+  endDate,
+  setEndDate,
+  startDate,
+  setStartDate,
+  statisticsOrders,
 }) => {
   const data = React.useMemo(() => products, [products]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isopen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+
   const handleDetail = (order) => {
     setIsOpen(true);
     setSelectedOrder(order);
@@ -72,21 +88,71 @@ const ProductTable = ({
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
-
+  console.log(statisticsOrders);
   return (
     <div>
       <div className="projects">
         {isopen && <Form cart={selectedOrder} setIsOpen={setIsOpen} />}
         <div className="_card">
+          <div className="card-header">
+            {" "}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                borderRadius: "5px",
+                marginBottom: "20px",
+              }}
+            >
+              <span>Quản lý đơn hàng</span>
+            </div>
+          </div>
           <div className="_card-body">
-            <div className="styled-table">
+            <div className="dashboard_cards">
+              <Card
+                value={statisticsOrders.totalOrders}
+                title={"Tổng đơn hàng"}
+                icon={faShoppingCart}
+                cln={"bcl1"}
+              />
+              <Card
+                value={statisticsOrders.Shipped}
+                title={"Đơn hàng đang vận chuyển"}
+                icon={faTruck}
+                cln={"bcl2"}
+              />
+              <Card
+                value={statisticsOrders.Confirmed}
+                title={"Đơn hàng đã xác nhận"}
+                icon={faBan}
+                cln={"bcl3"}
+              />
+              <Card
+                value={statisticsOrders.Finished}
+                title={"Đơn hàng đã hoàn thành"}
+                icon={faCheckCircle}
+                cln={"bcl4"}
+              />
+            </div>
+            <div
+              className="styled-table BrP5 mgt10"
+              style={{ marginTop: "10px" }}
+            >
               <TopTable
                 handleSearch={handleSearch}
                 handlePageChange={fetchProducts}
                 currentPage={currentPage}
                 pageCount={pageCount}
               />
-              <OrderBar />
+              <OrderBar
+                status={status}
+                setStatus={setStatus}
+                endDate={endDate}
+                setEndDate={setEndDate}
+                startDate={startDate}
+                setStartDate={setStartDate}
+              />
               <table {...getTableProps()} className="styled-table">
                 <thead>
                   {headerGroups.map((headerGroup) => (

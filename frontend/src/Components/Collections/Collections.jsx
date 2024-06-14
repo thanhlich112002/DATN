@@ -106,7 +106,7 @@ function Collections({ setIsLoading }) {
   };
 
   return (
-    <div className="container">
+    <div className="container_cus">
       <div className="collections">
         <div className="collections_left">
           <div className="collections_left_">

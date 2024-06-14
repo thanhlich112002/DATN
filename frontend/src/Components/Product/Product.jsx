@@ -118,7 +118,7 @@ function Product() {
   };
 
   return (
-    <div className="container">
+    <div className="container_cus">
       <div className="product">
         <div className="product_left">
           <div className="large-image">
@@ -200,74 +200,106 @@ function Product() {
           </div>
         </div>
       </div>
-      <div className="comments-section">
-        <h2 className="comments-title">Đánh giá sản phẩm</h2>
-
-        <div>
-          {listComment &&
-            listComment.map((comment, key) => {
-              return (
-                <div className="comment" key={key}>
-                  <div className="comment-header">
-                    <img className="comment-avatar" src="" alt="User1 Avatar" />
-                  </div>
-                  <div className="comment-body">
-                    <div className="comment-info">
-                      <span className="comment-user">
-                        {comment.user.lastName + " " + comment.user.firstName}
-                      </span>
-                      <span className="comment-date">{comment.createdAt}</span>
-                    </div>
-                    <p>{comment.content}</p>
-                    {comment.images ? (
+      <div style={{ display: "flex" }}>
+        <div className="comments-section">
+          <h2 className="comments-title">Đánh giá sản phẩm</h2>
+          <div>
+            {listComment &&
+              listComment.map((comment, key) => {
+                return (
+                  <div className="comment" key={key}>
+                    <div className="comment-header">
                       <img
-                        className="comment-img"
-                        src={comment.images}
-                        alt="Comment Image"
+                        className="comment-avatar"
+                        src="https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-1/341567992_189194443477447_7522191387098263235_n.jpg?stp=cp6_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEarTZE1aOvAEMKCFgm0iyGwIk906XKCkTAiT3TpcoKRF6DzDf_rTfilFbZ4fh7aLieJ-YbdEzNf9h1RH7jnDvV&_nc_ohc=9wgj3DPaut0Q7kNvgHTlYj1&_nc_ht=scontent.fdad1-4.fna&oh=00_AYCWXjvjWodp66otNOxgqb4FY1ZCXIeiQMDsaykFLSwuZg&oe=666FD5B9"
+                        alt="User1 Avatar"
                       />
-                    ) : (
-                      <></>
-                    )}
+                    </div>
+                    <div className="comment-body">
+                      <div className="comment-info">
+                        <span className="comment-user">
+                          {comment.user.lastName + " " + comment.user.firstName}
+                        </span>
+                        <span className="comment-date">16:30 6/13/2024</span>
+                      </div>
+                      <RatingStars setonChange={setRating} />
+                      <p>{comment.content}</p>
+
+                      {comment.images ? (
+                        <img
+                          className="comment-img"
+                          src={comment.images}
+                          alt="Comment Image"
+                        />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            {iscomment ? (
+              <div className="comment1 ">
+                <RatingStars setonChange={setRating} />
+                <div className="cmt">
+                  <input
+                    type="text"
+                    onChange={(e) => setContent(e.target.value)}
+                  />
+                  <div>
+                    <label htmlFor="file-upload">
+                      <FontAwesomeIcon icon={faLink} />
+                    </label>
+                    <input
+                      id="file-upload"
+                      type="file"
+                      hidden
+                      onChange={(e) => setImage(e.target.files[0])} // Set the image state with the selected file
+                    />
+
+                    <FontAwesomeIcon
+                      icon={faPaperPlane}
+                      onClick={handleSubmitComment}
+                    />
                   </div>
                 </div>
-              );
-            })}
-          {iscomment ? (
-            <div className="comment1 ">
-              <RatingStars setonChange={setRating} />
-              <div className="cmt">
-                <input
-                  type="text"
-                  onChange={(e) => setContent(e.target.value)}
-                />
-                <div>
-                  <label htmlFor="file-upload">
-                    <FontAwesomeIcon icon={faLink} />
-                  </label>
-                  <input
-                    id="file-upload"
-                    type="file"
-                    hidden
-                    onChange={(e) => setImage(e.target.files[0])} // Set the image state with the selected file
+                {image ? (
+                  <img
+                    className="comment-img1"
+                    src={URL.createObjectURL(image)}
+                    alt="Comment Image"
                   />
-
-                  <FontAwesomeIcon
-                    icon={faPaperPlane}
-                    onClick={handleSubmitComment}
-                  />
-                </div>
+                ) : null}
               </div>
-              {image ? (
-                <img
-                  className="comment-img1"
-                  src={URL.createObjectURL(image)}
-                  alt="Comment Image"
-                />
-              ) : null}
-            </div>
-          ) : (
-            <></>
-          )}
+            ) : (
+              <></>
+            )}
+          </div>
+        </div>
+        <div className="comments-section1">
+          <div>
+            <h2 className="comments-title">Sản phẩm</h2>
+          </div>
+          <div className="comment-item">
+            <span className="comment-label">Đánh giá:</span>
+            <span className="comment-value">4 sao</span>
+          </div>
+          <div className="comment-item">
+            <span className="comment-label">Số lượng đánh giá:</span>
+            <span className="comment-value">1 lượt</span>
+          </div>
+          <div className="comment-item">
+            <span className="comment-label">Số lượt mua:</span>
+            <span className="comment-value">10 lượt</span>
+          </div>
+          <div className="comment-item">
+            <span className="comment-label">Số lượt thích:</span>
+            <span className="comment-value">20 lượt</span>
+          </div>
+          <div className="comment-item">
+            <span className="comment-label">Số lượt truy cập:</span>
+            <span className="comment-value">100 lượt</span>
+          </div>
         </div>
       </div>
     </div>

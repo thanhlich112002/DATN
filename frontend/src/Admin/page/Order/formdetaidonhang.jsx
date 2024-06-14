@@ -145,18 +145,19 @@ function AddAddress({ setIsOpen, cart }) {
                   padding: "2px 5px",
                 }}
               >
-                <option value="Pending">Đang chờ</option>
+                <option value="Pending">Chờ xử lý</option>
                 <option value="Confirmed">Đã xác nhận</option>
-                <option value="Shipped">Đã giao hàng</option>
+                <option value="Shipped">Vận chuyển</option>
                 <option value="Finished">Hoàn thành</option>
                 <option value="Cancelled">Hủy bỏ</option>
               </select>
             </div>
           </div>
         </div>
-
-        {/* Nút để gửi thông báo */}
-        <div className="Cart_left">
+        <div
+          className="Cart_left"
+          style={{ maxHeight: "200px", overflowY: "auto" }}
+        >
           {cart?.cart?.map((product, index) => (
             <CartItem product={product} key={index} />
           ))}

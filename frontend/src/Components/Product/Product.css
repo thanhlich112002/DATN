@@ -303,3 +303,25 @@
   width: 100px;
   margin-top: 20px;
 }
+
+.comments-section1 {
+  margin-top: 30px;
+  width: 30%;
+  padding: 10px;
+  border-radius: 5px;
+  padding-left: 30px;
+}
+
+.comment-item {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.comment-label {
+  flex: 2;
+  font-weight: bold;
+}
+
+.comment-value {
+  flex: 1;
+}

@@ -42,22 +42,18 @@
 }
 .box-status {
   padding: 5px 10px;
-  background: #ffffff;
+  background-color: rgba(42, 7, 7, 0.075) !important;
   min-width: 100px;
   display: flex;
   margin-bottom: 5px;
   justify-content: center;
   align-items: center;
   border-radius: 2px;
-  border: 1px solid #a66dd4 !important;
   transform: background-color 1s linear;
   cursor: pointer;
 }
 .box-status:hover {
-  background-color: #a66dd4;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
+  border-left: 3px solid #3b7ddd !important;
 }
 .orderbar-status input {
   padding: 5px 10px;

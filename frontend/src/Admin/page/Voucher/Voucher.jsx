@@ -1,10 +1,25 @@
 import React, { useEffect, useState } from "react";
 import "./Voucher.css";
-import { getAllVouchers, createVoucher } from "../../service/userService";
+import {
+  getAllVouchers,
+  createVoucher,
+  deleteVoucher,
+} from "../../service/userService";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBookmark,
+  faEdit,
+  faTrashAlt,
+  faUser,
+  faUserCheck,
+  faUserShield,
+  faUserTimes,
+} from "@fortawesome/free-solid-svg-icons";
+import { useTable } from "react-table";
 import TopTable from "../component/TopTable/TopTable";
+import DeleUser from "./DeleUser"; // Import component DeleUser
+import Card from "../Dashboard/card";
 
 const VoucherDisplay = ({ voucher, onSave }) => {
   return (
@@ -43,6 +58,7 @@ const VoucherForm = ({ onSave, setIsOpen }) => {
   const [expiryDate, setExpiryDate] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -139,24 +155,120 @@ const VoucherForm = ({ onSave, setIsOpen }) => {
 function Voucher() {
   const [vouchers, setVouchers] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-
-  const GetVoucher = async () => {
-    const req = await getAllVouchers();
-    setVouchers(req.data);
-  };
+  const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [orderID, setOrderID] = useState("");
 
   useEffect(() => {
-    GetVoucher();
+    getVouchers(1);
   }, []);
 
+  const getVouchers = async (page) => {
+    try {
+      const response = await getAllVouchers(page);
+      setVouchers(response.data.data);
+      setPageCount(response.data.totalPages);
+      setCurrentPage(page);
+    } catch (error) {
+      console.error("Lỗi khi lấy dữ liệu phiếu giảm giá:", error);
+    }
+  };
+
   const handleSave = () => {
-    GetVoucher();
     alert("Phiếu giảm giá đã được lưu!");
   };
 
+  const handleDelete = (voucherId) => {
+    setOrderID(voucherId);
+    setShowConfirmation(true);
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmation(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    try {
+      // Gọi API hoặc xử lý xóa phiếu giảm giá tại đây
+      await deleteVoucher(orderID);
+
+      const updatedVouchers = vouchers.filter(
+        (voucher) => voucher._id !== orderID
+      );
+      setVouchers(updatedVouchers);
+      setShowConfirmation(false);
+      alert("Phiếu giảm giá đã được xóa thành công!");
+    } catch (error) {
+      console.error("Lỗi khi xóa phiếu giảm giá:", error);
+      alert("Đã xảy ra lỗi khi xóa phiếu giảm giá!");
+    }
+  };
+
+  const data = React.useMemo(() => vouchers, [vouchers]);
+
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: "Tên phiếu giảm giá",
+        accessor: "name",
+      },
+      {
+        Header: "Mã phiếu",
+        accessor: "code",
+      },
+      {
+        Header: "Giá trị giảm giá",
+        accessor: "amount",
+        Cell: ({ value }) => <span>{value.toLocaleString("vi-VN")} VNĐ</span>,
+      },
+      {
+        Header: "Điều kiện",
+        accessor: "conditions",
+        Cell: ({ value }) => <span>{value.toLocaleString("vi-VN")} VNĐ</span>,
+      },
+      {
+        Header: "Ngày hết hạn",
+        accessor: "expiryDate",
+        Cell: ({ value }) => (
+          <span>{new Date(value).toLocaleDateString("vi-VN")}</span>
+        ),
+      },
+      {
+        Header: "Số lượng",
+        accessor: "quantity",
+      },
+      {
+        Header: "Hành động",
+        accessor: "actions",
+        Cell: ({ row }) => (
+          <div className="btn_tab">
+            <button className="btn-edit">
+              <FontAwesomeIcon icon={faEdit} />
+            </button>
+            <button
+              className="btn-delete"
+              onClick={() => handleDelete(row.original._id)}
+            >
+              <FontAwesomeIcon icon={faTrashAlt} />
+            </button>
+          </div>
+        ),
+      },
+    ],
+    []
+  );
+
+  useEffect(() => {
+    getVouchers(currentPage);
+  }, [currentPage]);
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data });
+
   return (
     <div className="projects">
-      <div className="voucher_contai">
+      <div className="_card">
         <div className="card-header">
           <div
             style={{
@@ -167,39 +279,81 @@ function Voucher() {
               marginBottom: "20px",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                width: "100px",
-                height: "100px",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <FontAwesomeIcon
-                icon={faBookmark}
-                fontSize={70}
-                color="#C0C0C0"
-              />
-            </div>
-            <span>Quản lý giảm giá</span>
+            <span>Quản lý phiếu giảm giá</span>
           </div>
-          <button className="background_cl" onClick={() => setIsOpen(!isOpen)}>
+          <button className="addbut" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? "Đóng form" : "Thêm phiếu giảm giá"}
           </button>
         </div>
-        <TopTable />
-        {isOpen && <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />}
-        <div className="voucher-grid">
-          {vouchers?.map((voucher, index) => (
-            <div>
-              <VoucherDisplay
-                key={index}
-                voucher={voucher}
-                onSave={handleSave}
+        <div className="_card-body">
+          <div className="dashboard_cards">
+            <Card
+              value={1} // Giá trị thực tế của statisticsUser.RoleAdmin
+              title={"Số lượng tài khoản Admin"}
+              icon={faUserShield}
+              cln={"bcl1"}
+            />
+            <Card
+              value={1} // Giá trị thực tế của statisticsUser.RoleUser
+              title={"Số lượng tài khoản User"}
+              icon={faUser}
+              cln={"bcl2"}
+            />
+            <Card
+              value={1} // Giá trị thực tế của statisticsUser.IsVerifiedTrue
+              title={"Tài khoản đang hoạt động"}
+              icon={faUserCheck}
+              cln={"bcl4"}
+            />
+            <Card
+              value={1} // Giá trị thực tế của statisticsUser.IsVerifiedFalse
+              title={"Tài khoản đã bị vô hiệu hóa"}
+              icon={faUserTimes}
+              cln={"bcl3"}
+            />
+          </div>
+          <div className="styled-table BrP5 mgt10">
+            <TopTable
+              handlePageChange={getVouchers}
+              currentPage={currentPage}
+              pageCount={pageCount}
+            />
+            <table {...getTableProps()} className="styled-table">
+              <thead>
+                {headerGroups.map((headerGroup) => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map((column) => (
+                      <th {...column.getHeaderProps()}>
+                        {column.render("Header")}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {rows.map((row) => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {row.cells.map((cell) => (
+                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            {isOpen && (
+              <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />
+            )}
+            {showConfirmation && (
+              <DeleUser
+                orderID={orderID}
+                onCancel={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
               />
-            </div>
-          ))}
+            )}
+          </div>
         </div>
       </div>
     </div>

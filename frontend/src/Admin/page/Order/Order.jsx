@@ -1,19 +1,35 @@
 import React, { useEffect, useState } from "react";
 import ProductTable from "./OrderTable";
-import { getAllOrders } from "../../service/userService";
-import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import { getAllOrders, getStatisticsOrders } from "../../service/userService";
 
 const TableOrder = () => {
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
-  const [status, setStatus] = useState("");
-  const fetchProducts = async (page) => {
+  const [statisticsOrders, setStatisticsOrders] = useState("");
+  const [endDate, setEndDate] = useState(
+    new Date(Date.now() + 86400000).toISOString().split("T")[0]
+  );
+  const currentDate = new Date();
+  currentDate.setMonth(currentDate.getMonth() - 1);
+  const [startDate, setStartDate] = useState(
+    currentDate.toISOString().split("T")[0]
+  );
+
+  const [status, setStatus] = useState("all");
+  const fetchStatisticsOrders = async (page, status, start, end) => {
     try {
-      const response = await getAllOrders(page);
+      const response = await getStatisticsOrders(start, end);
+      setStatisticsOrders(response.data.data);
+    } catch (error) {
+      console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+    }
+  };
+
+  const fetchProducts = async (page, status, start, end) => {
+    try {
+      const response = await getAllOrders(page, status, start, end);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(page);
@@ -21,47 +37,29 @@ const TableOrder = () => {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
     }
   };
+  useEffect(() => {
+    fetchStatisticsOrders(startDate, endDate);
+  }, [startDate, endDate]);
 
   useEffect(() => {
-    fetchProducts(currentPage, status);
-  }, [currentPage, status]);
-
-  useEffect(() => {
-    fetchProducts(currentPage, status, name);
-  }, [currentPage, name, status]);
+    fetchProducts(currentPage, status, startDate, endDate);
+  }, [currentPage, status, startDate, endDate]);
 
   return (
     <div className="projects">
-      {/* <div className="card-header">
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            borderRadius: "5px",
-            marginBottom: "20px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              width: "100px",
-              height: "100px",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <FontAwesomeIcon icon={faBookmark} fontSize={70} color="#C0C0C0" />
-          </div>
-          <span>Quản lý đơn hàng</span>
-        </div>
-      </div> */}
       <ProductTable
         products={products}
         fetchProducts={fetchProducts}
         currentPage={currentPage}
         pageCount={pageCount}
         setName={setName}
+        status={status}
+        setStatus={setStatus}
+        endDate={endDate}
+        setEndDate={setEndDate}
+        startDate={startDate}
+        setStartDate={setStartDate}
+        statisticsOrders={statisticsOrders}
       />
     </div>
   );

@@ -3,10 +3,21 @@ import { useTable } from "react-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark, faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
-import { getAllBrands, searchBrands } from "../../service/userService";
+import {
+  getAllBrands,
+  searchBrands,
+  getStatisticsBrand,
+} from "../../service/userService";
 import UpBrand from "./UpBrand";
 import { useNavigate } from "react-router-dom";
 import TopTable from "../component/TopTable/TopTable";
+import Card from "../Dashboard/card";
+import {
+  faListAlt,
+  faBoxOpen,
+  faBan,
+  faExclamationTriangle,
+} from "@fortawesome/free-solid-svg-icons";
 
 const BrandTable = ({ onDelete }) => {
   const [categories, setCategories] = useState([]);
@@ -15,6 +26,15 @@ const BrandTable = ({ onDelete }) => {
   const [pageCount, setPageCount] = useState(0);
   const [name, setName] = useState("");
   const navigate = useNavigate();
+  const [statisticsCategory, setStatisticsCategory] = useState([]);
+  const fetchStatisticsCategory = async () => {
+    try {
+      const response = await getStatisticsBrand();
+      setStatisticsCategory(response.data.data);
+    } catch (error) {
+      console.log("Lỗi khi lấy danh sách danh mục:", error);
+    }
+  };
 
   const fetchCategories = async (page) => {
     try {
@@ -94,6 +114,9 @@ const BrandTable = ({ onDelete }) => {
   const handleSearch = (name) => {
     setName(name);
   };
+  useEffect(() => {
+    fetchStatisticsCategory();
+  }, []);
 
   useEffect(() => {
     console.log(name);
@@ -119,31 +142,39 @@ const BrandTable = ({ onDelete }) => {
                 marginBottom: "20px",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  width: "100px",
-                  height: "100px",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={faBookmark}
-                  fontSize={70}
-                  color="#C0C0C0"
-                />
-              </div>
               <span>Quản lý thương hiệu</span>
             </div>
-            <button
-              onClick={handleBackToCategoryList}
-              className="background_cl"
-            >
+            <button onClick={handleBackToCategoryList} className="addbut">
               Thêm danh thương hiệu
             </button>
           </div>
-          <div className="_card-body">
+          <div className="dashboard_cards">
+            <Card
+              value={statisticsCategory.totalBrands}
+              title={"Tổng thương hiệu"}
+              icon={faListAlt}
+              cln={"bcl1"}
+            />
+            <Card
+              value={statisticsCategory.totalBrandsWithAvailableProducts}
+              title={"Có sản phẩm còn bán"}
+              icon={faBoxOpen}
+              cln={"bcl2"}
+            />
+            <Card
+              value={statisticsCategory.totalBrandsWithZeroProducts}
+              title={"Có sản phẩm hết hàng"}
+              icon={faBan}
+              cln={"bcl3"}
+            />
+            <Card
+              value={statisticsCategory.totalBrandsOutOfStock}
+              title={"Không có sản phẩm"}
+              icon={faExclamationTriangle}
+              cln={"bcl4"}
+            />
+          </div>
+          <div className="_card-body BrP5 ">
             {deletingCategory && (
               <UpBrand
                 setIsOpen={() => setDeletingCategory(null)}
@@ -151,7 +182,7 @@ const BrandTable = ({ onDelete }) => {
                 onDelete={onDelete}
               />
             )}
-            <div className="styled-table">
+            <div className="styled-table ">
               <TopTable
                 handleSearch={handleSearch}
                 handlePageChange={fetchCategories}

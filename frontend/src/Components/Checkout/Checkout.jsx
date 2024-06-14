@@ -58,9 +58,8 @@ function Checkout() {
         }
       }
       const req = await createOrder(total, 29000, address._id, vouchers?._id);
-      console.log(req.data.url);
-      if (req.data && req.data.url) {
-        window.open(req.data.url);
+      if (req.data && req.data.order_url) {
+        window.location.href = req.data.order_url;
       }
     } catch (error) {
       toast.error(error.response.data.message);
@@ -288,21 +287,6 @@ function Checkout() {
             >
               Chọn mã
             </div>
-          </div>
-          <div
-            class="field__input-wrapper"
-            style={{ marginTop: "10px", cursor: "pointer" }}
-          >
-            <label for="province" class="field__label">
-              Chọn mã giảm giá
-            </label>
-            <select name="" id="" class="field__input" data-bind="">
-              {listVouchers.map((contact) => (
-                <option key={contact._id} value={contact._id}>
-                  {contact.name}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
 
