@@ -4,10 +4,17 @@ const dotenv = require("dotenv");
 const router = require("./routes/index");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
-const http = require("http");
 const cors = require("cors");
-require("dotenv").config();
+const http = require("http");
 const errorHandler = require("./utils/errorHandler");
+const { initializeSocket } = require("./utils/socket"); // Import từ file socket.js
+
+dotenv.config();
+
+const app = express();
+const server = http.createServer(app);
+
+initializeSocket(server); // Khởi tạo socket với server
 
 mongoose
   .connect(process.env.DATABASE, {})
@@ -17,38 +24,17 @@ mongoose
   .catch((error) => {
     console.log("error connecting to MongoDB:", error.message);
   });
-const app = express();
-const server = http.createServer(app);
-
-const socketIo = require("socket.io")(server, {
-  cors: {
-    origin: "*",
-  },
-});
-let clients = [];
-
-socketIo.on("connection", (socket) => {
-  console.log("New client connected");
-  socket.on("disconnect", () => {
-    console.log("Client disconnected");
-    clients = clients.filter((client) => client.id !== socket.id);
-  });
-});
-function sendNotification(message) {
-  clients.forEach((client) => {
-    client.emit("serverNotification", message);
-  });
-}
-module.exports = { sendNotification };
 
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
 app.use("/", router);
-const port = process.env.PORT;
+
+const port = process.env.PORT || 3000;
 app.use(errorHandler);
-app.listen(port, () => {
+
+server.listen(port, () => {
   console.log(`http://localhost:${port}`);
 });
 

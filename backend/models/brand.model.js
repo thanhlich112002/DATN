@@ -11,7 +11,7 @@ const BrandSchema = new Schema({
   },
   images: {
     type: String,
-    required: [true, "Hình ảnh là bắt buộc"],
+    required: [false, "Hình ảnh là bắt buộc"],
   },
 });
 

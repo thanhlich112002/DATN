@@ -12,6 +12,7 @@ const orderModel = require("../models/order.model");
 const ApiFeatures = require("../utils/ApiFeatures.utlis");
 const userModel = require("../models/user.model");
 const Email = require("../utils/email");
+const sendNotification = require("../../backend/index.js");
 
 class AdminController {
   getAllUser = catchAsync(async (req, res, next) => {
@@ -21,9 +22,9 @@ class AdminController {
       if (role) {
         queryObj.role = role;
       }
-      if (status != null) {
-        queryObj.isVerified = status;
-      }
+      // if (status != null) {
+      //   queryObj.isAvailable = status;
+      // }
       console.log(queryObj);
       const pageSize = parseInt(req.query.limit, 10) || 7;
       const currentPage = parseInt(req.query.page, 10) || 1;
@@ -99,7 +100,7 @@ class AdminController {
 
   getQuantityUser = catchAsync(async (req, res, next) => {
     try {
-      let listo = 1;
+      let listo = 0;
       const time = req.params.time;
       if (time === "day") {
         const today = moment()
@@ -118,6 +119,7 @@ class AdminController {
             $lt: today,
           },
         });
+        console.log(orders);
         listo = orders.length;
       }
       if (time === "month") {
@@ -126,7 +128,6 @@ class AdminController {
           .startOf("day")
           .add(1, "day")
           .toDate();
-
         const startOfMonth = moment()
           .startOf("month")
           .add(process.env.UTC, "hours")
@@ -137,6 +138,7 @@ class AdminController {
             $lt: today,
           },
         });
+        console.log(orders);
         listo = orders.length;
       }
       if (time === "year") {
@@ -1096,6 +1098,21 @@ class AdminController {
           "Đã xảy ra lỗi khi lấy thống kê doanh số bán hàng của thương hiệu",
       });
     }
+  });
+  DElUser = catchAsync(async (req, res) => {
+    const userId = req.params.userId;
+    console.log(userId);
+    const user = await userModel.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "Người dùng không tồn tại",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Người dùng đã được xóa thành công",
+    });
   });
 }
 

@@ -11,7 +11,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { getAllUser, getStatisticsUser } from "../../service/userService";
+import {
+  getAllUser,
+  getStatisticsUser,
+  DElUser,
+} from "../../service/userService";
 import TopTable from "../component/TopTable/TopTable";
 import Card from "../Dashboard/card";
 import DeleUser from "./DeleUser"; // Import component DeleUser
@@ -57,15 +61,8 @@ const ProductTable = () => {
   const columns = React.useMemo(
     () => [
       {
-        Header: "Ảnh đại diện",
-        accessor: "photo",
-        Cell: ({ value }) => (
-          <img
-            src={value}
-            alt="Ảnh đại diện"
-            style={{ width: "50px", height: "auto" }}
-          />
-        ),
+        Header: "ID",
+        accessor: "_id",
       },
       {
         Header: "Email",
@@ -117,14 +114,9 @@ const ProductTable = () => {
     setShowConfirmation(false);
   };
 
-  const handleConfirmDelete = () => {
-    console.log("Xác nhận xóa người dùng");
-    // Gọi API hoặc xử lý xóa người dùng tại đây
-
-    // Sau khi xóa thành công, cập nhật lại danh sách người dùng
+  const handleConfirmDelete = async (id) => {
+    await DElUser(id);
     fetchProducts(currentPage, status, role);
-
-    // Ẩn thông báo xác nhận xóa
     setShowConfirmation(false);
   };
 
@@ -169,7 +161,7 @@ const ProductTable = () => {
                 icon={faUser}
                 cln={"bcl2"}
               />
-              <Card
+              {/* <Card
                 value={statisticsUser.IsVerifiedTrue}
                 title={"Tài khoản đang hoạt động"}
                 icon={faUserCheck}
@@ -180,7 +172,7 @@ const ProductTable = () => {
                 title={"Tài khoản đã bị vô hiệu hóa"}
                 icon={faUserTimes}
                 cln={"bcl3"}
-              />
+              /> */}
             </div>
             <div
               className="styled-table BrP5 mgt10"
@@ -208,7 +200,7 @@ const ProductTable = () => {
                   </div>
                 </div>
 
-                <div className="orderbar-status">
+                {/* <div className="orderbar-status">
                   <label>Trạng thái</label>
                   <select
                     className="ATV"
@@ -218,7 +210,7 @@ const ProductTable = () => {
                     <option value={true}>Còn hoạt động</option>
                     <option value={false}>Đã khóa</option>
                   </select>
-                </div>
+                </div> */}
               </div>
               <table {...getTableProps()} className="styled-table">
                 <thead>

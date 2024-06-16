@@ -232,14 +232,17 @@ const upStatus = async (data, id) => {
     },
   });
 };
-const getAllVouchers = async (page) => {
+const getAllVouchers = async (page, status) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/vouchers/getAllVouchers?page=${page}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      ContentType: "multipart/form-data",
-    },
-  });
+  return axios.get(
+    `${url}/api/vouchers/getAllVouchers?page=${page}&status=${status}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+    }
+  );
 };
 const createVoucher = async (data) => {
   const token = localStorage.getItem("token");
@@ -250,7 +253,17 @@ const createVoucher = async (data) => {
     },
   });
 };
+const updateVoucher = async (data, id) => {
+  const token = localStorage.getItem("token");
+  return axios.post(`${url}/api/vouchers/updateVoucher/${id}`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
 const deleteVoucher = async (req, res, next) => {};
+
 const searchProducts = async (data, page) => {
   const token = localStorage.getItem("token");
   return axios.post(
@@ -356,7 +369,19 @@ const getStatisticsBrandbyId = async (id) => {
     config
   );
 };
+const DElUser = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.delete(`${url}/api/admin/DElUser/${id}`, config);
+};
 export {
+  updateVoucher,
+  DElUser,
   deleteVoucher,
   getStatisticsUser,
   getStatisticsBrandbyId,

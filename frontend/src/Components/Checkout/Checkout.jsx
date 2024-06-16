@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./Checkout.css";
 import { useUser } from "../../service/userContext";
+import AddAddress from "../Account/form";
 import { useAuth } from "../../service/authContext";
 import {
   getUser,
@@ -21,11 +22,12 @@ function Checkout() {
   const [address, setAddress] = useState(null);
   const [vouchers, setVouchers] = useState();
   const [code, setCode] = useState("");
+  const [openaddress, setOpenaddress] = useState(false);
   const getUserData = async () => {
     try {
       const res = await getUser();
       setUser(res.data);
-      console.log(address);
+      setAddress(res.data.defaultContact);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -40,15 +42,15 @@ function Checkout() {
       console.error("Error fetching user data:", error);
     }
   };
-  // const getListVouchers = async (data) => {
-  //   try {
-  //     setVouchers(null);
-  //     const res = await getVouchersbyUser(data);
-  //     setListVouchers(res.data);
-  //   } catch (error) {
-  //     console.error("Error fetching user data:", error);
-  //   }
-  // };
+  const getListVouchers = async (data) => {
+    try {
+      setVouchers(null);
+      const res = await getVouchersbyUser(data);
+      setListVouchers(res.data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
   const Order = async () => {
     try {
       if (vouchers) {
@@ -57,34 +59,31 @@ function Checkout() {
           return;
         }
       }
+
       const req = await createOrder(total, 29000, address._id, vouchers?._id);
+      console.log("vui");
       if (req.data && req.data.order_url) {
         window.location.href = req.data.order_url;
       }
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error("Không thể thanh toán lúc này");
     }
   };
-
-  const getAddress = (id) => {
-    console.log(id);
-    const defaultContactId = id;
-    const address = user?.contact.find(
-      (contact) => contact._id === defaultContactId
-    );
-    console.log(address);
-    setAddress(address);
-  };
+  // const getAddress = (id) => {
+  //   const defaultContactId = id;
+  //   const address = user?.contact.find(
+  //     (contact) => contact._id === defaultContactId
+  //   );
+  //   setAddress(address);
+  // };
+  // useEffect(() => {
+  //   getAddress(user?.defaultContact);
+  // }, [user]);
   useEffect(() => {
     getUserData();
-    // getListVouchers({ tatolprice: total });
   }, [total]);
-  useEffect(() => {
-    getAddress(user?.defaultContact);
-  }, [user]);
 
   useEffect(() => {
-    // Calculate subtotal and total
     const newSubtotal = cart.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
@@ -136,6 +135,9 @@ function Checkout() {
           </div>
           <div className="checkout_left_top">
             <span>Địa chỉ mặc định</span>
+            <button className="addbut" onClick={() => setOpenaddress(true)}>
+              Thêm địa chi
+            </button>
           </div>
           <div className="checkout_left">
             <div class="field__input-wrapper">
@@ -147,7 +149,6 @@ function Checkout() {
                 id="phone_number"
                 class="field__input"
                 data-bind="province"
-                onChange={(e) => getAddress(e.target.value)}
               >
                 {user?.contact?.map((contact) => (
                   <option key={contact._id} value={contact._id}>
@@ -195,7 +196,7 @@ function Checkout() {
           <div className="checkout_left_top">
             <span>Thanh toán</span>
           </div>{" "}
-          {["Thanh toán qua MoMo"].map((option, index) => (
+          {["Thanh toán qua ZaloPay"].map((option, index) => (
             <div class="radio-wrapper">
               <div class="radio__input">
                 <input
@@ -391,6 +392,11 @@ function Checkout() {
           </div>
         </div>
       </div>
+      {openaddress ? (
+        <AddAddress setIsOpen={setOpenaddress} getUserData={getUserData} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

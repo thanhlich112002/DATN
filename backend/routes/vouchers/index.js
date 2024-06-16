@@ -15,7 +15,7 @@ router.get(
   authsController.protect,
   voucherController.getVouchersbyCode
 );
-// router.post("/checkVouchers/:voucherID", voucherController.checkVouchers);
+router.post("/updateVoucher/:id", voucherController.updateVoucher);
 router.post(
   "/getVouchersbyUser",
   authsController.protect,

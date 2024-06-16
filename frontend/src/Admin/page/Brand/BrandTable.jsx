@@ -145,7 +145,7 @@ const BrandTable = ({ onDelete }) => {
               <span>Quản lý thương hiệu</span>
             </div>
             <button onClick={handleBackToCategoryList} className="addbut">
-              Thêm danh thương hiệu
+              Thêm thương hiệu
             </button>
           </div>
           <div className="dashboard_cards">

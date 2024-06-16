@@ -50,7 +50,7 @@ function AddCategory() {
       <div className="projects">
         <div className="_card">
           <div className="card-header">
-            <span>Thêm Danh mục</span>
+            <span>Thêm Thương Hiệu</span>
             <button
               onClick={handleBackToCategoryList}
               style={{
@@ -63,7 +63,7 @@ function AddCategory() {
               className="background_cl"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
-              Qua về danh mục
+              Qua về thương hiệu
             </button>
           </div>
           <div className="_card-body">
@@ -98,7 +98,7 @@ function AddCategory() {
               </div>
               <tbody>
                 <tr className="table-row">
-                  <td className="column-1">Tên danh mục</td>
+                  <td className="column-1">Tên thương hiệu</td>
                   <td className="column-2">
                     <input
                       type="text"
@@ -108,7 +108,7 @@ function AddCategory() {
                   </td>
                 </tr>
                 <tr className="table-row">
-                  <td className="column-1">Mô tả danh mục</td>
+                  <td className="column-1">Mô tả thương hiệu</td>
                   <td className="column-2">
                     <textarea
                       type="text"

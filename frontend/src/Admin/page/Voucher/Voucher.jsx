@@ -4,6 +4,7 @@ import {
   getAllVouchers,
   createVoucher,
   deleteVoucher,
+  updateVoucher,
 } from "../../service/userService";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -50,7 +51,7 @@ const VoucherDisplay = ({ voucher, onSave }) => {
   );
 };
 
-const VoucherForm = ({ onSave, setIsOpen }) => {
+const VoucherForm = ({ setIsOpen }) => {
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [amount, setAmount] = useState(0);
@@ -151,6 +152,109 @@ const VoucherForm = ({ onSave, setIsOpen }) => {
     </div>
   );
 };
+const VoucherFormAdd = ({ voucher, setIsOpen }) => {
+  console.log(voucher);
+  const [code, setCode] = useState(voucher?.code);
+  const [name, setName] = useState(voucher?.name);
+  const [amount, setAmount] = useState(voucher?.amount);
+  const [conditions, setConditions] = useState(voucher?.conditions);
+  const [expiryDate, setExpiryDate] = useState(voucher?.expiryDate);
+  const [quantity, setQuantity] = useState(voucher?.quantity);
+  const [isAvailable, setIsAvailable] = useState(voucher?.isAvailable);
+  const dateObject = new Date(expiryDate);
+
+  const formattedDate = dateObject.toLocaleDateString("en-CA"); // Thay 'en-CA' bằng mã ngôn ngữ mong muốn
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newVoucher = {
+      code,
+      name,
+      amount,
+      conditions,
+      expiryDate,
+      quantity,
+      isAvailable,
+    };
+    console.log(newVoucher);
+    try {
+      const req = await updateVoucher(newVoucher, voucher._id);
+      toast.success("Thêm phiếu giảm giá thành công");
+    } catch (err) {
+      toast.error(err.data.message);
+    }
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="vouadd">
+      <div className="form-container1" style={{ position: "relative" }}>
+        <div className="X" onClick={() => setIsOpen(false)}>
+          x
+        </div>
+        <h2 className="voucher-heading">Thêm Phiếu Giảm Giá</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-field">
+            <label>Mã</label>
+            <input
+              type="text"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field">
+            <label>Tên</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field">
+            <label>Số Tiền Giảm Giá (VND)</label>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field">
+            <label>Điều Kiện Áp Dụng (VND)</label>
+            <input
+              type="number"
+              value={conditions}
+              onChange={(e) => setConditions(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field">
+            <label>Ngày Hết Hạn</label>
+            <input
+              type="date"
+              value={formattedDate}
+              onChange={(e) => setExpiryDate(e.target.value)}
+              required
+            />
+          </div>
+          <div className="form-field">
+            <label>Số Lượng</label>
+            <input
+              type="number"
+              value={quantity}
+              onChange={(e) => setQuantity(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit" className="add-button">
+            Lưu
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 function Voucher() {
   const [vouchers, setVouchers] = useState([]);
@@ -159,17 +263,24 @@ function Voucher() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [orderID, setOrderID] = useState("");
+  const [order, setOrder] = useState();
+  const [showEdit, setShowEdit] = useState(false);
+  const [trueCount, setTrueCount] = useState(0);
+  const [falseCount, setFalseCount] = useState(0);
+  const [status, setStatus] = useState(true);
 
   useEffect(() => {
     getVouchers(1);
-  }, []);
+  }, [showEdit, isOpen, status]);
 
   const getVouchers = async (page) => {
     try {
-      const response = await getAllVouchers(page);
+      const response = await getAllVouchers(page, status);
       setVouchers(response.data.data);
       setPageCount(response.data.totalPages);
-      setCurrentPage(page);
+      setCurrentPage(response.data.currentPage);
+      setTrueCount(response.data.trueCount);
+      setFalseCount(response.data.falseCount);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu phiếu giảm giá:", error);
     }
@@ -182,6 +293,10 @@ function Voucher() {
   const handleDelete = (voucherId) => {
     setOrderID(voucherId);
     setShowConfirmation(true);
+  };
+  const handleEdit = (voucherId) => {
+    setOrder(voucherId);
+    setShowEdit(true);
   };
 
   const handleCancelDelete = () => {
@@ -243,7 +358,10 @@ function Voucher() {
         accessor: "actions",
         Cell: ({ row }) => (
           <div className="btn_tab">
-            <button className="btn-edit">
+            <button
+              className="btn-edit"
+              onClick={() => handleEdit(row.original)}
+            >
               <FontAwesomeIcon icon={faEdit} />
             </button>
             <button
@@ -262,7 +380,6 @@ function Voucher() {
   useEffect(() => {
     getVouchers(currentPage);
   }, [currentPage]);
-
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
@@ -288,26 +405,14 @@ function Voucher() {
         <div className="_card-body">
           <div className="dashboard_cards">
             <Card
-              value={1} // Giá trị thực tế của statisticsUser.RoleAdmin
-              title={"Số lượng tài khoản Admin"}
+              value={trueCount}
+              title={"Số phiếu giảm đang mở"}
               icon={faUserShield}
               cln={"bcl1"}
             />
             <Card
-              value={1} // Giá trị thực tế của statisticsUser.RoleUser
-              title={"Số lượng tài khoản User"}
-              icon={faUser}
-              cln={"bcl2"}
-            />
-            <Card
-              value={1} // Giá trị thực tế của statisticsUser.IsVerifiedTrue
-              title={"Tài khoản đang hoạt động"}
-              icon={faUserCheck}
-              cln={"bcl4"}
-            />
-            <Card
-              value={1} // Giá trị thực tế của statisticsUser.IsVerifiedFalse
-              title={"Tài khoản đã bị vô hiệu hóa"}
+              value={falseCount}
+              title={"Số phiếu giảm đã đống"}
               icon={faUserTimes}
               cln={"bcl3"}
             />
@@ -318,42 +423,55 @@ function Voucher() {
               currentPage={currentPage}
               pageCount={pageCount}
             />
-            <table {...getTableProps()} className="styled-table">
-              <thead>
-                {headerGroups.map((headerGroup) => (
-                  <tr {...headerGroup.getHeaderGroupProps()}>
-                    {headerGroup.headers.map((column) => (
-                      <th {...column.getHeaderProps()}>
-                        {column.render("Header")}
-                      </th>
+            <div
+              onClick={() => setStatus(true)}
+              className={`box-status ${status === true ? "ATV" : ""}`}
+            >
+              Còn mỡ
+            </div>
+            <div
+              onClick={() => setStatus(false)}
+              className={`box-status ${status === false ? "ATV" : ""}`}
+            >
+              Đã đóng
+            </div>
+          </div>
+          <table {...getTableProps()} className="styled-table">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map((cell) => (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                     ))}
                   </tr>
-                ))}
-              </thead>
-              <tbody {...getTableBodyProps()}>
-                {rows.map((row) => {
-                  prepareRow(row);
-                  return (
-                    <tr {...row.getRowProps()}>
-                      {row.cells.map((cell) => (
-                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                      ))}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-            {isOpen && (
-              <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />
-            )}
-            {showConfirmation && (
-              <DeleUser
-                orderID={orderID}
-                onCancel={handleCancelDelete}
-                onConfirm={handleConfirmDelete}
-              />
-            )}
-          </div>
+                );
+              })}
+            </tbody>
+          </table>
+          {isOpen && <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />}
+          {showConfirmation && (
+            <DeleUser
+              orderID={orderID}
+              onCancel={handleCancelDelete}
+              onConfirm={handleConfirmDelete}
+            />
+          )}
+          {showEdit && (
+            <VoucherFormAdd voucher={order} setIsOpen={setShowEdit} />
+          )}
         </div>
       </div>
     </div>

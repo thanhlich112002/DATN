@@ -164,8 +164,8 @@ function AddAddress({ setIsOpen, getUserData }) {
             <input
               type="checkbox"
               id="setDefault"
-              checked={setDefault}
-              onChange={(e) => setSetDefault(e.target.checked)}
+              defaultChecked
+              checked={true}
             />
             <label htmlFor="setDefault">Đặt làm mặc định</label>
           </div>

@@ -13,49 +13,13 @@ import AddProduct from "./page/Product/addProduct";
 import UpProduct from "./page/Product/Upproduct";
 import Voucher from "./page/Voucher/Voucher";
 import User from "./page/User/User";
-import socketIOClient from "socket.io-client";
-import { useEffect, useState } from "react";
-const host = "http://localhost:3000";
+import Headers from "./component/Headers/headers";
+
 const App = () => {
-  const [notification, setNotification] = useState("");
-  useEffect(() => {
-    const socket = socketIOClient.connect(host);
-    socket.on("serverNotification", (notification) => {
-      setNotification(notification);
-    });
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
   return (
     <div>
       <Sidebar>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "end",
-            borderBottom: " 0.1px solid #ebebeb",
-            alignContent: "center",
-          }}
-        >
-          <div
-            style={{
-              margin: "10px 20px",
-              height: "40px",
-              width: "40px",
-              borderRadius: "50px",
-              overflow: "hidden",
-            }}
-          >
-            {notification}
-            <img
-              style={{ width: "40px", height: "40px" }}
-              src="https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-1/341567992_189194443477447_7522191387098263235_n.jpg?stp=cp6_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEarTZE1aOvAEMKCFgm0iyGwIk906XKCkTAiT3TpcoKRF6DzDf_rTfilFbZ4fh7aLieJ-YbdEzNf9h1RH7jnDvV&_nc_ohc=9wgj3DPaut0Q7kNvgHTlYj1&_nc_ht=scontent.fdad1-4.fna&oh=00_AYCWXjvjWodp66otNOxgqb4FY1ZCXIeiQMDsaykFLSwuZg&oe=666FD5B9"
-              alt=""
-            />
-          </div>
-        </div>
+        <Headers />
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/category/add" element={<AddCategory />} />

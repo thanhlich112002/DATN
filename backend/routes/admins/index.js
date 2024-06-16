@@ -29,4 +29,5 @@ router.get(
   "/getStatisticsBrandbyId/:BrandId",
   AdminController.getStatisticsBrandbyId
 );
+router.delete("/DElUser/:userId", AdminController.DElUser);
 module.exports = router;

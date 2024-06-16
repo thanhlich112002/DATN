@@ -104,6 +104,10 @@ const userSchema = new Schema(
       },
       select: false,
     },
+    isAvailable: {
+      type: "boolean",
+      default: false,
+    },
   },
   {
     timestamps: true,

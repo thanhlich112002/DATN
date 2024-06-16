@@ -9,7 +9,6 @@ const Email = require("../utils/email");
 
 class UserController {
   singUpUser = AuthsController.singUp(User, "User");
-
   userSendEmail = catchAsync(async (req, res, next) => {
     const doc = req.doc;
     const signUpToken = req.signUpToken;
@@ -59,16 +58,17 @@ class UserController {
         .json({ error: "Đã xảy ra lỗi khi đặt liên hệ mặc định." });
     }
   });
-
   getUser = catchAsync(async (req, res, next) => {
-    const user = await User.findOne({ email: req.user.email });
+    const user = await User.findOne({ email: req.user.email }).populate(
+      "defaultContact"
+    );
     res.status(200).json(user);
   });
-
   addContact = catchAsync(async (req, res, next) => {
     const user = await User.findOne({ email: req.user.email });
     console.log(user);
     user.contact.push(req.body.contact);
+    user.defaultContact = req.body.contact._id;
     await user.save({ validateBeforeSave: false });
     res.status(200).json(user);
   });

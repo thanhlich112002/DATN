@@ -153,13 +153,13 @@ const searchProducts = async (object) => {
 };
 
 const Getallcategory = async () => {
-  return axios.get(`${url}/api/categorys/getAllCategory`);
+  return axios.get(`${url}/api/categorys/getAllCategory?limit=100`);
 };
 const getAllBrands = async () => {
-  return axios.get(`${url}/api/brands/getAllBrands`);
+  return axios.get(`${url}/api/brands/getAllBrands?limit=100`);
 };
 const seachBrands = async (name) => {
-  return axios.post(`${url}/api/brands/seachBands`, {
+  return axios.post(`${url}/api/brands/seachBands?limit=100`, {
     nameBrand: name,
   });
 };
@@ -205,6 +205,7 @@ const changepassword = async (
 };
 
 const createOrder = async (totalPrice, shipCost, contactId, voucherID) => {
+  console.log("creteqwewqewqe");
   const token = localStorage.getItem("token");
   const config = {
     headers: {
@@ -217,7 +218,6 @@ const createOrder = async (totalPrice, shipCost, contactId, voucherID) => {
     quantity: product.quantity,
     price: product.price,
     product: product._id,
-    notes: product.specialRequest,
   }));
   const orderData = {
     cart: products,

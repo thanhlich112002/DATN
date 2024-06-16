@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css"; // Import file CSS của component
 
-function DeleUser({ userId, onCancel, handleConfirmDelete }) {
+function DeleUser({ userId, onCancel, onConfirm }) {
   return (
     <div className="full">
       {" "}
@@ -21,6 +21,7 @@ function DeleUser({ userId, onCancel, handleConfirmDelete }) {
             Hủy
           </button>
           <button
+            onClick={() => onConfirm(userId)}
             style={{
               minWidth: "90px",
               display: "flex",

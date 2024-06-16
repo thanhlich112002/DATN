@@ -21,33 +21,69 @@ class VoucherController {
       res.status(400).json({ message: err.message });
     }
   });
+  updateVoucher = catchAsync(async (req, res) => {
+    try {
+      const id = req.params.id;
+      const { name, amount, code, conditions, expiryDate, quantity } = req.body;
+      const localExpiryDate = new Date(expiryDate);
+
+      // Tìm và cập nhật voucher theo id
+      const voucher = await Voucher.findById(id);
+      if (!voucher) {
+        return res.status(404).json({ message: "Voucher not found" });
+      }
+
+      // Cập nhật thông tin voucher
+      voucher.name = name;
+      voucher.amount = amount;
+      voucher.code = code;
+      voucher.conditions = conditions;
+      voucher.expiryDate = localExpiryDate;
+      voucher.quantity = quantity;
+
+      // Lưu voucher đã cập nhật
+      const savedVoucher = await voucher.save();
+      res.status(201).json(savedVoucher);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  });
+
   getAllVouchers = catchAsync(async (req, res) => {
     try {
-      const { status } = req.body;
+      const { status, limit, page } = req.query;
+
       let queryObj = {};
-      if (status != null) {
-        queryObj.isAvaliable = status;
+      if (status !== undefined) {
+        queryObj.isAvailable = status === "true";
       }
+
       console.log(queryObj);
-      const pageSize = parseInt(req.query.limit, 10) || 7;
-      const currentPage = parseInt(req.query.page, 10) || 1;
-      let query = Voucher.find(queryObj);
-      if (req.query.search) {
-        query = new ApiFeatures(query, req.query).filter().search().sort();
-      } else {
-        query = new ApiFeatures(query, req.query).filter().sort().query;
-      }
-      const totalResults = await Voucher.countDocuments(query);
+
+      const pageSize = parseInt(limit, 10) || 7;
+      const currentPage = parseInt(page, 10) || 1;
+
+      const [totalResults, vouchers, trueCount, falseCount] = await Promise.all(
+        [
+          Voucher.countDocuments(queryObj),
+          Voucher.find(queryObj)
+            .skip((currentPage - 1) * pageSize)
+            .limit(pageSize),
+          Voucher.countDocuments({ isAvailable: true }),
+          Voucher.countDocuments({ isAvailable: false }),
+        ]
+      );
+
       const totalPages = Math.ceil(totalResults / pageSize);
-      const vouchers = await query
-        .skip((currentPage - 1) * pageSize)
-        .limit(pageSize);
+
       return res.status(200).json({
         message: "Thành công",
         data: vouchers,
         totalResults,
         totalPages,
         currentPage,
+        trueCount,
+        falseCount,
       });
     } catch (err) {
       console.error(err);

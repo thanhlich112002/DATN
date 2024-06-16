@@ -7,7 +7,7 @@ const Brand = require("../models/brand.model");
 const UploadImage = require("../utils/uploadConfig.utlis");
 const favoriteModel = require("../models/favorite.model");
 const cloudinary = require("cloudinary").v2;
-
+const { middleware } = require("../utils/socket");
 class productsController {
   UpImage = UploadImage.array("images", 10);
   updateProduct = catchAsync(async (req, res, next) => {
@@ -129,6 +129,7 @@ class productsController {
     return res.status(200).json(product);
   });
   getProductsbyID = catchAsync(async (req, res, next) => {
+    middleware("chào bạn");
     const features = new ApiFeatures(
       Products.findOne({ _id: req.params.id })
         .populate({
