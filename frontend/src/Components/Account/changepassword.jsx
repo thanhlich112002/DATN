@@ -5,7 +5,7 @@ import Button from "../../Components/Login/button";
 import { changepassword } from "../../service/API";
 import { useAuth } from "../../service/authContext";
 
-function Changepassword() {
+function Changepassword({ setIsLoading }) {
   const { user } = useAuth();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -15,15 +15,18 @@ function Changepassword() {
   const fetchOrders = async () => {
     try {
       if (user && user.email) {
+        setIsLoading(true);
         const req = await changepassword(
           user.email,
           oldPassword,
           newPassword,
           confirmPassword
         );
+        setIsLoading(false);
         setMessage("Mật khẩu đã được thay đổi thành công!");
       }
     } catch (err) {
+      setIsLoading(false);
       setMessage(
         err.response?.data?.message || "Có lỗi xảy ra. Vui lòng thử lại."
       );

@@ -49,12 +49,14 @@ function Collections({ setIsLoading }) {
 
   const SearchProducts = async () => {
     try {
+      setIsLoading(true);
       const productsResponse = await searchProducts({
         search: query,
         CategoryID: selectedCategories,
         BrandID: selectedBrands,
       });
       setProducts(productsResponse.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Failed to search products:", error);
     }

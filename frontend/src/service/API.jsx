@@ -327,8 +327,53 @@ const getAllSidebar = async (id) => {
   };
   return await axios.get(`${url}/api/sidebar/getAllSidebar`, config);
 };
+const forgetPassword = async (gmail) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.post(
+    `${url}/api/auths/forgetPassword/${gmail}`,
+    {},
+    config
+  );
+};
+const verifyToken = async (gmail, signUpToke) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.post(
+    `${url}/api/auths/verifyToken/${gmail}`,
+    { signUpToken: signUpToke },
+    config
+  );
+};
+const resetPassword = async (gmail, data) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.post(
+    `${url}/api/auths/resetPassword/${gmail}`,
+    data,
+    config
+  );
+};
 
 export {
+  resetPassword,
+  verifyToken,
+  forgetPassword,
   getAllSidebar,
   cancelOrder,
   ReturnOrder,

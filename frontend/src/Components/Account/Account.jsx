@@ -9,7 +9,7 @@ import Form from "./form";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../service/authContext";
 
-function Account() {
+function Account({ setIsLoading }) {
   const { id } = useParams();
   console.log(id);
   const navigate = useNavigate();
@@ -31,11 +31,11 @@ function Account() {
           <div onClick={() => handleNav("addresses")}>Địa chỉ</div>
         </div>
         <div className="account_right">
-          {id === "info" && <Info />}
-          {id === "orders" && <Order />}
-          {id === "changepassword" && <Changepassword />}
-          {id === "addresses" && <Address />}
-          {id === "form" && <Form />}
+          {id === "info" && <Info setIsLoading={ setIsLoading }/>}
+          {id === "orders" && <Order setIsLoading={ setIsLoading }/>}
+          {id === "changepassword" && <Changepassword setIsLoading={ setIsLoading }/>}
+          {id === "addresses" && <Address setIsLoading={ setIsLoading }/>}
+          {id === "form" && <Form setIsLoading={ setIsLoading }/>}
         </div>
       </div>
     </div>

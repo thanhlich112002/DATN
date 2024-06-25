@@ -229,7 +229,7 @@ class orderController {
       const items = [];
       const transID = Math.floor(Math.random() * 1000000);
       const embed_data = {
-        redirecturl: `http://localhost:3001/account/orders?requestId=${newOrder._id}`,
+        redirecturl: `https://datn-ten-zeta.vercel.app/account/orders?requestId=${newOrder._id}`,
       };
       const order = {
         app_id: config.app_id,

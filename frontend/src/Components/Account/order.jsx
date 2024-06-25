@@ -13,7 +13,7 @@ import OrderBar from "./orderBar";
 import DeleUser from "./ReturnOrder"; // Đã sửa lại đường dẫn đúng
 import { toast } from "react-toastify";
 
-function Order() {
+function Order({ setIsLoading }) {
   const location = useLocation();
   const { user } = useAuth();
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -40,6 +40,7 @@ function Order() {
 
   const fetchProducts = async (page, status, start, end) => {
     try {
+      setIsLoading(true);
       const response = await getOrdersByUserId(
         user._id,
         page,
@@ -51,8 +52,10 @@ function Order() {
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      setIsLoading(false);
     }
   };
 

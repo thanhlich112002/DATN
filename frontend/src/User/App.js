@@ -19,6 +19,7 @@ import Favorite from "../Components/Favorite/Favorite";
 import LoadingModal from "../Components/Loading/Loading";
 import { useState } from "react";
 import { useAuth } from "../service/authContext";
+import { Helmet } from "react-helmet";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);

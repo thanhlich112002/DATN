@@ -31,6 +31,10 @@ function Header() {
   const NavF = () => {
     navigate("/Favorite");
   };
+  const NavO = () => {
+    logout();
+    navigate("/login");
+  };
 
   const toggleAccountMenu = () => {
     setIsopen(!isopen);
@@ -107,7 +111,7 @@ function Header() {
                     />
                     <Select
                       title={"Đăng xuất"}
-                      actions={logout}
+                      actions={NavO}
                       icon={faRightFromBracket}
                     />
                   </div>

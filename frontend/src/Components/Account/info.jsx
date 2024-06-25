@@ -3,8 +3,7 @@ import { updateUser, getUser } from "../../service/API";
 import { toast } from "react-toastify";
 import { useAuth } from "../../service/authContext";
 
-
-function Info() {
+function Info({ setIsLoading }) {
   const { setUser } = useAuth();
   const [user, setuser] = useState();
   const [formData, setFormData] = useState({
@@ -14,9 +13,10 @@ function Info() {
   });
   const getUserData = async () => {
     try {
+      setIsLoading(true);
       const res = await getUser();
       setuser(res.data);
-      console.log(res.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -35,9 +35,11 @@ function Info() {
 
   const update = async () => {
     try {
+      setIsLoading(true);
       const res = await updateUser(formData);
       console.log(res.data);
       setUser(res.data);
+      setIsLoading(false);
       getUserData();
       toast.success("Cập nhật thành công");
     } catch (error) {
@@ -63,7 +65,6 @@ function Info() {
     <div>
       <span className="checkout_left_span">Thông tin tài khoản</span>
       <div style={{ width: "50%" }}>
-
         <div className="checkout_left info">
           <div className="field__input-wrapper">
             <label htmlFor="lastName" className="field__label">

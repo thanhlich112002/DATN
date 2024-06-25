@@ -31,6 +31,32 @@ const WrapperSliderStyle = styled(Slider)`
   }
 `;
 
+const PrevArrow = (props) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", left: "-25px" }}
+      onClick={onClick}
+    >
+      <FontAwesomeIcon icon={faAngleLeft} />
+    </div>
+  );
+};
+
+const NextArrow = (props) => {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", right: "-25px" }}
+      onClick={onClick}
+    >
+      <FontAwesomeIcon icon={faAngleRight} />
+    </div>
+  );
+};
+
 function Voucher() {
   const [vouchers, setVouchers] = useState([]);
 
@@ -54,34 +80,8 @@ function Voucher() {
       fetchAllVouchers();
     } catch (error) {
       console.error("Lỗi khi thêm phiếu giảm giá:", error);
-      toast.error(error.response.data.message);
+      toast.error(error.response?.data?.message || "Lỗi không xác định");
     }
-  };
-
-  const PrevArrow = (props) => {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: "block", left: "-25px" }}
-        onClick={onClick}
-      >
-        <FontAwesomeIcon icon={faAngleLeft} />
-      </div>
-    );
-  };
-
-  const NextArrow = (props) => {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        className={className}
-        style={{ ...style, display: "block", right: "-25px" }}
-        onClick={onClick}
-      >
-        <FontAwesomeIcon icon={faAngleRight} />
-      </div>
-    );
   };
 
   const settings = {
@@ -92,23 +92,29 @@ function Voucher() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    centerPadding: "150px",
     centerMode: true,
-    centerPadding: "0",
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
   };
 
   return (
     <div className="container_cus" style={{ border: "0.1px solid #cdcdcd" }}>
-      <div className="cat">
-        <div className="cat_title background_cl">Phiếu giảm giá</div>
-      </div>
-      <WrapperSliderStyle {...settings}>
-        {vouchers.map((item, index) => (
-          <div key={index}>
-            <Vou item={item} handleAddVouchers={handleAddVouchers} />
+      {vouchers && vouchers.length > 0 ? (
+        <>
+          <div className="cat">
+            <div className="cat_title background_cl">Phiếu giảm giá</div>
           </div>
-        ))}
-      </WrapperSliderStyle>
+          <WrapperSliderStyle {...settings}>
+            {vouchers.map((item, index) => (
+              <div key={index}>
+                <Vou item={item} handleAddVouchers={handleAddVouchers} />
+              </div>
+            ))}
+          </WrapperSliderStyle>
+        </>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

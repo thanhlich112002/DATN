@@ -29,7 +29,7 @@ module.exports = class Email {
     });
   }
 
-  async sendPasswordReset(user) {
+  async sendPasswordReset(user, token) {
     try {
       const transport = await this.newTransport();
 
@@ -39,6 +39,7 @@ module.exports = class Email {
         subject: "Đặt lại mật khẩu",
         html: `
           <p>Xin chào ${user.firstName},</p>
+          <p>Mã của bạn là  ${token},</p>
           <p>Bạn vừa yêu cầu đặt lại mật khẩu. Vui lòng làm theo các bước để hoàn tất quá trình.</p>
           <p>Nếu bạn không yêu cầu thay đổi mật khẩu, vui lòng bỏ qua email này.</p>
         `,

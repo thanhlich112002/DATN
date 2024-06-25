@@ -60,19 +60,34 @@ class AuthController {
       .json({ message: "Cập nhật mật khẩu thành công" });
   });
   forgetPassword = catchAsync(async (req, res, next) => {
-    const email = req.params.email;
-    console.log(email);
-    const user = await User.findOne({ email: email });
-    console.log(user);
-    if (!user) {
-      return next(new appError("Không tìm thấy Email", 401));
+    try {
+      const email = req.params.email;
+      console.log(email);
+
+      const user = await User.findOne({ email: email });
+      console.log(user);
+
+      if (!user) {
+        return res.status(400).json({
+          message: "Không tìm thấy email",
+        });
+      }
+
+      const resetToken = user.createSignUpToken();
+      await user.save({ validateBeforeSave: false });
+
+      await new Email().sendPasswordReset(user, resetToken);
+
+      res.status(200).json({
+        message: "Mã đã được gửi đến email!",
+      });
+    } catch (error) {
+      console.error("Đã xảy ra lỗi khi xử lý yêu cầu quên mật khẩu:", error);
+      res.status(500).json({
+        message:
+          "Đã xảy ra lỗi khi xử lý yêu cầu quên mật khẩu. Vui lòng thử lại sau.",
+      });
     }
-    const resetToken = user.createSignUpToken();
-    await user.save({ validateBeforeSave: false });
-    await new Email().sendOrderConfirmation(user);
-    res.status(200).json({
-      message: "Mã đã được gửi đến email!",
-    });
   });
 
   verifyToken = catchAsync(async (req, res, next) => {

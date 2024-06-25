@@ -9,41 +9,50 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
-function Address() {
+function Address({ setIsLoading }) {
   const [user, setUser] = useState();
   const [isOpen, setIsOpen] = useState(false);
 
   const getUserData = async () => {
     try {
+      setIsLoading(true);
       const res = await getUser();
       setUser(res.data);
       console.log(res.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setIsLoading(false);
     }
   };
 
   const deleteContact = async (contactId) => {
     try {
       // Call API to delete the contact
+      setIsLoading(true);
       await delContact(contactId);
       toast.success("Contact deleted successfully");
       getUserData();
+      setIsLoading(false);
     } catch (error) {
       // Display the error message using toast.error
       toast.error(error.response.data.error);
       console.error("Error deleting contact:", error);
+      setIsLoading(false);
     }
   };
   const defContact = async (contactId) => {
     try {
       // Call API to delete the contact
+      setIsLoading(true);
       await defaultContact(contactId);
       toast.success("Đỗi địa chỉ mặc định");
       getUserData();
+      setIsLoading(false);
     } catch (error) {
       toast.error(error.response.data.error);
       console.error("Error deleting contact:", error);
+      setIsLoading(false);
     }
   };
 
@@ -67,7 +76,7 @@ function Address() {
             <div className="address-group_info">
               <p>
                 <strong>Số điện thoại:</strong> {contact.phoneNumber}
-                {user.defaultContact === contact._id && (
+                {user.defaultContact._id === contact._id && (
                   <span className="address-default">Địa chỉ mặc định</span>
                 )}
               </p>

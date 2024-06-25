@@ -8,8 +8,6 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_KEY,
   api_secret: process.env.CLOUDINARY_SECRET,
 });
-
-// Thiết lập lưu trữ Cloudinary
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {

@@ -1,18 +1,27 @@
 // AuthContext.js
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { GetUserByToken } from "./API";
 
 const AuthContext = createContext();
 
+// Cung cấp ngữ cảnh xác thực cho ứng dụng
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
-    setUser(JSON.parse(localStorage.getItem("setUser")));
-    if (token) setIsLoggedIn(true);
-  }, [isLoggedIn]);
+    const storedUser = JSON.parse(localStorage.getItem("setUser"));
+
+    if (token && storedUser) {
+      setIsLoggedIn(true);
+      setUser(storedUser);
+    } else {
+      setIsLoggedIn(false);
+      setUser(null);
+    }
+  }, []);
+
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser }}>
       {children}
@@ -20,6 +29,7 @@ export function AuthProvider({ children }) {
   );
 }
 
+// Hook để sử dụng ngữ cảnh xác thực
 export function useAuth() {
   return useContext(AuthContext);
 }
