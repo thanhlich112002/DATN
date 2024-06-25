@@ -11,6 +11,8 @@ const axios = require("axios");
 const Voucher = require("../models/voucher.model");
 const CryptoJS = require("crypto-js"); // npm install crypto-js
 const Email = require("../utils/email");
+const { middleware } = require("../utils/socket");
+const Notification = require("../models/notification.model");
 
 class orderController {
   createOrder1 = catchAsync(async (req, res, next) => {
@@ -152,7 +154,6 @@ class orderController {
   createOrder = catchAsync(async (req, res, next) => {
     const userId = req.user._id;
     const { cart, totalPrice, contact, shipCost, voucherID } = req.body;
-
     try {
       let voucher = null;
       if (voucherID) {
@@ -276,6 +277,8 @@ class orderController {
   payment = catchAsync(async (req, res, next) => {
     const MoMo_Params = req.query;
     const requestId = MoMo_Params.requestId;
+    const status = parseInt(MoMo_Params.status, 10);
+    console.log("UUUU", parseInt(MoMo_Params.status, 10));
     if (!requestId) {
       return res.status(400).json({
         status: "error",
@@ -294,21 +297,34 @@ class orderController {
           message: "Order not found",
         });
       }
-      if (order.status === "Pending") {
+      const currentTime = new Date(
+        Date.now() + process.env.UTC * 60 * 60 * 1000
+      );
+
+      if (order.status === "Pending" && status === 1) {
         order.status = "Confirmed";
-        order.dateCheckout = new Date(
-          Date.now() + process.env.UTC * 60 * 60 * 1000
-        );
+        order.dateCheckout = currentTime;
         await order.save();
-        new Email().sendOrderCancel(order, "Thông báo xác nhận đơn hàng");
+
+        new Email().sendOrderConfirmation(order, "Thông báo xác nhận đơn hàng");
+        middleware(req.Noti); // Ensure middleware is appropriately handled
+
         return res.status(200).json({
           status: "success",
           data: MoMo_Params,
         });
       } else {
+        order.status = "Cancelled";
+        order.dateCheckout = currentTime;
+        await order.save();
+        await Notification.findByIdAndDelete(req.Noti._id);
+        new Email().sendOrderCancel(
+          order,
+          "Thông báo thanh toán không thành công"
+        );
         return res.status(400).json({
           status: "error",
-          message: "Order is not in pending state",
+          message: "Order is not in pending state or status is not confirmed",
         });
       }
     } catch (error) {
@@ -319,6 +335,7 @@ class orderController {
       });
     }
   });
+
   getOrdersByUserId = catchAsync(async (req, res, next) => {
     console.log(req.query);
     const user = await User.findById(req.query.userId);
@@ -379,6 +396,7 @@ class orderController {
   getOrdersByOrderId = catchAsync(async (req, res, next) => {
     const order = await Order.findById(req.params.orderId)
       .populate("user")
+      .populate("contact")
       .populate("cart.product");
     if (!order) return next(new appError("Không tìm thấy người dùng", 404));
 
@@ -498,6 +516,14 @@ class orderController {
   checkComments = catchAsync(async (req, res, next) => {
     try {
       const productId = req.params.productId;
+      const existingComment = await Comment.findOne({
+        product: productId,
+        user: req.user.id,
+      });
+
+      if (existingComment) {
+        return res.status(400).json(false);
+      }
       const order = await Order.find({
         user: req.user.id,
         "cart.product": productId,
@@ -505,9 +531,10 @@ class orderController {
       });
       let status = false;
       status = order.length > 0;
+
       return res.status(200).json(status);
     } catch (err) {
-      return res.status(500).json("");
+      return res.status(500).json(false);
     }
   });
   ReturnOrder = catchAsync(async (req, res, next) => {
@@ -521,6 +548,7 @@ class orderController {
       if (orders.status === "Cancelled") {
         new Email().sendOrderCancel(orders, "Thông báo hoàn trả đơn hàng");
       }
+      middleware(req.Noti);
       return res.status(200).json({
         success: true,
         message: "Hoàn đơn thành công",
@@ -560,6 +588,7 @@ class orderController {
       if (order.status === "Cancelled") {
         new Email().sendOrderCancel(order, "Thông báo hủy đơn hàng");
       }
+      middleware(req.Noti);
       res.status(200).json({ message: "Đơn hàng đã được hủy" });
     } catch (error) {
       console.error("Lỗi khi hủy đơn hàng:", error);

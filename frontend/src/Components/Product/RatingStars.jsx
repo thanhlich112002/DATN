@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar as solidStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as regularStar } from "@fortawesome/free-regular-svg-icons";
 
-const RatingStars = ({ setonChange }) => {
-  const [rating, setRating] = useState(0);
+const RatingStars = ({ setonChange, number = 0 }) => {
+  const [rating, setRating] = useState(number);
+
+  useEffect(() => {
+    setRating(number);
+  }, [number]);
 
   const handleStarClick = (value) => {
     setRating(value);

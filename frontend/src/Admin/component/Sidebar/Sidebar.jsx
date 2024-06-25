@@ -2,17 +2,13 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChartBar,
-  faPizzaSlice,
   faListAlt,
   faTags,
-  faHome,
   faUser,
   faPercent,
   faShoppingBasket,
   faSignOutAlt,
-  faChevronLeft,
   faBars,
-  faExclamationTriangle,
   faFlask,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useLocation } from "react-router-dom";
@@ -59,6 +55,11 @@ const Sidebar = ({ children }) => {
     {
       path: "/admin/order",
       name: "QL Đơn hàng",
+      icon: faShoppingBasket,
+    },
+    {
+      path: "/admin/slidebar",
+      name: "QL Quảng cáo",
       icon: faShoppingBasket,
     },
   ];

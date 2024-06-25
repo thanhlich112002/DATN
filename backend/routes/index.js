@@ -11,6 +11,7 @@ router.use("/api/comments", require("./comments/index"));
 router.use("/api/favorites", require("./favorites/index"));
 router.use("/api/admin", require("./admins/index"));
 router.use("/api/vouchers", require("./vouchers/index"));
-
+router.use("/api/notification", require("./notification/index"));
+router.use("/api/sidebar", require("./sidebar/index"));
 
 module.exports = router;

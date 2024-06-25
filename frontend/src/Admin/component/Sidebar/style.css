@@ -9,6 +9,7 @@ main-sider {
   min-height: 100vh;
   max-height: 100vh;
   background-color: #ffffff4e;
+  width: auto;
   z-index: 0;
 }
 
@@ -136,4 +137,113 @@ div.sidebar-link:hover {
 #sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
   transform: rotate(45deg);
   transition: all 0.2s ease-out;
+}
+
+.notification-container {
+  display: flex;
+  position: absolute;
+  width: 300px;
+  height: 400px;
+  background: #ffffff;
+  flex-direction: column;
+  border-radius: 5px;
+  overflow: hidden;
+  overflow-y: auto;
+  top: 60px;
+  right: 80px;
+  z-index: 100000;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.notification-bottom-container {
+  display: flex;
+  width: 300px;
+  background: #ffffff;
+  flex-direction: column;
+  border-radius: 5px;
+  overflow: hidden;
+  overflow-y: auto;
+  bottom: 0px;
+  right: 10px;
+  position: fixed;
+  z-index: 100000;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.notification {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #ebebeb;
+}
+
+.notification-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.notification-title {
+  font-weight: bold;
+}
+
+.notification-id,
+.notification-time {
+  font-size: 0.8em;
+  color: gray;
+}
+
+.notification-dot {
+  width: 10px;
+  height: 10px;
+  background: red;
+  border-radius: 50%;
+  align-self: center;
+}
+
+.header-container {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+  border-bottom: 0.1px solid #ebebeb;
+  align-items: center;
+}
+
+.bell-icon-container {
+  margin: 10px 0px;
+  height: 40px;
+  width: 40px;
+  border-radius: 50px;
+  background-color: #dedede;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-img-container {
+  margin: 10px 20px;
+  height: 40px;
+  width: 40px;
+  border-radius: 50px;
+  overflow: hidden;
+}
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+}
+.container__notification {
+  display: flex;
+  width: 300px;
+  background: #ffffff;
+  flex-direction: column;
+  border-radius: 5px;
+  overflow: hidden;
+  overflow-y: auto;
+  bottom: 0;
+  right: 10px;
+  transform: translateY(100);
+  position: fixed;
+  z-index: 1000;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 10px;
 }

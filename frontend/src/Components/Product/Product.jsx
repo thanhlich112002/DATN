@@ -13,11 +13,14 @@ import {
   chekcomments,
   viewsProduct,
 } from "../../service/API";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import RatingStars from "./RatingStars";
 import style from "./Product.css";
 import { toast } from "react-toastify";
 import { addFavorite } from "../../service/API";
+import Category from "../Category/category";
+import Item from "../Category/item";
+import { getAllProductsbyCat } from "../../service/API";
 
 function Product() {
   const { addToCart } = useUser();
@@ -27,9 +30,12 @@ function Product() {
   const [listComment, setListComment] = useState(null);
   const [startIndex, setStartIndex] = useState(0);
   const [image, setImage] = useState(null);
+  const [favorites, setFavorites] = useState(0);
   const [content, setContent] = useState("");
   const [rating, setRating] = useState(0);
   const [iscomment, setIsComment] = useState(false);
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
   const handleAddToFavorites = async (productId) => {
     const favorites = await addFavorite(productId);
     console.log(favorites.data);
@@ -42,12 +48,6 @@ function Product() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-  function formatCurrency(price) {
-    return price.toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-    });
-  }
   const fetchIsComents = async () => {
     try {
       const productData = await chekcomments(id);
@@ -61,6 +61,7 @@ function Product() {
     try {
       const productData = await getProductsbyID(id);
       setProduct(productData.data.data[0]);
+      setFavorites(productData.data.favorites);
       setActiveImage(productData.data.data[0]?.images[0]);
     } catch (error) {
       console.error("Error fetching product data:", error);
@@ -86,7 +87,11 @@ function Product() {
     fetchProduct();
     fetchComment();
     fetchIsComents();
+    fetchProducts(product?.Category._id);
   }, [id]);
+  useEffect(() => {
+    fetchProducts(product?.Category._id);
+  }, [product]);
 
   const handleNext = () => {
     if (product && startIndex + 4 < product.images?.length) {
@@ -115,6 +120,18 @@ function Product() {
       console.log(error.response.data.message);
       toast.error(error.response.data.message);
     }
+  };
+  const handleNavClick = () => {
+    navigate(`/collections?category=${encodeURIComponent(Category._id)}`);
+  };
+  const handleNavClickOrder = () => {
+    navigate(`/checkout?product=${encodeURIComponent(product._id)}`);
+  };
+  const fetchProducts = async (id) => {
+    try {
+      const productsData = await getAllProductsbyCat(id, "5", "1");
+      setProducts(productsData.data.data);
+    } catch (error) {}
   };
 
   return (
@@ -165,7 +182,9 @@ function Product() {
               {product?.isOutofOrder ? "Out of Order" : "Có sẳn"}
             </span>
           </div>
-          <div className="product_r_price">{product?.price} đ</div>
+          <div className="product_r_price">
+            {product?.price.toLocaleString()} đ
+          </div>
           <div className="product_r product_r_title">
             <span>{product?.description}</span>
           </div>
@@ -182,7 +201,7 @@ function Product() {
             <span className="product_r_t">{product?.Brand?.name}</span>
           </div>
           <div className="product_r_t">
-            <div className="product_r_b">
+            <div className="product_r_b" onClick={handleNavClickOrder}>
               <span>MUA NGAY</span>
             </div>
             <div className="product_r_b" onClick={() => addToCart(product)}>
@@ -204,6 +223,9 @@ function Product() {
         <div className="comments-section">
           <h2 className="comments-title">Đánh giá sản phẩm</h2>
           <div>
+            {listComment && listComment.length === 0 && (
+              <p>Chưa có đánh giá nào. Hãy mua hàng và thực hiện đánh giá!</p>
+            )}
             {listComment &&
               listComment.map((comment, key) => {
                 return (
@@ -211,7 +233,7 @@ function Product() {
                     <div className="comment-header">
                       <img
                         className="comment-avatar"
-                        src="https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-1/341567992_189194443477447_7522191387098263235_n.jpg?stp=cp6_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEarTZE1aOvAEMKCFgm0iyGwIk906XKCkTAiT3TpcoKRF6DzDf_rTfilFbZ4fh7aLieJ-YbdEzNf9h1RH7jnDvV&_nc_ohc=9wgj3DPaut0Q7kNvgHTlYj1&_nc_ht=scontent.fdad1-4.fna&oh=00_AYCWXjvjWodp66otNOxgqb4FY1ZCXIeiQMDsaykFLSwuZg&oe=666FD5B9"
+                        src="https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-1/448968917_1755655164964370_3349898044676183418_n.jpg?stp=dst-jpg_s200x200&_nc_cat=104&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeETjyxF0ur1b9tPWUGV-SOomvWtUpQcmMKa9a1SlByYwvW7ICk-YGnxsL9F46GLhNL98lp2lZwP1K48DlZ3PF4u&_nc_ohc=Fwe4goYLcrIQ7kNvgG5uLZP&_nc_ht=scontent.fdad3-4.fna&oh=00_AYCOBjikzr5562x7g0X8Xo8GRlJKjN7LGRTZzmPuRq83qg&oe=66802F41"
                         alt="User1 Avatar"
                       />
                     </div>
@@ -220,9 +242,14 @@ function Product() {
                         <span className="comment-user">
                           {comment.user.lastName + " " + comment.user.firstName}
                         </span>
-                        <span className="comment-date">16:30 6/13/2024</span>
+                        <span className="comment-date">
+                          {new Date(comment.createdAt).toLocaleString()}
+                        </span>
                       </div>
-                      <RatingStars setonChange={setRating} />
+                      <RatingStars
+                        setonChange={setRating}
+                        number={comment.rating}
+                      />
                       <p>{comment.content}</p>
 
                       {comment.images ? (
@@ -241,7 +268,7 @@ function Product() {
             {iscomment ? (
               <div className="comment1 ">
                 <RatingStars setonChange={setRating} />
-                <div className="cmt">
+                <div className="cmt" style={{ outline: "none" }}>
                   <input
                     type="text"
                     onChange={(e) => setContent(e.target.value)}
@@ -282,23 +309,48 @@ function Product() {
           </div>
           <div className="comment-item">
             <span className="comment-label">Đánh giá:</span>
-            <span className="comment-value">4 sao</span>
+            <span className="comment-value">
+              {product?.ratingsQuantity} sao
+            </span>
           </div>
           <div className="comment-item">
             <span className="comment-label">Số lượng đánh giá:</span>
-            <span className="comment-value">1 lượt</span>
+            <span className="comment-value">
+              {product?.ratingsAverage} lượt
+            </span>
           </div>
           <div className="comment-item">
             <span className="comment-label">Số lượt mua:</span>
-            <span className="comment-value">10 lượt</span>
+            <span className="comment-value">
+              {product?.productPurchases} lượt
+            </span>
           </div>
           <div className="comment-item">
             <span className="comment-label">Số lượt thích:</span>
-            <span className="comment-value">20 lượt</span>
+            <span className="comment-value">{favorites} lượt</span>
           </div>
           <div className="comment-item">
             <span className="comment-label">Số lượt truy cập:</span>
-            <span className="comment-value">100 lượt</span>
+            <span className="comment-value">{product?.productViews} lượt</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="container_cus" style={{ marginTop: "30px" }}>
+          <div>
+            <h2 className="comments-title" style={{ marginLeft: "10px" }}>
+              Sản phẩm cùng danh mục
+            </h2>
+          </div>
+          <div className="cat_list_product">
+            {products.map((product, index) => (
+              <Item key={index} product={product} />
+            ))}
+          </div>
+          <div className="cat2">
+            <div className="cursor background_cl" onClick={handleNavClick}>
+              Xem thêm
+            </div>
           </div>
         </div>
       </div>

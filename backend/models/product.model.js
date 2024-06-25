@@ -50,11 +50,6 @@ const productSchema = new Schema(
         message: (props) => `${props.value} không hợp lệ.`,
       },
     },
-    ratingAverage: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
     description: {
       type: String,
       maxLength: [2000, "Mô tả chỉ được tối đa 2000 kí tự"],
@@ -69,7 +64,7 @@ const productSchema = new Schema(
     },
     ratingsAverage: {
       type: Number,
-      default: 5.0,
+      default: 0,
       min: [1, "Rating must be above 1.0"],
       max: [5, "Rating must be below 5.0"],
       set: (val) => Math.round(val * 10) / 10,

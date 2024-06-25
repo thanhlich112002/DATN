@@ -399,7 +399,7 @@ function Voucher() {
             <span>Quản lý phiếu giảm giá</span>
           </div>
           <button className="addbut" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? "Đóng form" : "Thêm phiếu giảm giá"}
+            Thêm phiếu giảm giá
           </button>
         </div>
         <div className="_card-body">

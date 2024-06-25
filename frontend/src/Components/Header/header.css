@@ -42,6 +42,9 @@ body {
   justify-content: end;
   cursor: pointer;
 }
+.header-right-wrap div div input {
+  padding: 7px 10px !important;
+}
 
 .header-account {
   display: flex;

@@ -2,8 +2,8 @@ import axios from "axios";
 import Category from "../Components/Category/category";
 
 //
-// const url = "https://datn-ten-zeta.vercel.app";
-const url = "http://localhost:3000";
+const url = "https://datn-ten-zeta.vercel.app";
+// const url = "http://localhost:3000";
 
 const loginAPI = async (formData) => {
   const token = localStorage.getItem("token");
@@ -287,7 +287,7 @@ const addVouchers = async (id) => {
   };
   return await axios.post(`${url}/api/vouchers/addVouchers/${id}`, {}, config);
 };
-const getVouchersbyUser = async (data) => {
+const getVouchersbyUser = async () => {
   const token = localStorage.getItem("token");
   const config = {
     headers: {
@@ -295,11 +295,7 @@ const getVouchersbyUser = async (data) => {
       "Content-Type": "application/json",
     },
   };
-  return await axios.post(
-    `${url}/api/vouchers/getVouchersbyUser`,
-    data,
-    config
-  );
+  return await axios.post(`${url}/api/vouchers/getVouchersbyUser`, {}, config);
 };
 const ReturnOrder = async (id) => {
   const token = localStorage.getItem("token");
@@ -321,7 +317,19 @@ const cancelOrder = async (id) => {
   };
   return await axios.get(`${url}/api/orders/cancelOrder/${id}`, config);
 };
+const getAllSidebar = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/sidebar/getAllSidebar`, config);
+};
+
 export {
+  getAllSidebar,
   cancelOrder,
   ReturnOrder,
   getVouchersbyUser,

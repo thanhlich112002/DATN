@@ -10,6 +10,7 @@ import {
   Getallcategory,
   searchProducts,
 } from "../../service/API";
+import { useLocation } from "react-router-dom";
 
 function Collections({ setIsLoading }) {
   const [products, setProducts] = useState([]);
@@ -18,6 +19,23 @@ function Collections({ setIsLoading }) {
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const searchInputRef = useRef();
+  const query = useQuery().get("query");
+  const category = useQuery().get("category");
+  const brand = useQuery().get("brand");
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);
+  }
+  useEffect(() => {
+    SearchProducts();
+  }, [selectedBrands, selectedCategories, query]);
+  useEffect(() => {
+    if (category) {
+      handleCategoryChange(category);
+    }
+    if (brand) {
+      handleBrandChange(brand);
+    }
+  }, []);
 
   const SeachBands = async (_id) => {
     try {
@@ -32,6 +50,7 @@ function Collections({ setIsLoading }) {
   const SearchProducts = async () => {
     try {
       const productsResponse = await searchProducts({
+        search: query,
         CategoryID: selectedCategories,
         BrandID: selectedBrands,
       });
@@ -72,10 +91,6 @@ function Collections({ setIsLoading }) {
     fetchCategories();
     fetchProducts();
   }, []);
-
-  useEffect(() => {
-    SearchProducts();
-  }, [selectedBrands, selectedCategories]);
 
   const handleSearch = () => {
     if (searchInputRef.current) {

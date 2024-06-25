@@ -181,25 +181,25 @@ function Dashboard() {
                     onClick={() => setOrderCountTime("year")}
                     className={orderCountTime === "year" ? "ATV" : ""}
                   >
-                    This year
+                    Năm
                   </li>
                   <li
                     onClick={() => setOrderCountTime("month")}
                     className={orderCountTime === "month" ? "ATV" : ""}
                   >
-                    This month
+                    Tháng
                   </li>
                   <li
                     onClick={() => setOrderCountTime("week")}
                     className={orderCountTime === "week" ? "ATV" : ""}
                   >
-                    This week
+                    Tuần
                   </li>
                   <li
                     onClick={() => setOrderCountTime("day")}
                     className={orderCountTime === "day" ? "ATV" : ""}
                   >
-                    Today
+                    Hôm nay
                   </li>
                 </ul>
               </div>
@@ -219,7 +219,7 @@ function Dashboard() {
                       orderRevenueByCategoryTime === "year" ? "ATV" : ""
                     }
                   >
-                    This year
+                    Năm
                   </li>
                   <li
                     onClick={() => setOrderRevenueByCategoryTime("month")}
@@ -227,7 +227,7 @@ function Dashboard() {
                       orderRevenueByCategoryTime === "month" ? "ATV" : ""
                     }
                   >
-                    This month
+                    Tháng
                   </li>
                   <li
                     onClick={() => setOrderRevenueByCategoryTime("week")}
@@ -235,7 +235,7 @@ function Dashboard() {
                       orderRevenueByCategoryTime === "week" ? "ATV" : ""
                     }
                   >
-                    This week
+                    Tuần
                   </li>
                   <li
                     onClick={() => setOrderRevenueByCategoryTime("day")}
@@ -243,7 +243,7 @@ function Dashboard() {
                       orderRevenueByCategoryTime === "day" ? "ATV" : ""
                     }
                   >
-                    Today
+                    Ngày
                   </li>
                 </ul>
               </div>
@@ -265,25 +265,25 @@ function Dashboard() {
                     onClick={() => setTopSaleTime("year")}
                     className={topSaleTime === "year" ? "ATV" : ""}
                   >
-                    This year
+                    Năm
                   </li>
                   <li
                     onClick={() => setTopSaleTime("month")}
                     className={topSaleTime === "month" ? "ATV" : ""}
                   >
-                    This month
+                    Tháng
                   </li>
                   <li
                     onClick={() => setTopSaleTime("week")}
                     className={topSaleTime === "week" ? "ATV" : ""}
                   >
-                    This week
+                    Tuần
                   </li>
                   <li
                     onClick={() => setTopSaleTime("day")}
                     className={topSaleTime === "day" ? "ATV" : ""}
                   >
-                    Today
+                    Ngày
                   </li>
                 </ul>
               </div>
@@ -301,25 +301,25 @@ function Dashboard() {
                     onClick={() => setOrderRevenueByBrandTime("year")}
                     className={orderRevenueByBrandTime === "year" ? "ATV" : ""}
                   >
-                    This year
+                    Năm
                   </li>
                   <li
                     onClick={() => setOrderRevenueByBrandTime("month")}
                     className={orderRevenueByBrandTime === "month" ? "ATV" : ""}
                   >
-                    This month
+                    Tháng
                   </li>
                   <li
                     onClick={() => setOrderRevenueByBrandTime("week")}
                     className={orderRevenueByBrandTime === "week" ? "ATV" : ""}
                   >
-                    This week
+                    Tuần
                   </li>
                   <li
                     onClick={() => setOrderRevenueByBrandTime("day")}
                     className={orderRevenueByBrandTime === "day" ? "ATV" : ""}
                   >
-                    Today
+                    Ngày
                   </li>
                 </ul>
               </div>

@@ -17,7 +17,6 @@ function AddAddress({ setIsOpen, cart }) {
         },
         cart._id
       );
-      setIsOpen(false);
     } catch (error) {
       console.error("Lỗi khi cập nhật trạng thái:", error);
     }

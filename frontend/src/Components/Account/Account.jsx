@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import style from "./Account.css";
 import Info from "./info";
 import Order from "./order";
@@ -10,12 +10,15 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../service/authContext";
 
 function Account() {
-  const { i } = useParams();
+  const { id } = useParams();
+  console.log(id);
   const navigate = useNavigate();
-  const { user } = useAuth();
   const handleNav = (nav) => {
     navigate(`/account/${nav}`);
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="container_cus">
@@ -28,11 +31,11 @@ function Account() {
           <div onClick={() => handleNav("addresses")}>Địa chỉ</div>
         </div>
         <div className="account_right">
-          {i === "info" && <Info />}
-          {i === "orders" && <Order />}
-          {i === "changepassword" && <Changepassword />}
-          {i === "addresses" && <Address />}
-          {i === "form" && <Form />}
+          {id === "info" && <Info />}
+          {id === "orders" && <Order />}
+          {id === "changepassword" && <Changepassword />}
+          {id === "addresses" && <Address />}
+          {id === "form" && <Form />}
         </div>
       </div>
     </div>

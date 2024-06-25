@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   width: 20%;
-  border: 0.1px solid #c7c7c7;
+  border: 0.1px solid #ebebeb !important;
   border-radius: 2px;
   margin: 5px;
   gap: 20px;
@@ -16,7 +16,7 @@
 }
 .collections_left_ {
   padding-bottom: 2px;
-  border-bottom: 0.1px solid #c7c7c7;
+  border-bottom: 0.1px solid #ebebeb !important;
 }
 ::-webkit-scrollbar {
   width: 5px;
@@ -44,7 +44,7 @@
 .collections_input input {
   width: 75%;
   padding: 5px;
-  border-color: #979494;
+  border: 0.1px solid #ebebeb !important;
 }
 .collections_input input:focus {
   outline: none; /* Remove outline when input is focused */
@@ -141,7 +141,7 @@
   display: flex;
   flex-direction: column;
   width: 80%;
-  border: 0.1px solid #c7c7c7;
+  border: 0.1px solid #ebebeb !important;
   border-radius: 2px;
   padding: 5px;
   margin: 5px;
@@ -157,11 +157,11 @@
   overflow: hidden;
   flex: 0 1 24%;
   box-sizing: border-box;
-  border: 0.1px solid #c7c7c7;
+  border: 0.1px solid #ebebeb !important;
 }
 .collections_right_title {
   font-size: 20px;
   font-weight: 500;
   padding-bottom: 20px;
-  border-bottom: 0.05px solid #c7c7c7;
+  border-bottom: 0.1px solid #ebebeb !important;
 }

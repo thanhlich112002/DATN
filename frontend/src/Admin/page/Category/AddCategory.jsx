@@ -17,14 +17,7 @@ function AddCategory() {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [deletedImageUrls, setDeletedImageUrls] = useState([]);
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(file);
-  };
 
-  const handleChooseImage = () => {
-    inputRef.current.click();
-  };
 
   const handleSubmit = async () => {
     if (!categoryName || !categoryDescription || !images[0]?.file) {

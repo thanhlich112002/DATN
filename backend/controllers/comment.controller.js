@@ -36,6 +36,7 @@ class commentController {
         images: imagePaths,
         user: user,
         rating: rating,
+        createdAt: new Date(),
       });
       const savedComment = await newComment.save();
       res.status(201).json(savedComment);
@@ -49,13 +50,10 @@ class commentController {
     const commentID = req.params.commentID;
     const userId = req.user._id;
     try {
-      // Find the comment by ID
       const comment = await Comment.findById(commentID);
       if (!comment) {
         return res.status(404).json({ message: "Comment not found" });
       }
-
-      // Check if the user is the owner of the comment or an admin
       if (
         comment.user.toString() !== userId.toString() &&
         req.user.role !== "admin"
@@ -64,8 +62,6 @@ class commentController {
           .status(403)
           .json({ message: "User not authorized to delete this comment" });
       }
-
-      // Delete the comment
       await comment.deleteOne();
 
       res.status(200).json({ message: "Comment deleted successfully" });
@@ -87,19 +83,14 @@ class commentController {
       if (!comment) {
         return res.status(404).json({ message: "Comment not found" });
       }
-
-      // Check if the user is the owner of the comment
       if (comment.user.toString() !== userId.toString()) {
         return res
           .status(403)
           .json({ message: "User not authorized to update this comment" });
       }
 
-      // Update the comment
       if (content) comment.content = content;
       if (image) comment.image = image;
-
-      // Save the updated comment to the database
       const updatedComment = await comment.save();
 
       res.status(200).json(updatedComment);

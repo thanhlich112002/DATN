@@ -1,3 +1,16 @@
 .container_xl {
   width: 100%;
 }
+.cat_titleplus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 5px;
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 30px;
+}
+.plus {
+  display: flex;
+  justify-content: space-between;
+}

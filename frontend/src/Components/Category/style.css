@@ -89,7 +89,7 @@
 .cat_list_product > div {
   flex: 0 1 19%;
   height: 300px;
-  border: 0.1px solid rgba(227, 227, 227, 0.5);
+  border: 0.1px solid #ebebeb !important;
 }
 .item_bottom {
   height: 20%;
@@ -120,7 +120,7 @@
 .item_icons div {
   display: flex;
   padding: 5px;
-  border: 0.1px solid #006a31;
+  border: 0.1px solid #ebebeb !important;
   border-radius: 2px;
   cursor: pointer;
 }
@@ -146,13 +146,14 @@
   margin: 5px 0px;
 }
 .cat2 {
-  border-top: 0.1px solid #cdcdcd;
+  border: 0.1px solid #ebebeb !important;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 20px;
 }
 .cat2 div {
-  border: 0.1px solid #cdcdcd;
+  border: 0.1px solid #ebebeb !important;
   padding: 5px 10px;
   margin: 2px;
   display: flex;

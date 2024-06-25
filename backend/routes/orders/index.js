@@ -2,13 +2,17 @@ const express = require("express");
 const router = express.Router();
 const orderController = require("../../controllers/order.controller");
 const AuthController = require("../../controllers/auths.controller");
-
+const NotificationController = require("../../controllers/notification.controller");
 router.post(
   "/createOrder",
   AuthController.protect,
   orderController.createOrder
 );
-router.get("/after-checkout/payment", orderController.payment);
+router.get(
+  "/after-checkout/payment",
+  NotificationController.addNotification,
+  orderController.payment
+);
 router.get(
   "/getOrdersByUserId",
   // AuthController.restrict("User"),
@@ -33,11 +37,13 @@ router.get(
 router.get(
   "/cancelOrder/:orderId",
   // AuthController.restrict("User"),
+  NotificationController.CancelNotification,
   orderController.cancelOrder
 );
 router.get(
   "/ReturnOrder/:orderId",
   // AuthController.restrict("User"),
+  NotificationController.RefundNotification,
   orderController.ReturnOrder
 );
 

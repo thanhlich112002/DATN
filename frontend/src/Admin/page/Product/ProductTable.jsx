@@ -34,7 +34,7 @@ const ProductTable = ({
         Header: "Có Sẵn",
         accessor: "isAvailable",
         Cell: ({ cell: { value } }) => (
-          <span className={`dot ${value ? "green-dot" : "green-dot"}`}></span>
+          <span className={`dot ${value ? "green-dot" : "red-dot"}`}></span>
         ),
       },
       {

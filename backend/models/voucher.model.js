@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+
 const voucherSchema = new Schema(
   {
     name: {
@@ -11,7 +12,7 @@ const voucherSchema = new Schema(
     },
     amount: {
       type: Number,
-      require: [true, "Giá tiền giảm là bắt buộc"],
+      required: [true, "Giá tiền giảm là bắt buộc"],
     },
     code: {
       type: String,
@@ -24,7 +25,6 @@ const voucherSchema = new Schema(
       type: Number,
       required: [true, "Điều kiện là bắt buộc"],
     },
-
     user: [
       {
         userId: {
@@ -36,7 +36,7 @@ const voucherSchema = new Schema(
           ref: "Order",
         },
         isUse: {
-          type: Boolean, // Sửa từ boolean thành Boolean
+          type: Boolean,
           default: false,
         },
       },
@@ -44,16 +44,10 @@ const voucherSchema = new Schema(
     expiryDate: {
       type: Date,
       required: [true, "Ngày hết hạn là bắt buộc"],
-      validate: {
-        validator: function (v) {
-          return v > Date.now();
-        },
-        message: "Ngày hết hạn phải là một ngày trong tương lai",
-      },
     },
     quantity: {
       type: Number,
-      require: [true, "Số lượng là bắt buộc"],
+      required: [true, "Số lượng là bắt buộc"],
     },
     isAvailable: {
       type: Boolean,
@@ -64,15 +58,14 @@ const voucherSchema = new Schema(
     timestamps: true,
   }
 );
+
 voucherSchema.pre("save", function (next) {
-  if (this.quantity === 0) {
-    this.isAvailable = false;
-  }
-  if (Date.now() > this.expiryDate) {
+  if (this.quantity === 0 || this.expiryDate < Date.now()) {
     this.isAvailable = false;
   }
   next();
 });
+
 const Voucher = mongoose.model("Voucher", voucherSchema);
 
 module.exports = Voucher;

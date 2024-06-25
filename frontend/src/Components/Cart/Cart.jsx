@@ -23,10 +23,33 @@ function Cart() {
         <div className="Cart_title">GIỎ HÀNG</div>
         <div className="Cart_body">
           <div className="Cart_left">
-            {cart.map((product, index) => (
-              <CartItem product={product} />
-            ))}
+            {cart && cart.length > 0 ? (
+              cart.map((product, index) => (
+                <CartItem key={index} product={product} />
+              ))
+            ) : (
+              <div
+                style={{
+                  marginTop: "100px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                }}
+              >
+                <div style={{ fontSize: "24px" }}>Chưa có sản phẩm nào </div>
+                <p
+                  style={{ cursor: "pointer", color: "blue" }}
+                  onClick={() => {
+                    handleNav("/collections");
+                  }}
+                >
+                  tiếp tục mua hàng
+                </p>
+              </div>
+            )}
           </div>
+
           <div className="Cart_right">
             <div className="Cart1">
               <div className="Cart1_price1">

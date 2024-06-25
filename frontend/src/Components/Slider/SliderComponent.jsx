@@ -58,15 +58,11 @@ const SimpleSlider = ({ arrImages }) => {
   };
 
   return (
-    <div className="slider-container" style={{ marginTop: "10px" }}>
+    <div className="slider-container">
       <WrapperSliderStyle {...settings}>
-        {arrImages.map((image) => (
-          <div key={image}>
-            <img
-              src={image}
-              alt={image}
-              style={{ width: "100%", height: "100%", objectFit: "cover" }} // Đặt chiều rộng và chiều cao của hình ảnh
-            />
+        {arrImages?.map((image) => (
+          <div key={image._id}>
+            <img src={image.img} alt={image.img} />
           </div>
         ))}
       </WrapperSliderStyle>

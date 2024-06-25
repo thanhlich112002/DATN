@@ -465,7 +465,7 @@ function AddCategory() {
                               comment.user.firstName}
                           </span>
                           <span className="comment-date">
-                            {comment.createdAt}
+                            {new Date(comment.createdAt).toLocaleString()}
                           </span>
                         </div>
                         <RatingStars num={comment.rating} />

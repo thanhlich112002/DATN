@@ -15,6 +15,7 @@ import TopTable from "../component/TopTable/TopTable";
 import OrderBar from "../component/TopTable/orderBar";
 import Card from "../Dashboard/card";
 import { faBan } from "@fortawesome/free-solid-svg-icons";
+const moment = require("moment-timezone");
 
 const ProductTable = ({
   products,
@@ -30,21 +31,35 @@ const ProductTable = ({
   setStartDate,
   statisticsOrders,
 }) => {
+  // Hàm chuyển đổi ngày
+  const convertDate = (utcDate) => {
+    const localDate = moment.utc(utcDate);
+    return localDate.format("HH:mm DD/MM/YYYY");
+  };
+
   const data = React.useMemo(() => products, [products]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isopen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const handleDetail1 = (id) => {
+    navigate(`/admin/order/${id}`);
+  };
 
   const handleDetail = (order) => {
     setIsOpen(true);
     setSelectedOrder(order);
   };
 
+
   const columns = React.useMemo(
     () => [
       { Header: "Đơn hàng", accessor: "_id" },
       { Header: "Người đặt hàng", accessor: "user" },
-      { Header: "Ngày", accessor: "dateOrdered" },
+      {
+        Header: "Ngày",
+        accessor: "dateOrdered",
+        Cell: ({ value }) => convertDate(value),
+      },
       { Header: "Địa chỉ", accessor: "contact.address" },
       { Header: "Giá trị đơn hàng", accessor: "totalPrice" },
       {
@@ -72,7 +87,7 @@ const ProductTable = ({
         Cell: ({ row }) => (
           <button
             style={{ width: "100px", padding: "5px", borderRadius: "5px" }}
-            onClick={() => handleDetail(row.original)}
+            onClick={() => handleDetail1(row.original._id)}
           >
             Chi tiết
           </button>
@@ -88,7 +103,7 @@ const ProductTable = ({
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
-  console.log(statisticsOrders);
+
   return (
     <div>
       <div className="projects">

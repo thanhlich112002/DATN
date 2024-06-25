@@ -1,7 +1,7 @@
 import axios from "axios";
-// const url = "https://datn-ten-zeta.vercel.app";
+const url = "https://datn-ten-zeta.vercel.app";
 
-const url = "http://localhost:3000";
+// const url = "http://localhost:3000";
 
 const getAllProducts = async (page) => {
   return axios.get(`${url}/api/products/getAllProducts?limit=7&page=${page}`);
@@ -57,7 +57,7 @@ const getAllOrders = async (page, status, start, end) => {
 };
 const getOrdersByOrderId = async (id) => {
   const token = localStorage.getItem("token");
-  return axios.get(`${url}/api/orders/getOrdersByOrderId${id}`, {
+  return axios.get(`${url}/api/orders/getOrdersByOrderId/${id}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       ContentType: "multipart/form-data",
@@ -244,6 +244,7 @@ const getAllVouchers = async (page, status) => {
     }
   );
 };
+
 const createVoucher = async (data) => {
   const token = localStorage.getItem("token");
   return axios.post(`${url}/api/vouchers/createVoucher`, data, {
@@ -261,6 +262,37 @@ const updateVoucher = async (data, id) => {
       ContentType: "multipart/form-data",
     },
   });
+};
+const getAllSidebar = async (page, status) => {
+  const token = localStorage.getItem("token");
+  return axios.get(`${url}/api/sidebar/getAllSidebar?page=${page}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const createSidebar = async (data) => {
+  const token = localStorage.getItem("token");
+  return axios.post(`${url}/api/sidebar/createSidebar`, data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      ContentType: "multipart/form-data",
+    },
+  });
+};
+const updateSidebar = async (id) => {
+  const token = localStorage.getItem("token");
+  return axios.put(
+    `${url}/api/sidebar/updateSidebar/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ContentType: "multipart/form-data",
+      },
+    }
+  );
 };
 const deleteVoucher = async (req, res, next) => {};
 
@@ -379,7 +411,32 @@ const DElUser = async (id) => {
   };
   return await axios.delete(`${url}/api/admin/DElUser/${id}`, config);
 };
+const getAllNotifications = async () => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return await axios.get(`${url}/api/notification/getAllNotifications`, config);
+};
+const isSend = async (id) => {
+  const token = localStorage.getItem("token");
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  };
+  return axios.get(`${url}/api/notification/isSend/${id}`, config);
+};
 export {
+  createSidebar,
+  updateSidebar,
+  getAllSidebar,
+  isSend,
+  getAllNotifications,
   updateVoucher,
   DElUser,
   deleteVoucher,

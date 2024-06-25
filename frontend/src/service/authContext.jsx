@@ -8,12 +8,11 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     setUser(JSON.parse(localStorage.getItem("setUser")));
     if (token) setIsLoggedIn(true);
-  }, []);
+  }, [isLoggedIn]);
   return (
     <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, user, setUser }}>
       {children}
@@ -21,12 +20,10 @@ export function AuthProvider({ children }) {
   );
 }
 
-// Custom hook to use the AuthContext
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-// Custom hook to handle logout functionality
 export function useLogout() {
   const { setIsLoggedIn, setUser } = useAuth();
 
@@ -34,6 +31,7 @@ export function useLogout() {
     setIsLoggedIn(false);
     setUser(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("setUser");
   }
 
   return logout;

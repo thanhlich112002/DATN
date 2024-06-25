@@ -10,7 +10,6 @@ const convertDateStringToDate = (dateString) => {
 const List = ({ item, handleAddVouchers }) => {
   return (
     <div className="coupon-card">
-      <img className="logo" src={img} alt="" />
       <h3>{item.name}</h3>
       <h4>
         Giảm {item.amount} cho đơn từ {item.conditions}
@@ -21,7 +20,7 @@ const List = ({ item, handleAddVouchers }) => {
           Lưu
         </span>
       </div>
-      <p>hạn đên:{convertDateStringToDate(item.expiryDate)}</p>
+      <p>hạn đến:{convertDateStringToDate(item.expiryDate)}</p>
     </div>
   );
 };

@@ -6,7 +6,7 @@ function Gioithieu() {
     window.scrollTo(0, 0);
   }, []);
   return (
-    <div className="container">
+    <div className="container_cus">
       <div className="containerit">
         <h2>
           TRẢI NGHIỆM NHỮNG CẢM XÚC MÙI HƯƠNG ĐẦY THI VỊ CÙNG LUXURY PERFUMES

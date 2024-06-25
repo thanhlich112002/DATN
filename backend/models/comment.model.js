@@ -32,7 +32,7 @@ const commentSchema = new Schema(
     },
     createdAt: {
       type: Date,
-      default: moment().tz("Asia/Ho_Chi_Minh").format(),
+      default: () => moment().tz("Asia/Ho_Chi_Minh").toDate(),
     },
   },
   {
@@ -40,4 +40,5 @@ const commentSchema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
 module.exports = mongoose.model("Comment", commentSchema);

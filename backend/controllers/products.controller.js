@@ -7,7 +7,6 @@ const Brand = require("../models/brand.model");
 const UploadImage = require("../utils/uploadConfig.utlis");
 const favoriteModel = require("../models/favorite.model");
 const cloudinary = require("cloudinary").v2;
-const { middleware } = require("../utils/socket");
 class productsController {
   UpImage = UploadImage.array("images", 10);
   updateProduct = catchAsync(async (req, res, next) => {
@@ -129,16 +128,13 @@ class productsController {
     return res.status(200).json(product);
   });
   getProductsbyID = catchAsync(async (req, res, next) => {
-    middleware("chào bạn");
     const features = new ApiFeatures(
       Products.findOne({ _id: req.params.id })
         .populate({
           path: "Category",
-          select: "name",
         })
         .populate({
           path: "Brand",
-          select: "name",
         }),
       req.query
     )
@@ -194,7 +190,7 @@ class productsController {
 
   getAllProductsbyCat = catchAsync(async (req, res, next) => {
     const nameCat = req.body.Category || req.query.Category;
-    const category = await Category.findOne({ name: nameCat });
+    const category = await Category.findOne({ _id: nameCat });
 
     if (!category) {
       return res.status(404).json({ message: "Category not found" });

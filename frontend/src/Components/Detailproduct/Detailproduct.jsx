@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useUser } from "../../service/userContext"; // Import the custom hook
 import style from "./Detailproduct.css";
+import { useEffect } from "react";
 
 function Detailproduct({ setDetail, item }) {
   const { addToCart } = useUser();
@@ -14,6 +15,9 @@ function Detailproduct({ setDetail, item }) {
       currency: "VND",
     });
   }
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const [note, setNote] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);

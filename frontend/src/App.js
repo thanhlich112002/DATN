@@ -1,9 +1,13 @@
 import React from "react";
 import User from "./User/App";
 import Admin from "./Admin/App";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { AuthProvider } from "./service/authContext";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { AuthProvider, useAuth } from "./service/authContext";
 import { UserProvider } from "./service/userContext";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -13,14 +17,8 @@ function App() {
       <UserProvider>
         <Router>
           <Routes>
-            <Route
-              path="/*"
-              element={<User element={<User />} role="User" />}
-            />
-            <Route
-              path="/admin/*"
-              element={<Admin element={<Admin />} role="Admin" />}
-            />
+            <Route path="/*" element={<User />} />
+            <Route path="/admin/*" element={<Admin />} />
           </Routes>
         </Router>
       </UserProvider>

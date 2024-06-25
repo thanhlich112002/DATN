@@ -75,7 +75,6 @@ class VoucherController {
       );
 
       const totalPages = Math.ceil(totalResults / pageSize);
-
       return res.status(200).json({
         message: "Thành công",
         data: vouchers,
@@ -95,13 +94,23 @@ class VoucherController {
 
   addVouchers = catchAsync(async (req, res) => {
     try {
-      const userId = req.body.userId;
+      const userId = req.user._id;
+      console.log(userId);
       const voucherID = req.params.voucherID;
+      console.log(voucherID);
       const voucher = await Voucher.findById(voucherID);
-      const isUserExist = voucher.user.some((user) => user.userId === userId);
+      console.log(voucher);
+
+      const isUserExist = voucher.user.some((user) => {
+        console.log(user);
+        // Kiểm tra xem user.userId và userId có tồn tại trước khi so sánh
+        return user.userId && userId && user.userId.equals(userId);
+      });
+
       if (isUserExist) {
         return res.status(400).json({ message: "Phiếu được lưu từ trước" });
       }
+
       voucher.user.push({ userId: userId });
       const updatedVoucher = await voucher.save();
       res.status(200).json(updatedVoucher);
@@ -109,6 +118,7 @@ class VoucherController {
       res.status(500).json({ message: err.message });
     }
   });
+
   getVouchersbyCode = catchAsync(async (req, res) => {
     try {
       const voucherCode = req.params.voucherCode;
@@ -127,10 +137,11 @@ class VoucherController {
 
   getVouchersbyUser = catchAsync(async (req, res) => {
     try {
-      const tatolprice = req.body.tatolprice;
+      const today = new Date();
       const vouchers = await Voucher.find({
         "user.userId": req.user._id,
-        conditions: { $gte: tatolprice },
+        expiryDate: { $gt: today },
+        isAvailable: true,
       });
       res.status(200).json(vouchers);
     } catch (err) {

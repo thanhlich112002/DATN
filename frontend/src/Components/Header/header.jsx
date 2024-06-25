@@ -22,7 +22,7 @@ function Header() {
   const { cart } = useUser();
   const [isopen, setIsopen] = useState(false);
   const [isopencart, setIsopencart] = useState(false);
-
+  const [searchTerm, setSearchTerm] = useState("");
   const accountMenuRef = useRef(null);
   const cartRef = useRef(null);
   const Nav = () => {
@@ -30,9 +30,6 @@ function Header() {
   };
   const NavF = () => {
     navigate("/Favorite");
-  };
-  const NavFa = () => {
-    navigate("/");
   };
 
   const toggleAccountMenu = () => {
@@ -49,8 +46,7 @@ function Header() {
     }
   };
   const handleNavClick = () => {
-    const searchTerm = "giày thể thao"; // Thay đổi thành giá trị của ô input hoặc từ bất kỳ nguồn dữ liệu nào bạn muốn
-    navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
+    navigate(`/collections?query=${encodeURIComponent(searchTerm)}`);
   };
 
   return (
@@ -66,6 +62,7 @@ function Header() {
                   </em>
                 </label>
                 <input
+                  onChange={(e) => setSearchTerm(e.target.value)}
                   id="autocomplete-address"
                   placeholder="Tìm kiếm sản phẩm"
                   autoComplete="off"

@@ -1,18 +1,43 @@
 import React, { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 import { getAllVouchers, addVouchers } from "../../service/API";
 import Vou from "./App";
 import { toast } from "react-toastify";
+import Slider from "react-slick";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+
+const WrapperSliderStyle = styled(Slider)`
+  & .slick-slide > div {
+    padding: 0;
+    margin: 0;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  & .slick-arrow.slick-prev {
+    left: 12px;
+    top: 50%;
+    z-index: 10;
+  }
+  & .slick-arrow.slick-next {
+    right: 12px;
+    top: 50%;
+    z-index: 10;
+  }
+`;
 
 function Voucher() {
-  const [currentIndex, setCurrentIndex] = useState(0);
   const [vouchers, setVouchers] = useState([]);
+
   const fetchAllVouchers = async () => {
     try {
       const response = await getAllVouchers();
       setVouchers(response.data.data);
-      console.log(response.data);
     } catch (error) {
       console.error("Lỗi khi tải danh sách phiếu giảm giá:", error);
     }
@@ -21,6 +46,7 @@ function Voucher() {
   useEffect(() => {
     fetchAllVouchers();
   }, []);
+
   const handleAddVouchers = async (id) => {
     try {
       await addVouchers(id);
@@ -32,36 +58,57 @@ function Voucher() {
     }
   };
 
-  const moveIcon = (direction) => {
-    if (direction === "left" && currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    } else if (direction === "right" && currentIndex < vouchers.length - 3) {
-      setCurrentIndex(currentIndex + 1);
-    }
+  const PrevArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{ ...style, display: "block", left: "-25px" }}
+        onClick={onClick}
+      >
+        <FontAwesomeIcon icon={faAngleLeft} />
+      </div>
+    );
+  };
+
+  const NextArrow = (props) => {
+    const { className, style, onClick } = props;
+    return (
+      <div
+        className={className}
+        style={{ ...style, display: "block", right: "-25px" }}
+        onClick={onClick}
+      >
+        <FontAwesomeIcon icon={faAngleRight} />
+      </div>
+    );
+  };
+
+  const settings = {
+    dots: false,
+    infinite: true,
+    speed: 1000,
+    slidesToShow: 2,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    centerPadding: "150px",
+    centerMode: true,
+    centerPadding: "0",
   };
 
   return (
-    <div className="container_cus">
-      <div className="listVoucher">
-        <div className="cirl1" onClick={() => moveIcon("left")}>
-          <FontAwesomeIcon icon={faAngleLeft} />
-        </div>
-
-        {vouchers &&
-          vouchers
-            .slice(currentIndex, currentIndex + 3)
-            .map((item, index) => (
-              <Vou
-                key={index}
-                item={item}
-                handleAddVouchers={handleAddVouchers}
-              />
-            ))}
-
-        <div className="cirl2" onClick={() => moveIcon("right")}>
-          <FontAwesomeIcon icon={faAngleRight} />
-        </div>
+    <div className="container_cus" style={{ border: "0.1px solid #cdcdcd" }}>
+      <div className="cat">
+        <div className="cat_title background_cl">Phiếu giảm giá</div>
       </div>
+      <WrapperSliderStyle {...settings}>
+        {vouchers.map((item, index) => (
+          <div key={index}>
+            <Vou item={item} handleAddVouchers={handleAddVouchers} />
+          </div>
+        ))}
+      </WrapperSliderStyle>
     </div>
   );
 }
