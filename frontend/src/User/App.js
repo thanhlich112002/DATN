@@ -5,7 +5,7 @@ import Register from "../Components/Login/Register";
 import Forgetpassword from "../Components/Login/Forgetpassword";
 import Footer from "../Components/Footer/Footer";
 import Home from "../Components/Home/Home";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Collections from "../Components/Collections/Collections";
@@ -18,10 +18,16 @@ import Favorite from "../Components/Favorite/Favorite";
 
 import LoadingModal from "../Components/Loading/Loading";
 import { useState } from "react";
-import { useAuth } from "../service/authContext";
-import { Helmet } from "react-helmet";
+const ProtectedRoute = ({ element, role }) => {
+  if (role === "User") {
+    return element;
+  } else {
+    return <Navigate to="/login" />;
+  }
+};
 
-function App() {
+function App({ role }) {
+  console.log(role);
   const [isLoading, setIsLoading] = useState(false);
 
   return (
@@ -32,17 +38,14 @@ function App() {
         <Route path="/" element={<Home setIsLoading={setIsLoading} />} />
         <Route path="/login" element={<Login setIsLoading={setIsLoading} />} />
         <Route
-          path="/collections"
-          element={<Collections setIsLoading={setIsLoading} />}
-        />
-        <Route
-          path="/cart"
-          element={<Cart Collections setIsLoading={setIsLoading} />}
-        />
-        <Route
           path="/register"
           element={<Register Collections setIsLoading={setIsLoading} />}
         />
+        <Route
+          path="/collections"
+          element={<Collections setIsLoading={setIsLoading} />}
+        />
+
         <Route
           path="/forgetpassword"
           element={<Forgetpassword setIsLoading={setIsLoading} />}
@@ -56,21 +59,41 @@ function App() {
           element={<Introduce setIsLoading={setIsLoading} />}
         />
         <Route
+          path="/cart"
+          element={<Cart Collections setIsLoading={setIsLoading} />}
+        />
+        <Route
           path="/checkout"
-          element={<Checkout setIsLoading={setIsLoading} />}
+          element={
+            <ProtectedRoute
+              role={role}
+              element={<Checkout setIsLoading={setIsLoading} />}
+            />
+          }
         />
         <Route
           path="/favorite"
-          element={<Favorite setIsLoading={setIsLoading} />}
+          element={
+            <ProtectedRoute
+              role={role}
+              element={<Favorite setIsLoading={setIsLoading} />}
+            />
+          }
         />
         <Route
           path="/account/:id"
-          element={<Account setIsLoading={setIsLoading} />}
+          element={
+            <ProtectedRoute
+              role={role}
+              element={<Account setIsLoading={setIsLoading} />}
+            />
+          }
         />
         <Route
           path="/logout"
           element={<Forgetpassword setIsLoading={setIsLoading} />}
         />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Footer />
     </div>

@@ -20,13 +20,13 @@ function App() {
         return element;
       } else {
         if (userData.role === "User") {
-          return <User />;
+          return <User role={"User"} />;
         } else if (userData.role === "Admin") {
-          return <Admin />;
+          return <Admin role={"Admin"} />;
         }
       }
     } else {
-      return <User />;
+      return <User role={""} />;
     }
   };
   return (
@@ -34,8 +34,16 @@ function App() {
       <UserProvider>
         <Router>
           <Routes>
-            <Route path="/*" element={<UserRoute />} />
-            <Route path="/admin/*" element={<UserRoute />} />
+            <Route
+              path="/*"
+              element={<UserRoute element={<User role="User" />} role="User" />}
+            />
+            <Route
+              path="/admin/*"
+              element={
+                <UserRoute element={<Admin role="Admin" />} role="Admin" />
+              }
+            />
           </Routes>
         </Router>
       </UserProvider>

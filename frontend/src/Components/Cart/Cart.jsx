@@ -70,18 +70,21 @@ function Cart() {
                   })}
                 </div>
               </div>
-              <div className="cart1_button">
-                <div className="Cart1_item_rigth">
-                  <span
-                    onClick={() => {
-                      handleNav("/checkout");
-                    }}
-                  >
-                    MUA NGAY
-                  </span>
-                  {/* <FontAwesomeIcon icon={faArrowRight} /> */}
+              {cart.length > 0 && (
+                <div className="cart1_button">
+                  <div className="Cart1_item_rigth">
+                    <span
+                      onClick={() => {
+                        handleNav("/checkout");
+                      }}
+                    >
+                      MUA NGAY
+                    </span>
+                    {/* <FontAwesomeIcon icon={faArrowRight} /> */}
+                  </div>
                 </div>
-              </div>
+              )}
+
               <div className="cart1_button">
                 <div className="Cart1_item_rigth">
                   <span

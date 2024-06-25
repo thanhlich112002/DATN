@@ -6,7 +6,7 @@ import OrderSummary from "./OrderSummary";
 import { useUser } from "../../service/userContext";
 import "./Checkout.css";
 
-function Checkout() {
+function Checkout({ setIsLoading }) {
   const [selectedPayment, setSelectedPayment] = useState("");
   const [subtotal, setSubtotal] = useState(0);
   const [total, setTotal] = useState(0);
@@ -18,30 +18,35 @@ function Checkout() {
 
   const getUserData = async () => {
     try {
+      setIsLoading(true);
       const res = await getUser();
       setUser(res.data);
       setAddress(res.data.defaultContact);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching user data:", error);
+      setIsLoading(false);
     }
   };
 
   const Order = async () => {
     try {
+      setIsLoading(true);
       if (vouchers) {
         if (vouchers.conditions > total + vouchers.amount) {
           toast.error("Điều kiện không hợp lệ");
           return;
         }
       }
-
       const req = await createOrder(total, 29000, address._id, vouchers?._id);
       if (req.data && req.data.order_url) {
         window.location.href = req.data.order_url;
       }
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
       toast.error(error.response.data.message);
+      setIsLoading(false);
     }
   };
 

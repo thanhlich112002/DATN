@@ -29,6 +29,7 @@ function Forgetpassword({ setIsLoading }) {
     try {
       setIsLoading(true);
       await verifyToken(email, token);
+      setIsLoading(false);
       setForm(3);
       console.log("Token đã được xác nhận.");
     } catch (error) {

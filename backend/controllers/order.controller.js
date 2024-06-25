@@ -229,7 +229,7 @@ class orderController {
       const items = [];
       const transID = Math.floor(Math.random() * 1000000);
       const embed_data = {
-        redirecturl: `https://datn-7vhw-git-master-lichs-projects.vercel.app/account/orders?requestId=${newOrder._id}`,
+        redirecturl: `http://localhost:3001/account/orders?requestId=${newOrder._id}`,
       };
       const order = {
         app_id: config.app_id,
@@ -278,7 +278,6 @@ class orderController {
     const MoMo_Params = req.query;
     const requestId = MoMo_Params.requestId;
     const status = parseInt(MoMo_Params.status, 10);
-    console.log("UUUU", parseInt(MoMo_Params.status, 10));
     if (!requestId) {
       return res.status(400).json({
         status: "error",
@@ -300,13 +299,13 @@ class orderController {
       const currentTime = new Date(
         Date.now() + process.env.UTC * 60 * 60 * 1000
       );
-
-      if (order.status === "Pending" && status === 1) {
+      console.log(status === 1);
+      if (status === 1) {
         order.status = "Confirmed";
         order.dateCheckout = currentTime;
         await order.save();
 
-        new Email().sendOrderConfirmation(order, "Thông báo xác nhận đơn hàng");
+        new Email().sendOrderCancel(order, "Thông báo xác nhận đơn hàng");
         middleware(req.Noti); // Ensure middleware is appropriately handled
 
         return res.status(200).json({

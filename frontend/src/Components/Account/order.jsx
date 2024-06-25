@@ -7,7 +7,7 @@ import {
   cancelOrder,
   ReturnOrder,
 } from "../../service/API";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import Form from "./formdetaidonhang";
 import OrderBar from "./orderBar";
 import DeleUser from "./ReturnOrder"; // Đã sửa lại đường dẫn đúng
@@ -62,19 +62,26 @@ function Order({ setIsLoading }) {
   useEffect(() => {
     fetchProducts(currentPage, status, startDate, endDate);
   }, [currentPage, status, startDate, endDate, user]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const urlParams = window.location.search;
-    if (urlParams) {
-      createPayment(urlParams)
-        .then(() => {
+    const call = async () => {
+      if (urlParams) {
+        try {
+          setIsLoading(true);
+          console.log(urlParams);
+          const response = await createPayment(urlParams);
           localStorage.removeItem("cartItems");
-          window.location.reload();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+          navigate("/account/orders");
+          setIsLoading(false);
+        } catch (error) {
+          console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+          setIsLoading(false);
+        }
+      }
+    };
+    call();
   }, [location]);
 
   const handleDetail = (order) => {
