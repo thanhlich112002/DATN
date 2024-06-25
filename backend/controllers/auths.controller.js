@@ -72,12 +72,9 @@ class AuthController {
           message: "Không tìm thấy email",
         });
       }
-
       const resetToken = user.createSignUpToken();
       await user.save({ validateBeforeSave: false });
-
       await new Email().sendPasswordReset(user, resetToken);
-
       res.status(200).json({
         message: "Mã đã được gửi đến email!",
       });
@@ -100,11 +97,10 @@ class AuthController {
     const doc = await User.findOne({ email: req.params.email }).select(
       "+signUpToken +signUpExpires"
     );
-    console.log(doc.signUpToken);
+    console.log(doc.signUpToken, token);
     if (!doc || doc.signUpToken !== token) {
       return next(new appError(" Mã không hợp lệ  ", 400));
     }
-
     if (!doc.signUpExpires > new Date()) {
       return next(new appError("Mã đã hết hạn", 400));
     }

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { resetPassword, verifyToken, forgetPassword } from "../../service/API";
 import { toast } from "react-toastify";
 
-function Forgetpassword() {
+function Forgetpassword({ setIsLoading }) {
   const [email, setEmail] = useState("");
   const [token, setToken] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -14,36 +14,44 @@ function Forgetpassword() {
 
   const handleForgetPassword = async () => {
     try {
+      setIsLoading(true);
       await forgetPassword(email);
       setForm(2);
+      setIsLoading(false);
       console.log("Email xác nhận đã được gửi.");
     } catch (error) {
       console.error("Đã xảy ra lỗi khi yêu cầu quên mật khẩu", error);
+      setIsLoading(false);
     }
   };
 
   const handleVerifyToken = async () => {
     try {
+      setIsLoading(true);
       await verifyToken(email, token);
       setForm(3);
       console.log("Token đã được xác nhận.");
     } catch (error) {
-      console.error("Đã xảy ra lỗi khi xác nhận token", error);
+      toast.error(error.response.data.message);
+      setIsLoading(false);
     }
   };
 
   const handleResetPassword = async () => {
     try {
+      setIsLoading(true);
       await resetPassword(email, {
         newPassword: newPassword,
         comfirmPassword: newPassword,
         signUpToken: token,
       });
+      setIsLoading(false);
       console.log("Mật khẩu đã được đặt lại thành công.");
       toast.success("Đổi mật khẩu thành công");
       navigate("/login");
     } catch (error) {
-      console.error("Đã xảy ra lỗi khi đặt lại mật khẩu", error);
+      toast.error(error.response.data.message);
+      setIsLoading(false);
     }
   };
 
