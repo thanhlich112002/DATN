@@ -1,6 +1,6 @@
 import axios from "axios";
-// const url = "https://datn-ten-zeta.vercel.app";
-const url = "http://localhost:3000";
+const url = "https://datn-ten-zeta.vercel.app";
+// const url = "http://localhost:3000";
 const getOrderCount = async (time) => {
   const token = localStorage.getItem("token");
   return axios.get(`${url}/api/admin/getOrderCount/${time}`, {
