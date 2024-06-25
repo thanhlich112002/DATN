@@ -1,7 +1,7 @@
 import axios from "axios";
-const url = "https://datn-ten-zeta.vercel.app";
+// const url = "https://datn-ten-zeta.vercel.app";
 
-// const url = "http://localhost:3000";
+const url = "http://localhost:3000";
 
 const getAllProducts = async (page) => {
   return axios.get(`${url}/api/products/getAllProducts?limit=7&page=${page}`);

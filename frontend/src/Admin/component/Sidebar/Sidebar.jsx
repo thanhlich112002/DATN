@@ -10,6 +10,7 @@ import {
   faSignOutAlt,
   faBars,
   faFlask,
+  faAd,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useLocation } from "react-router-dom";
 import "./style.css";
@@ -60,7 +61,7 @@ const Sidebar = ({ children }) => {
     {
       path: "/admin/slidebar",
       name: "QL Quảng cáo",
-      icon: faShoppingBasket,
+      icon: faAd,
     },
   ];
 

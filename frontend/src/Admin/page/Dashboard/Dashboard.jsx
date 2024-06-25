@@ -91,7 +91,7 @@ function Dashboard() {
 
   const fetchData = async () => {
     try {
-      const req = await quantity("week");
+      const req = await quantity("day");
       setData(req.data.data);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu:", error);

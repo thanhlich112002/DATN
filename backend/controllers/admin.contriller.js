@@ -274,7 +274,9 @@ class AdminController {
       const totalOrders = orders.length;
       let totalAmount = 0;
       orders.forEach((order) => {
-        if (order.status != "Pending") totalAmount += order.totalPrice;
+        if (order.status !== "Pending" && order.status !== "Cancelled")
+          console.log(order.status);
+        totalAmount += order.totalPrice;
       });
       res.status(200).json({
         success: true,
