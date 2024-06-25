@@ -2,13 +2,12 @@ const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 
 const oAuth2Client = new google.auth.OAuth2(
-  "101226702177-ok6d8e86stk9c1g3dom21u07jitqja4m.apps.googleusercontent.com",
-  "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",
-  "https://developers.google.com/oauthplayground"
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.REDIRECT_URI
 );
 oAuth2Client.setCredentials({
-  refresh_token:
-    "1//04YxabYLAYDylCgYIARAAGAQSNwF-L9IrDlvULsrHj26hY_DRCmi4oPJ68--O3kgmulSgcTerSVkdiD0qrXR7m6S_dkmu2-ZrlLE",
+  refresh_token: process.env.REFRESEH_TOKEN,
 });
 
 module.exports = class Email {
@@ -19,11 +18,9 @@ module.exports = class Email {
       auth: {
         type: "OAuth2",
         user: "nguyenthanhlich112002@gmail.com",
-        clientId:
-          "101226702177-ok6d8e86stk9c1g3dom21u07jitqja4m.apps.googleusercontent.com",
-        clientSecret: "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",
-        refreshToken:
-          "1//04YxabYLAYDylCgYIARAAGAQSNwF-L9IrDlvULsrHj26hY_DRCmi4oPJ68--O3kgmulSgcTerSVkdiD0qrXR7m6S_dkmu2-ZrlLE",
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        refreshToken: process.env.REFRESEH_TOKEN,
         accessToken: accessToken,
       },
     });
@@ -32,7 +29,6 @@ module.exports = class Email {
   async sendPasswordReset(user, token) {
     try {
       const transport = await this.newTransport();
-
       const mailOptions = {
         from: "Luxury Ferfumes nước hoa cao cấp <nguyenthanhlich112002@gmail.com>",
         to: user.email,

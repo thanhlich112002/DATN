@@ -24,6 +24,7 @@ function Cart({ setIsopencart }) {
   const navigate = useNavigate();
 
   const handleNav = (nav) => {
+    setIsopencart(false);
     navigate(`/${nav}`);
   };
 
@@ -104,7 +105,10 @@ function Cart({ setIsopencart }) {
             </div>
           ) : (
             <>
-              <div style={{ display: "flex", justifyContent: "center" }}>
+              <div
+                style={{ display: "flex", justifyContent: "center" }}
+                onClick={() => handleNav("login")}
+              >
                 <span
                   style={{ display: "flex", margin: "10px", fontSize: "20px" }}
                 >
