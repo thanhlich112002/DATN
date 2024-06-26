@@ -125,6 +125,11 @@ function Product({ setIsLoading }) {
     fetchIsComents();
     try {
       await createComment(formData, product._id);
+      fviewsProduct();
+      fetchProduct();
+      fetchComment();
+      fetchIsComents();
+      fetchProducts(product?.Category._id);
     } catch (error) {
       console.log(error.response.data.message);
       toast.error(error.response.data.message);
@@ -315,14 +320,12 @@ function Product({ setIsLoading }) {
           </div>
           <div className="comment-item">
             <span className="comment-label">Đánh giá:</span>
-            <span className="comment-value">
-              {product?.ratingsQuantity} sao
-            </span>
+            <span className="comment-value">{product?.ratingsAverage} sao</span>
           </div>
           <div className="comment-item">
             <span className="comment-label">Số lượng đánh giá:</span>
             <span className="comment-value">
-              {product?.ratingsAverage} lượt
+              {product?.ratingsQuantity} lượt
             </span>
           </div>
           <div className="comment-item">
