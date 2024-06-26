@@ -23,32 +23,32 @@ router.get(
 router.get(
   "/getOrdersByOrderId/:orderId",
   AuthController.protect,
-  AuthController.restrict("User"),
+  // AuthController.restrict("User"),
   orderController.getOrdersByOrderId
 );
 router.get(
   "/getAllOrders",
   AuthController.protect,
-  AuthController.restrict("User"),
+  // AuthController.restrict("User"),
   orderController.getAllOrders
 );
 router.get(
   "/getStatisticsOrders",
   AuthController.protect,
-  AuthController.restrict("User"),
+  // AuthController.restrict("User"),
   orderController.getStatisticsOrders
 );
 router.get(
   "/cancelOrder/:orderId",
   AuthController.protect,
-  AuthController.restrict("User"),
+  // AuthController.restrict("User"),
   NotificationController.CancelNotification,
   orderController.cancelOrder
 );
 router.get(
   "/ReturnOrder/:orderId",
   AuthController.protect,
-  AuthController.restrict("User"),
+  // AuthController.restrict("User"),
   NotificationController.RefundNotification,
   orderController.ReturnOrder
 );
@@ -56,7 +56,7 @@ router.get(
 router.get(
   "/chekcomments/:productId",
   AuthController.protect,
-  AuthController.restrict("User"),
+  // AuthController.restrict("User"),
   orderController.checkComments
 );
 
