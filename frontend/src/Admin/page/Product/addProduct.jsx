@@ -58,7 +58,7 @@ function AddCategory({ setIsLoading }) {
 
     fetchCategories();
     fetchBrands();
-    setIsLoading(true);
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
@@ -133,11 +133,11 @@ function AddCategory({ setIsLoading }) {
       setDeletedImageUrls([]);
       toast.success("Thêm sản phẩm thành công!");
       navigate("/admin/product");
-      setIsLoading(true);
+      setIsLoading(false);
     } catch (error) {
       console.log("Đã xảy ra lỗi khi thêm sản phẩm:", error);
       toast.error("Đã xảy ra lỗi khi thêm sản phẩm!");
-      setIsLoading(true);
+      setIsLoading(false);
     }
   };
 
@@ -156,7 +156,7 @@ function AddCategory({ setIsLoading }) {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-             className="addbut"
+              className="addbut"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Qua về sản phẩm
