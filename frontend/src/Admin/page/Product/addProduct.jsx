@@ -38,7 +38,7 @@ function AddCategory({ setIsLoading }) {
   useEffect(() => {
     const fetchCategories = async () => {
       setIsLoading(true);
-      const categoriesData = await getAllCategory();
+      const categoriesData = await getAllCategory(1, 100);
       setCategories(categoriesData.data.data);
       if (categoriesData.data.data.length > 0) {
         setCategoryId(categoriesData.data.data[0]._id);
