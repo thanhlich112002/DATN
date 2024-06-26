@@ -72,6 +72,7 @@ function Order({ setIsLoading }) {
           setIsLoading(true);
           console.log(urlParams);
           await createPayment(urlParams);
+
           setIsLoading(false);
           navigate("/account/orders");
         } catch (error) {
@@ -255,7 +256,7 @@ function Order({ setIsLoading }) {
             title="Bạn chắc chắn muốn hoàn trả đơn"
             onCancel={() => setIsOpenRut(false)}
             handleConfirmDelete={handleReturn} // Đổi handleCancel thành handleConfirmDelete
-            id={selectedOrder} // Truyền id của đơn hàng cần hoàn trả
+            id={selectedOrder?._id} // Truyền id của đơn hàng cần hoàn trả
           />
         ) : null}
       </div>
