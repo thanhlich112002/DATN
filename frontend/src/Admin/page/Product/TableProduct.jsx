@@ -26,7 +26,7 @@ const TableProduct = ({ setIsLoading }) => {
   const [status, setStatus] = useState(true);
   const [status1, setStatus1] = useState(false);
 
-  const fetchProducts = async (page, status, status1) => {
+  const fetchProducts = async (page) => {
     try {
       setIsLoading(true);
       const response = await getAllProducts(page, status, status1);
@@ -51,9 +51,10 @@ const TableProduct = ({ setIsLoading }) => {
     }
   };
 
-  const fetchSProducts = async (searchTerm, page, status, status1) => {
+  const fetchSProducts = async (searchTerm, page) => {
     try {
       setIsLoading(true);
+      console.log("Ô", status, status1);
       const response = await searchProducts(searchTerm, page, status, status1);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
@@ -67,9 +68,9 @@ const TableProduct = ({ setIsLoading }) => {
 
   useEffect(() => {
     if (name) {
-      fetchSProducts(name, currentPage, status, status1);
+      fetchSProducts(name, currentPage);
     } else {
-      fetchProducts(currentPage, status, status1);
+      fetchProducts(currentPage);
     }
   }, [currentPage, name, status, status1]);
   useEffect(() => {
