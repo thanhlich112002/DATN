@@ -22,6 +22,12 @@ function Collections({ setIsLoading }) {
   const query = useQuery().get("query");
   const category = useQuery().get("category");
   const brand = useQuery().get("brand");
+  const pageNumbers = [];
+  const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
+  for (let i = 1; i <= pageCount; i++) {
+    pageNumbers.push(i);
+  }
   function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
@@ -47,12 +53,17 @@ function Collections({ setIsLoading }) {
   const SearchProducts = async () => {
     try {
       setIsLoading(true);
-      const productsResponse = await searchProducts({
-        search: query,
-        CategoryID: selectedCategories,
-        BrandID: selectedBrands,
-      });
+      const productsResponse = await searchProducts(
+        {
+          search: query,
+          CategoryID: selectedCategories,
+          BrandID: selectedBrands,
+        },
+        1
+      );
       setProducts(productsResponse.data.data);
+      setPageCount(productsResponse.data.totalPages);
+      setCurrentPage(productsResponse.data.currentPage);
       setIsLoading(false);
     } catch (error) {
       console.error("Failed to search products:", error);
@@ -120,6 +131,26 @@ function Collections({ setIsLoading }) {
   useEffect(() => {
     SearchProducts();
   }, [selectedBrands, selectedCategories, query]);
+  const handlePageChange = async (page) => {
+    try {
+      setIsLoading(true);
+      const productsResponse = await searchProducts(
+        {
+          search: query,
+          CategoryID: selectedCategories,
+          BrandID: selectedBrands,
+        },
+        page
+      );
+      setProducts(productsResponse.data.data);
+      setPageCount(productsResponse.data.totalPages);
+      setCurrentPage(productsResponse.data.currentPage);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Failed to search products:", error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="container_cus">
@@ -189,6 +220,56 @@ function Collections({ setIsLoading }) {
               {products.map((product, index) => (
                 <Item key={index} product={product} />
               ))}
+            </div>
+            <div style={{ display: "flex" }}>
+              {" "}
+              <div>
+                <nav aria-label="Page navigation example">
+                  <ul className="pagination">
+                    <li
+                      className={`page-item ${
+                        currentPage === 1 ? "disabled" : ""
+                      }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        aria-label="Previous"
+                      >
+                        <span aria-hidden="true">&laquo;</span>
+                      </button>
+                    </li>
+                    {pageNumbers.map((number) => (
+                      <li
+                        key={number}
+                        className={`page-item ${
+                          currentPage === number ? "active" : ""
+                        }`}
+                      >
+                        <button
+                          className="page-link"
+                          onClick={() => handlePageChange(number)}
+                        >
+                          {number}
+                        </button>
+                      </li>
+                    ))}
+                    <li
+                      className={`page-item ${
+                        currentPage === pageCount ? "disabled" : ""
+                      }`}
+                    >
+                      <button
+                        className="page-link"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        aria-label="Next"
+                      >
+                        <span aria-hidden="true">&raquo;</span>
+                      </button>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </div>
