@@ -201,12 +201,10 @@ function Product() {
             <span className="product_r_t">{product?.Brand?.name}</span>
           </div>
           <div className="product_r_t">
-            <div className="product_r_b" onClick={handleNavClickOrder}>
-              <span>MUA NGAY</span>
-            </div>
             <div className="product_r_b" onClick={() => addToCart(product)}>
               <span>THÊM VÀO GIỎ HÀNG</span>
             </div>
+            
           </div>
           <div
             className="product_r_icon"

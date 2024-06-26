@@ -2,8 +2,8 @@ import axios from "axios";
 import Category from "../Components/Category/category";
 
 //
-// const url = "https://datn-ten-zeta.vercel.app";
-const url = "http://localhost:3000";
+const url = "https://datn-ten-zeta.vercel.app";
+// const url = "http://localhost:3000";
 
 const loginAPI = async (formData) => {
   const token = localStorage.getItem("token");
