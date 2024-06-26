@@ -104,7 +104,7 @@ class AdminController {
       const time = req.params.time;
       if (time === "day") {
         const today = moment()
-          .add(Number(process.env.UTC), "hours")
+          .add(7, "hours")
           .startOf("day")
           .add(1, "day")
           .toDate();
@@ -124,7 +124,7 @@ class AdminController {
       }
       if (time === "month") {
         const today = moment()
-          .add(Number(process.env.UTC), "hours")
+          .add(7, "hours")
           .startOf("day")
           .add(1, "day")
           .toDate();
@@ -143,7 +143,7 @@ class AdminController {
       }
       if (time === "year") {
         const today = moment()
-          .add(Number(process.env.UTC), "hours")
+          .add(7, "hours")
           .startOf("day")
           .add(1, "day")
           .toDate();
@@ -180,19 +180,13 @@ class AdminController {
       let startDate, endDate, dateFormat, incrementUnit;
       switch (time) {
         case "day":
-          startDate = moment()
-            .startOf("day")
-            .add(Number(process.env.UTC), "hours")
-            .toDate();
+          startDate = moment().startOf("day").add(7, "hours").toDate();
           endDate = moment(startDate).add(1, "day").toDate();
           dateFormat = "YYYY-MM-DD";
           incrementUnit = "day";
           break;
         case "week":
-          startDate = moment()
-            .startOf("week")
-            .add(Number(process.env.UTC), "hours")
-            .toDate();
+          startDate = moment().startOf("week").add(7, "hours").toDate();
           endDate = moment(startDate).add(1, "week").toDate();
           dateFormat = "YYYY-MM-DD";
           incrementUnit = "day";
@@ -231,7 +225,7 @@ class AdminController {
 
       orders.forEach((order) => {
         const date = moment(order.dateOrdered)
-          .subtract(Number(process.env.UTC), "hours")
+          .subtract(7, "hours")
           .format(dateFormat);
         if (statsByTime[date] !== undefined) {
           statsByTime[date].value++;
@@ -254,7 +248,7 @@ class AdminController {
   getStatistics = catchAsync(async (req, res, next) => {
     try {
       const today = moment()
-        .add(Number(process.env.UTC), "hours")
+        .add(7, "hours")
         .startOf("day")
         .add(1, "day")
         .add(process.env.UTC, "hours")
