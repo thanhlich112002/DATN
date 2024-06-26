@@ -41,6 +41,13 @@ class VoucherController {
       voucher.expiryDate = localExpiryDate;
       voucher.quantity = quantity;
 
+      // Kiểm tra và đặt lại trường isAvailable
+      if (localExpiryDate > new Date()) {
+        voucher.isAvailable = true;
+      } else {
+        voucher.isAvailable = false;
+      }
+
       // Lưu voucher đã cập nhật
       const savedVoucher = await voucher.save();
       res.status(201).json(savedVoucher);
@@ -55,7 +62,9 @@ class VoucherController {
 
       let queryObj = {};
       if (status !== undefined) {
-        queryObj.isAvailable = status === true;
+        queryObj.isAvailable = status === "true";
+      } else {
+        queryObj.isAvailable = status;
       }
 
       console.log(queryObj);

@@ -233,7 +233,7 @@ class orderController {
       };
       const order = {
         app_id: config.app_id,
-        app_trans_id: `${moment().format("YYMMDD")}_${transID}`, // translation missing: vi.docs.shared.sample_code.comments.app_trans_id
+        app_trans_id: `${moment().format("YYMMDD")}_${transID}`,
         app_user: newOrder._id,
 
         app_time: Date.now(), // miliseconds
@@ -435,6 +435,13 @@ class orderController {
         status: req.query.status,
       };
     }
+    if (req.query.name) {
+      const search = req.query.name;
+      obj = {
+        ...obj,
+        _id: search,
+      };
+    }
 
     const features = new ApiFeatures(
       Order.find(obj).populate({ path: "contact" }).populate("cart.product"),
@@ -457,6 +464,7 @@ class orderController {
       currentPage,
     });
   });
+
   getStatisticsOrders = catchAsync(async (req, res, next) => {
     let start, end;
     if (!req.query.start) {
@@ -488,7 +496,6 @@ class orderController {
         status: req.query.status,
       };
     }
-
     const orderStats = await Order.aggregate([
       { $match: obj },
       {

@@ -10,7 +10,7 @@ class CategoryController {
     const cat = await Category.findOne({ name: req.body.name });
     if (cat) {
       return res.status(409).json({
-        message: "Category already exists",
+        message: "Danh mục đã tồn tại",
       });
     }
     const imagePath = req.file.path;

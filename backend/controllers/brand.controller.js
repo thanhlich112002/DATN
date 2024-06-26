@@ -13,7 +13,12 @@ class BrandController {
         message: "Chi nhánh đã tồn tại",
       });
     }
-    const doc = await Brand.create(req.body);
+    const imagePath = req.file.path;
+    const categoryData = {
+      ...req.body,
+      images: imagePath,
+    };
+    const doc = await Brand.create(categoryData);
     res.status(200).json({
       data: doc,
     });

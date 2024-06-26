@@ -158,7 +158,6 @@ class productsController {
     const currentPage = parseInt(req.query.page) || 1; // Trang hiện tại
     const isAvailable = req.query.isAvailable;
     const isOutofOrder = req.query.isOutofOrder;
-
     // Tạo điều kiện tìm kiếm dựa trên tham số truy vấn
     let queryConditions = {};
     if (isAvailable === undefined) {
@@ -203,7 +202,6 @@ class productsController {
       currentPage,
     });
   });
-
   getAllProductsbyCat = catchAsync(async (req, res, next) => {
     const nameCat = req.body.Category || req.query.Category;
     const category = await Category.findOne({ _id: nameCat });
@@ -260,7 +258,6 @@ class productsController {
   searchProducts = catchAsync(async (req, res, next) => {
     const { search, CategoryID, BrandID } = req.body;
     console.log(req.body);
-
     const isAvailable = req.query.isAvailable;
     const isOutofOrder = req.query.isOutofOrder;
 

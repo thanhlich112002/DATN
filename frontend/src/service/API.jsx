@@ -2,8 +2,8 @@ import axios from "axios";
 import Category from "../Components/Category/category";
 
 //
-// const url = "https://datn-ten-zeta.vercel.app";
-const url = "http://localhost:3000";
+const url = "https://datn-ten-zeta.vercel.app";
+// const url = "http://localhost:3000";
 
 const loginAPI = async (formData) => {
   const token = localStorage.getItem("token");
@@ -149,7 +149,10 @@ const getProductsbyID = async (id) => {
   return axios.get(`${url}/api/products/getProductsbyID/${id}`);
 };
 const searchProducts = async (object) => {
-  return axios.post(`${url}/api/products/searchProducts?limit=100`, object);
+  return axios.post(
+    `${url}/api/products/searchProducts?limit=100&isAvailable=${true}&isOutofOrder=${false}`,
+    object
+  );
 };
 
 const Getallcategory = async () => {

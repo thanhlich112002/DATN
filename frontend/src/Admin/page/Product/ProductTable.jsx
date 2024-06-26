@@ -13,6 +13,10 @@ const ProductTable = ({
   currentPage,
   pageCount,
   setName,
+  status,
+  setStatus,
+  status1,
+  setStatus1,
 }) => {
   const [deletingProduct, setDeletingProduct] = useState(null);
   const navigate = useNavigate();
@@ -31,10 +35,10 @@ const ProductTable = ({
       },
       { Header: "Giá", accessor: "price" },
       {
-        Header: "Có Sẵn",
-        accessor: "isAvailable",
+        Header: "Hết hàng",
+        accessor: "isOutofOrder",
         Cell: ({ cell: { value } }) => (
-          <span className={`dot ${value ? "green-dot" : "red-dot"}`}></span>
+          <span className={`dot ${value ? "red-dot" : "green-dot"}`}></span>
         ),
       },
       {
@@ -89,6 +93,33 @@ const ProductTable = ({
                 currentPage={currentPage}
                 pageCount={pageCount}
               />
+              <div style={{ display: "flex", gap: "10px" }}>
+                <div
+                  onClick={() => setStatus(true)}
+                  className={`box-status ${status === true ? "ATV" : ""}`}
+                >
+                  Còn bán
+                </div>
+                <div
+                  onClick={() => setStatus(false)}
+                  className={`box-status ${status === false ? "ATV" : ""}`}
+                >
+                  Ngừng bán
+                </div>
+                <div
+                  onClick={() => setStatus1(false)}
+                  className={`box-status ${status1 === false ? "ATV" : ""}`}
+                >
+                  Còn hàng
+                </div>
+                <div
+                  onClick={() => setStatus1(true)}
+                  className={`box-status ${status1 === true ? "ATV" : ""}`}
+                >
+                  Hết hàng
+                </div>
+              </div>
+
               <table {...getTableProps()}>
                 <thead>
                   {headerGroups.map((headerGroup) => (

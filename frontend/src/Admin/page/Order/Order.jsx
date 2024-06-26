@@ -27,10 +27,10 @@ const TableOrder = ({ setIsLoading }) => {
     }
   };
 
-  const fetchProducts = async (page, status, start, end) => {
+  const fetchProducts = async (page, status, start, end, name) => {
     try {
       setIsLoading(true);
-      const response = await getAllOrders(page, status, start, end);
+      const response = await getAllOrders(page, status, start, end, name);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(page);
@@ -45,8 +45,8 @@ const TableOrder = ({ setIsLoading }) => {
   }, [startDate, endDate]);
 
   useEffect(() => {
-    fetchProducts(currentPage, status, startDate, endDate);
-  }, [currentPage, status, startDate, endDate]);
+    fetchProducts(currentPage, status, startDate, endDate, name);
+  }, [currentPage, status, startDate, endDate, name]);
 
   return (
     <div className="projects">

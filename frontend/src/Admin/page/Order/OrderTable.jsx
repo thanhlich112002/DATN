@@ -175,6 +175,7 @@ const ProductTable = ({
                 setEndDate={setEndDate}
                 startDate={startDate}
                 setStartDate={setStartDate}
+                
               />
               <table {...getTableProps()} className="styled-table">
                 <thead>

@@ -23,11 +23,13 @@ const TableProduct = ({ setIsLoading }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [name, setName] = useState("");
   const navigate = useNavigate();
+  const [status, setStatus] = useState(true);
+  const [status1, setStatus1] = useState(false);
 
-  const fetchProducts = async (page) => {
+  const fetchProducts = async (page, status, status1) => {
     try {
       setIsLoading(true);
-      const response = await getAllProducts(page);
+      const response = await getAllProducts(page, status, status1);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
@@ -49,10 +51,10 @@ const TableProduct = ({ setIsLoading }) => {
     }
   };
 
-  const fetchSProducts = async (searchTerm, page) => {
+  const fetchSProducts = async (searchTerm, page, status, status1) => {
     try {
       setIsLoading(true);
-      const response = await searchProducts(searchTerm, page);
+      const response = await searchProducts(searchTerm, page, status, status1);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
@@ -65,11 +67,11 @@ const TableProduct = ({ setIsLoading }) => {
 
   useEffect(() => {
     if (name) {
-      fetchSProducts(name, currentPage);
+      fetchSProducts(name, currentPage, status, status1);
     } else {
-      fetchProducts(currentPage);
+      fetchProducts(currentPage, status, status1);
     }
-  }, [currentPage, name]);
+  }, [currentPage, name, status, status1]);
   useEffect(() => {
     fetchStatistics();
   }, []);
@@ -129,6 +131,10 @@ const TableProduct = ({ setIsLoading }) => {
         currentPage={currentPage}
         pageCount={pageCount}
         setName={setName}
+        status={status}
+        setStatus={setStatus}
+        status1={status1}
+        setStatus1={setStatus1}
       />
     </div>
   );

@@ -1,10 +1,12 @@
 import axios from "axios";
-// const url = "https://datn-ten-zeta.vercel.app";
+const url = "https://datn-ten-zeta.vercel.app";
 
-const url = "http://localhost:3000";
+// const url = "http://localhost:3000";
 
-const getAllProducts = async (page) => {
-  return axios.get(`${url}/api/products/getAllProducts?limit=7&page=${page}`);
+const getAllProducts = async (page, status, status1) => {
+  return axios.get(
+    `${url}/api/products/getAllProducts?limit=7&page=${page}&isAvailable=${status}&isOutofOrder=${status1}`
+  );
 };
 const getStatisticsOrders = async (start, end) => {
   const token = localStorage.getItem("token");
@@ -27,7 +29,7 @@ const getStatisticsOrders = async (start, end) => {
     throw error;
   }
 };
-const getAllOrders = async (page, status, start, end) => {
+const getAllOrders = async (page, status, start, end, name) => {
   const token = localStorage.getItem("token");
   const url1 = `${url}/api/orders/getAllOrders`;
   const params = {
@@ -36,6 +38,7 @@ const getAllOrders = async (page, status, start, end) => {
     sort: "-dateOrdered",
     start: start,
     end: end,
+    name: name,
   };
   if (status !== "all") {
     params.status = status;
@@ -296,10 +299,10 @@ const updateSidebar = async (id) => {
 };
 const deleteVoucher = async (req, res, next) => {};
 
-const searchProducts = async (data, page) => {
+const searchProducts = async (data, page, status, status1) => {
   const token = localStorage.getItem("token");
   return axios.post(
-    `${url}/api/products/searchProducts?limit=7&page=${page}`,
+    `${url}/api/products/searchProducts?limit=7&page=${page}&isAvailable=${status}&isOutofOrder=${status1}`,
     { search: data },
     {
       headers: {
