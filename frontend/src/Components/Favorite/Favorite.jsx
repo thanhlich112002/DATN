@@ -2,17 +2,20 @@ import React, { useEffect, useState } from "react";
 import { getFavorite } from "../../service/API.jsx";
 import Item from "../../Components/Category/item";
 
-function Favorite() {
+function Favorite({ setIsLoading }) {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
+        setIsLoading(true);
         const favoriteProducts = await getFavorite();
         console.log(favoriteProducts.data.data);
         setProducts(favoriteProducts.data.data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching favorite products:", error);
+        setIsLoading(false);
       }
     };
 
