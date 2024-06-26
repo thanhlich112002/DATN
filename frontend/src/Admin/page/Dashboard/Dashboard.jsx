@@ -22,7 +22,7 @@ import Pie from "./Pie";
 import Topsale from "./topSale";
 import TopBrand from "./topBrand";
 
-function Dashboard() {
+function Dashboard({ setIsLoading }) {
   const [data, setData] = useState({ user: 0, product: 0, order: 0 });
   const [products, setProducts] = useState([]);
   const [revenue, setRevenue] = useState(0);
@@ -43,58 +43,76 @@ function Dashboard() {
 
   const fetchOrderCount = async (time) => {
     try {
+      setIsLoading(true);
       const response = await getOrderCount(time);
       setOrderCount(response.data.data);
       console.log(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchOrderRevenueByCategory = async (time) => {
     try {
+      setIsLoading(true);
       const response = await getOrderRevenueByCategory(time);
       setOrderCountByCategory(response.data.data);
       console.log(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchOrderRevenueByBrand = async (time) => {
     try {
+      setIsLoading(true);
       const response = await getOrderRevenueByBrand(time);
       setsetOrderRevenueByBrand(response.data.data);
       console.log(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchProducts = async (time) => {
     try {
+      setIsLoading(true);
       const response = await getTopSale(time);
       setProducts(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchRevenue = async () => {
     try {
+      setIsLoading(true);
       const req = await getStatistics();
       setRevenue(req.data.totalAmount);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const req = await quantity("day");
       setData(req.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu:", error);
+      setIsLoading(false);
     }
   };
 

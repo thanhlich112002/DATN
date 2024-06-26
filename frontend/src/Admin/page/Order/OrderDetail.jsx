@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import CartItem from "./CartItem";
 import "./style.css";
 
-function OrderDetail() {
+function OrderDetail({setIsLoading}) {
   const { id } = useParams();
   const [cart, setCart] = useState(null); // Initialize cart state
   const [selectedStatus, setSelectedStatus] = useState("");
@@ -18,12 +18,15 @@ function OrderDetail() {
 
   const getCart = async (id) => {
     try {
+      setIsLoading(true)
       const response = await getOrdersByOrderId(id);
       setCart(response.data.data);
       setSelectedStatus(response.data.data.status);
       setNotification(response.data.data.notification);
+      setIsLoading(false)
     } catch (error) {
       console.error("Error fetching order:", error);
+      setIsLoading(false)
     }
   };
 

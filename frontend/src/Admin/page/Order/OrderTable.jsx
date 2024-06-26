@@ -30,6 +30,7 @@ const ProductTable = ({
   startDate,
   setStartDate,
   statisticsOrders,
+  setIsLoading,
 }) => {
   // Hàm chuyển đổi ngày
   const convertDate = (utcDate) => {
@@ -49,7 +50,6 @@ const ProductTable = ({
     setIsOpen(true);
     setSelectedOrder(order);
   };
-
 
   const columns = React.useMemo(
     () => [

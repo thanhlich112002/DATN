@@ -7,7 +7,7 @@ import "./style.css";
 import Image from "../Product/image";
 import { toast } from "react-toastify";
 
-function AddCategory() {
+function AddCategory({ setIsLoading }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -26,12 +26,16 @@ function AddCategory() {
     formData.append("images", images[0]?.file);
 
     try {
+      setIsLoading(true);
       const res = await createBrand(formData);
       toast.success("Tạo thành công!");
       navigate("/admin/brand");
+      setIsLoading(false);
     } catch (error) {
       toast.error("Đã sảy ra lỗi thửu lại sau");
+      setIsLoading(false);
     } finally {
+      setIsLoading(false);
     }
   };
 
@@ -60,7 +64,7 @@ function AddCategory() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              className="background_cl"
+              className="addbut"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Qua về thương hiệu

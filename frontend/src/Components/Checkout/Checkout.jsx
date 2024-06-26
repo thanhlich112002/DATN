@@ -40,6 +40,7 @@ function Checkout({ setIsLoading }) {
       }
       const req = await createOrder(total, 29000, address._id, vouchers?._id);
       if (req.data && req.data.order_url) {
+        localStorage.removeItem("cartItems");
         window.location.href = req.data.order_url;
       }
       setIsLoading(false);

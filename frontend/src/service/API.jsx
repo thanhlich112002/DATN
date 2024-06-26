@@ -275,7 +275,10 @@ const getAllVouchers = async (id) => {
       "Content-Type": "application/json",
     },
   };
-  return await axios.get(`${url}/api/vouchers/getAllVouchers`, config);
+  return await axios.get(
+    `${url}/api/vouchers/getAllVouchers?status=true`,
+    config
+  );
 };
 const addVouchers = async (id) => {
   const token = localStorage.getItem("token");

@@ -18,7 +18,7 @@ import "./style.css";
 import Image from "../Product/image";
 import { toast } from "react-toastify";
 
-function EditCategory() {
+function EditCategory({ setIsLoading }) {
   const { id } = useParams();
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
@@ -30,22 +30,28 @@ function EditCategory() {
   const [statisticsCategory, setStatisticsCategory] = useState([]);
   const fetchStatisticsCategory = async () => {
     try {
+      setIsLoading(true);
       const response = await getStatisticsBrandbyId(id);
       setStatisticsCategory(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.log("Lỗi khi lấy danh sách danh mục:", error);
+      setIsLoading(false);
     }
   };
   const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const res = await getBrandById(id);
       setCategoryName(res.data.data.name);
       setCategoryDescription(res.data.data.description);
       setImages([{ url: res.data.data.images }]);
+      setIsLoading(false);
     } catch (error) {
       console.error("Đã xảy ra lỗi khi lấy dữ liệu danh mục:", error);
+      setIsLoading(false);
     }
   };
 
@@ -78,13 +84,16 @@ function EditCategory() {
       formData.append("dels", imageUrl.url);
     });
     try {
+      setIsLoading(true);
       const res = await updateBrand(formData, id);
       toast.success("Cập nhật thành công!");
       navigate("/admin/brand");
+      setIsLoading(false);
     } catch (error) {
       toast.error(error.reponse.data.message);
+      setIsLoading(false);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 

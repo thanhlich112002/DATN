@@ -12,7 +12,7 @@ const ChartComponent = ({ data }) => {
         labels: data?.map((row) => row.name),
         datasets: [
           {
-            label: "Acquisitions by year",
+            label: "Sản phẩm",
             data: data?.map((row) => row.value),
             backgroundColor: [
               "rgba(255, 99, 132, 1)",

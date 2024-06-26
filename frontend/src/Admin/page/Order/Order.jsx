@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import ProductTable from "./OrderTable";
 import { getAllOrders, getStatisticsOrders } from "../../service/userService";
 
-const TableOrder = () => {
+const TableOrder = ({ setIsLoading }) => {
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
@@ -29,12 +29,15 @@ const TableOrder = () => {
 
   const fetchProducts = async (page, status, start, end) => {
     try {
+      setIsLoading(true);
       const response = await getAllOrders(page, status, start, end);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(page);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -48,6 +51,7 @@ const TableOrder = () => {
   return (
     <div className="projects">
       <ProductTable
+        setIsLoading={setIsLoading}
         products={products}
         fetchProducts={fetchProducts}
         currentPage={currentPage}

@@ -31,32 +31,6 @@ const WrapperSliderStyle = styled(Slider)`
   }
 `;
 
-const PrevArrow = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", left: "-25px" }}
-      onClick={onClick}
-    >
-      <FontAwesomeIcon icon={faAngleLeft} />
-    </div>
-  );
-};
-
-const NextArrow = (props) => {
-  const { className, style, onClick } = props;
-  return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", right: "-25px" }}
-      onClick={onClick}
-    >
-      <FontAwesomeIcon icon={faAngleRight} />
-    </div>
-  );
-};
-
 function Voucher() {
   const [vouchers, setVouchers] = useState([]);
 
@@ -93,8 +67,6 @@ function Voucher() {
     autoplay: true,
     autoplaySpeed: 3000,
     centerMode: true,
-    prevArrow: <PrevArrow />,
-    nextArrow: <NextArrow />,
   };
 
   return (

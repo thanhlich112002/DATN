@@ -13,7 +13,7 @@ const ChartComponent = ({ data }) => {
         labels: data?.map((row) => row.times),
         datasets: [
           {
-            label: "Acquisitions by year",
+            label: "Thàn tiền",
             data: data?.map((row) => row.totalRevenue),
             backgroundColor: "#07503d",
             borderWidth: 1,

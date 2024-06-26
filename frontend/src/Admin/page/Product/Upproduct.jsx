@@ -22,7 +22,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Card from "../Dashboard/card";
 import RatingStars from "./RatingStars";
 
-function AddCategory() {
+function AddCategory({ setIsLoading }) {
   const { id } = useParams();
   const [item, setItem] = useState([]);
   const [images, setImages] = useState([]);
@@ -36,10 +36,13 @@ function AddCategory() {
   const [product, setProduct] = useState({});
   const fetchComment = async () => {
     try {
+      setIsLoading(true);
       const Comment = await getAllComment(id);
       setListComment(Comment.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching product data:", error);
+      setIsLoading(false);
     }
   };
   useEffect(() => {
@@ -49,7 +52,9 @@ function AddCategory() {
 
   const fetchProduct = async () => {
     try {
+      setIsLoading(true);
       const productData = await getProductsbyID(id);
+
       console.log(productData.data.data[0]);
       setItem(productData.data.favorites);
       const newImages = productData.data.data[0]?.images.map((image) => ({
@@ -71,8 +76,10 @@ function AddCategory() {
       });
       setBrandId(productData.data.data[0].Brand._id);
       setCategoryId(productData.data.data[0].Category._id);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching product data:", error);
+      setIsLoading(true);
     }
   };
   useEffect(() => {
@@ -85,19 +92,23 @@ function AddCategory() {
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setIsLoading(true);
       const categoriesData = await getAllCategory("", 100);
       setCategories(categoriesData.data.data);
       if (categoriesData.data.data.length > 0) {
         setCategoryId(categoriesData.data.data[0]._id);
       }
+      setIsLoading(false);
     };
 
     const fetchBrands = async () => {
+      setIsLoading(true);
       const brandsData = await getAllBrands("", 100);
       setBrands(brandsData.data.data);
       if (brandsData.data.data.length > 0) {
         setBrandId(brandsData.data.data[0]._id);
       }
+      setIsLoading(false);
     };
 
     fetchCategories();
@@ -171,6 +182,7 @@ function AddCategory() {
     formData.append("brandId", brandId);
     formData.append("categoryId", categoryId);
     try {
+      setIsLoading(true);
       await upproduct(formData, id);
       setProduct({
         name: "",
@@ -182,10 +194,12 @@ function AddCategory() {
       setImages([]);
       setDeletedImageUrls([]);
       toast.success("Cập nhật thành công!");
+      setIsLoading(false);
       navigate("/admin/product");
     } catch (error) {
       console.log("Đã xảy ra lỗi khi thêm sản phẩm:", error);
       toast.error("Đã xảy ra lỗi khi thêm sản phẩm!");
+      setIsLoading(false);
     }
   };
 

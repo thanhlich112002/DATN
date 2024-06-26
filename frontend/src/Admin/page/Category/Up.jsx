@@ -18,7 +18,7 @@ import {
   faExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 
-function EditCategory() {
+function EditCategory({ setIsLoading }) {
   const { id } = useParams();
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
@@ -29,21 +29,27 @@ function EditCategory() {
   const [statisticsCategory, setStatisticsCategory] = useState([]);
   const fetchStatisticsCategory = async () => {
     try {
+      setIsLoading(true);
       const response = await getStatisticsCategorybyId(id);
       setStatisticsCategory(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.log("Lỗi khi lấy danh sách danh mục:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchData = async () => {
     try {
+      setIsLoading(true);
       const res = await getCategoryById(id);
       setCategoryName(res.data.data.name);
       setCategoryDescription(res.data.data.description);
       setImages([{ url: res.data.data.images }]);
+      setIsLoading(false);
     } catch (error) {
       console.error("Đã xảy ra lỗi khi lấy dữ liệu danh mục:", error);
+      setIsLoading(false);
     }
   };
 
@@ -73,11 +79,14 @@ function EditCategory() {
     });
 
     try {
+      setIsLoading(true);
       const res = await updateCategory(formData, id);
       toast.success("Danh mục đã được cập nhật thành công!");
       navigate("/admin/category");
+      setIsLoading(false);
     } catch (error) {
       console.error("Đã xảy ra lỗi khi cập nhật danh mục:", error);
+      setIsLoading(false);
     }
   };
 

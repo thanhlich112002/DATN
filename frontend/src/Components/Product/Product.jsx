@@ -233,7 +233,7 @@ function Product() {
                     <div className="comment-header">
                       <img
                         className="comment-avatar"
-                        src="https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-1/448968917_1755655164964370_3349898044676183418_n.jpg?stp=dst-jpg_s200x200&_nc_cat=104&ccb=1-7&_nc_sid=0ecb9b&_nc_eui2=AeETjyxF0ur1b9tPWUGV-SOomvWtUpQcmMKa9a1SlByYwvW7ICk-YGnxsL9F46GLhNL98lp2lZwP1K48DlZ3PF4u&_nc_ohc=Fwe4goYLcrIQ7kNvgG5uLZP&_nc_ht=scontent.fdad3-4.fna&oh=00_AYCOBjikzr5562x7g0X8Xo8GRlJKjN7LGRTZzmPuRq83qg&oe=66802F41"
+                        src={comment.user.photo}
                         alt="User1 Avatar"
                       />
                     </div>

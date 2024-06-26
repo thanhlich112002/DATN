@@ -16,28 +16,71 @@ import Voucher from "./page/Voucher/Voucher";
 import Slidebar from "./page/Slidebar/Voucher";
 import User from "./page/User/User";
 import Headers from "./component/Headers/headers";
+import LoadingModal from "../Components/Loading/Loading";
+import { useState } from "react";
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(false);
   return (
     <div>
       <Sidebar>
         <Headers />
+        {isLoading ? <LoadingModal /> : <></>}
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/category/add" element={<AddCategory />} />
-          <Route path="/category/:id" element={<EditCategory />} />
-          <Route path="/category" element={<TableCategory />} />
-          <Route path="/brand/add" element={<AddBrand />} />
-          <Route path="/brand/:id" element={<EditBrand />} />
-          <Route path="/brand" element={<TableBrand />} />
-          <Route path="/product" element={<TableProduct />} />
-          <Route path="/product/add" element={<AddProduct />} />
-          <Route path="/product/:id" element={<UpProduct />} />
-          <Route path="/order" element={<Order />} />
-          <Route path="/order/:id" element={<DetailOrder />} />
-          <Route path="/user" element={<User />} />
-          <Route path="/slidebar" element={<Slidebar />} />
-          <Route path="/voucher" element={<Voucher />} />
+          <Route path="/" element={<Dashboard setIsLoading={setIsLoading} />} />
+          <Route
+            path="/category/add"
+            element={<AddCategory setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/category/:id"
+            element={<EditCategory setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/category"
+            element={<TableCategory setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/brand/add"
+            element={<AddBrand setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/brand/:id"
+            element={<EditBrand setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/brand"
+            element={<TableBrand setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/product"
+            element={<TableProduct setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/product/add"
+            element={<AddProduct setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/product/:id"
+            element={<UpProduct setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/order"
+            element={<Order setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/order/:id"
+            element={<DetailOrder setIsLoading={setIsLoading} />}
+          />
+          <Route path="/user" element={<User setIsLoading={setIsLoading} />} />
+          <Route
+            path="/slidebar"
+            element={<Slidebar setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/voucher"
+            element={<Voucher setIsLoading={setIsLoading} />}
+          />
         </Routes>
       </Sidebar>
     </div>

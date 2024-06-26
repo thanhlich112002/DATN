@@ -22,36 +22,7 @@ import TopTable from "../component/TopTable/TopTable";
 import DeleUser from "./DeleUser"; // Import component DeleUser
 import Card from "../Dashboard/card";
 
-const VoucherDisplay = ({ voucher, onSave }) => {
-  return (
-    <div className="voucher-container">
-      <h2 className="voucher-heading">Phiếu Giảm Giá</h2>
-      <div className="voucher-field">
-        <strong>Mã:</strong> {voucher.code}
-      </div>
-
-      <div className="voucher-field">
-        <strong>Số Tiền Giảm Giá:</strong> {voucher.amount} VND
-      </div>
-      <div className="voucher-field">
-        <strong>Điều Kiện Áp Dụng:</strong> Đơn hàng tối thiểu{" "}
-        {voucher.conditions} VND
-      </div>
-      <div className="voucher-field">
-        <strong>Ngày Hết Hạn:</strong>{" "}
-        {new Date(voucher.expiryDate).toLocaleDateString()}
-      </div>
-      <div className="voucher-field">
-        <strong>Số Lượng:</strong> {voucher.quantity}
-      </div>
-      <button className="save-button" onClick={onSave}>
-        Hủy
-      </button>
-    </div>
-  );
-};
-
-const VoucherForm = ({ setIsOpen }) => {
+const VoucherForm = ({ setIsOpen, setIsLoading }) => {
   const [code, setCode] = useState("");
   const [name, setName] = useState("");
   const [amount, setAmount] = useState(0);
@@ -74,10 +45,13 @@ const VoucherForm = ({ setIsOpen }) => {
     };
     console.log(newVoucher);
     try {
+      setIsLoading(true);
       const req = await createVoucher(newVoucher);
       toast.success("Thêm phiếu giảm giá thành công");
+      setIsLoading(false);
     } catch (err) {
       toast.error(err.data.message);
+      setIsLoading(false);
     }
     setIsOpen(false);
   };
@@ -152,7 +126,7 @@ const VoucherForm = ({ setIsOpen }) => {
     </div>
   );
 };
-const VoucherFormAdd = ({ voucher, setIsOpen }) => {
+const VoucherFormAdd = ({ voucher, setIsOpen, setIsLoading }) => {
   console.log(voucher);
   const [code, setCode] = useState(voucher?.code);
   const [name, setName] = useState(voucher?.name);
@@ -177,10 +151,13 @@ const VoucherFormAdd = ({ voucher, setIsOpen }) => {
     };
     console.log(newVoucher);
     try {
+      setIsLoading(true);
       const req = await updateVoucher(newVoucher, voucher._id);
       toast.success("Thêm phiếu giảm giá thành công");
+      setIsLoading(false);
     } catch (err) {
       toast.error(err.data.message);
+      setIsLoading(false);
     }
     setIsOpen(false);
   };
@@ -256,7 +233,7 @@ const VoucherFormAdd = ({ voucher, setIsOpen }) => {
   );
 };
 
-function Voucher() {
+function Voucher({ setIsLoading }) {
   const [vouchers, setVouchers] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [pageCount, setPageCount] = useState(0);
@@ -275,19 +252,18 @@ function Voucher() {
 
   const getVouchers = async (page) => {
     try {
+      setIsLoading(true);
       const response = await getAllVouchers(page, status);
       setVouchers(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
       setTrueCount(response.data.trueCount);
       setFalseCount(response.data.falseCount);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy dữ liệu phiếu giảm giá:", error);
+      setIsLoading(false);
     }
-  };
-
-  const handleSave = () => {
-    alert("Phiếu giảm giá đã được lưu!");
   };
 
   const handleDelete = (voucherId) => {
@@ -306,6 +282,7 @@ function Voucher() {
   const handleConfirmDelete = async () => {
     try {
       // Gọi API hoặc xử lý xóa phiếu giảm giá tại đây
+      setIsLoading(true);
       await deleteVoucher(orderID);
 
       const updatedVouchers = vouchers.filter(
@@ -314,9 +291,11 @@ function Voucher() {
       setVouchers(updatedVouchers);
       setShowConfirmation(false);
       alert("Phiếu giảm giá đã được xóa thành công!");
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi xóa phiếu giảm giá:", error);
       alert("Đã xảy ra lỗi khi xóa phiếu giảm giá!");
+      setIsLoading(false);
     }
   };
 
@@ -461,7 +440,9 @@ function Voucher() {
               })}
             </tbody>
           </table>
-          {isOpen && <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />}
+          {isOpen && (
+            <VoucherForm setIsLoading={setIsLoading} setIsOpen={setIsOpen} />
+          )}
           {showConfirmation && (
             <DeleUser
               orderID={orderID}
@@ -470,7 +451,11 @@ function Voucher() {
             />
           )}
           {showEdit && (
-            <VoucherFormAdd voucher={order} setIsOpen={setShowEdit} />
+            <VoucherFormAdd
+              voucher={order}
+              setIsOpen={setShowEdit}
+              setIsLoading={setIsLoading}
+            />
           )}
         </div>
       </div>

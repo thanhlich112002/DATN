@@ -12,7 +12,7 @@ import Image from "../Product/image";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function AddCategory() {
+function AddCategory({ setIsLoading }) {
   const [product, setProduct] = useState({
     name: "",
     price: "",
@@ -32,28 +32,33 @@ function AddCategory() {
   const navigate = useNavigate();
 
   const handleBackToCategoryList = () => {
-    navigate("/admin/tableProduct");
+    navigate("/admin/product");
   };
 
   useEffect(() => {
     const fetchCategories = async () => {
+      setIsLoading(true);
       const categoriesData = await getAllCategory();
       setCategories(categoriesData.data.data);
       if (categoriesData.data.data.length > 0) {
         setCategoryId(categoriesData.data.data[0]._id);
       }
+      setIsLoading(false);
     };
 
     const fetchBrands = async () => {
+      setIsLoading(true);
       const brandsData = await getAllBrands();
       setBrands(brandsData.data.data);
       if (brandsData.data.data.length > 0) {
         setBrandId(brandsData.data.data[0]._id);
       }
+      setIsLoading(false);
     };
 
     fetchCategories();
     fetchBrands();
+    setIsLoading(true);
   }, []);
 
   useEffect(() => {
@@ -113,6 +118,7 @@ function AddCategory() {
     formData.append("brandId", brandId);
     formData.append("categoryId", categoryId);
     try {
+      setIsLoading(true);
       await addproduct(formData);
       setProduct({
         name: "",
@@ -126,10 +132,12 @@ function AddCategory() {
       setImages([]);
       setDeletedImageUrls([]);
       toast.success("Thêm sản phẩm thành công!");
-      navigate("/admin/tableproduct");
+      navigate("/admin/product");
+      setIsLoading(true);
     } catch (error) {
       console.log("Đã xảy ra lỗi khi thêm sản phẩm:", error);
       toast.error("Đã xảy ra lỗi khi thêm sản phẩm!");
+      setIsLoading(true);
     }
   };
 
@@ -148,7 +156,7 @@ function AddCategory() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              className="background_cl"
+             className="addbut"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Qua về sản phẩm

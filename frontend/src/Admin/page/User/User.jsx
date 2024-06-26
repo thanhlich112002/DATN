@@ -20,7 +20,7 @@ import TopTable from "../component/TopTable/TopTable";
 import Card from "../Dashboard/card";
 import DeleUser from "./DeleUser"; // Import component DeleUser
 
-const ProductTable = () => {
+const ProductTable = ({ setIsLoading }) => {
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [products, setProducts] = useState([]);
@@ -33,21 +33,27 @@ const ProductTable = () => {
 
   const fetchProducts = async (page, status, role) => {
     try {
+      setIsLoading(true);
       const response = await getAllUser(page, status, role);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(page);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách người dùng:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchStatisticsUser = async () => {
     try {
+      setIsLoading(true);
       const response = await getStatisticsUser();
       setStatisticsUser(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy thống kê người dùng:", error);
+      setIsLoading(false);
     }
   };
 
@@ -115,9 +121,11 @@ const ProductTable = () => {
   };
 
   const handleConfirmDelete = async (id) => {
+    setIsLoading(true);
     await DElUser(id);
     fetchProducts(currentPage, status, role);
     setShowConfirmation(false);
+    setIsLoading(false);
   };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =

@@ -55,7 +55,7 @@ class VoucherController {
 
       let queryObj = {};
       if (status !== undefined) {
-        queryObj.isAvailable = status === "true";
+        queryObj.isAvailable = status === true;
       }
 
       console.log(queryObj);
@@ -146,6 +146,21 @@ class VoucherController {
       res.status(200).json(vouchers);
     } catch (err) {
       res.status(500).json({ message: err.message });
+    }
+  });
+  check = catchAsync(async (req, res, next) => {
+    try {
+      const vouchers = await Voucher.find();
+
+      vouchers.forEach((voucher) => {
+        if (voucher.expiryDate < new Date()) {
+          voucher.isAvailable = false;
+        }
+        voucher.save();
+      });
+      next();
+    } catch (err) {
+      next(err);
     }
   });
 }

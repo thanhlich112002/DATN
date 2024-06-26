@@ -3,11 +3,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import CategoryTable from "./CategoryTable";
 
-const App = () => {
-
+const App = ({ setIsLoading }) => {
   return (
     <div>
-      <CategoryTable />
+      <CategoryTable setIsLoading={setIsLoading} />
     </div>
   );
 };

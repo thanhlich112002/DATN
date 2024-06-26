@@ -16,7 +16,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Card from "../Dashboard/card";
 
-const TableProduct = () => {
+const TableProduct = ({ setIsLoading }) => {
   const [products, setProducts] = useState([]);
   const [statistics, setStatistics] = useState([]);
   const [pageCount, setPageCount] = useState(0);
@@ -26,31 +26,40 @@ const TableProduct = () => {
 
   const fetchProducts = async (page) => {
     try {
+      setIsLoading(true);
       const response = await getAllProducts(page);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      setIsLoading(false);
     }
   };
   const fetchStatistics = async () => {
     try {
+      setIsLoading(true);
       const response = await getStatisticsProduct();
       setStatistics(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchSProducts = async (searchTerm, page) => {
     try {
+      setIsLoading(true);
       const response = await searchProducts(searchTerm, page);
       setProducts(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi tìm kiếm sản phẩm:", error);
+      setIsLoading(false);
     }
   };
 
@@ -66,7 +75,7 @@ const TableProduct = () => {
   }, []);
 
   const handleAddProductClick = () => {
-    navigate(`/admin/tableProduct/add`);
+    navigate(`/admin/product/add`);
   };
 
   return (

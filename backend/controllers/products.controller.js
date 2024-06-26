@@ -156,9 +156,25 @@ class productsController {
   getAllProducts = catchAsync(async (req, res, next) => {
     const pageSize = parseInt(req.query.limit) || 7;
     const currentPage = parseInt(req.query.page) || 1; // Trang hiện tại
+    const isAvailable = req.query.isAvailable;
+    const isOutofOrder = req.query.isOutofOrder;
 
+    // Tạo điều kiện tìm kiếm dựa trên tham số truy vấn
+    let queryConditions = {};
+    if (isAvailable === undefined) {
+      queryConditions.isAvailable = true;
+    } else {
+      queryConditions.isAvailable = isAvailable === "true";
+    }
+
+    if (isOutofOrder === undefined) {
+      queryConditions.isOutofOrder = false;
+    } else {
+      queryConditions.isOutofOrder = isOutofOrder === "true";
+    }
+    console.log(queryConditions);
     const features = new ApiFeatures(
-      Products.find()
+      Products.find(queryConditions)
         .populate({
           path: "Category",
           select: "name",
@@ -196,8 +212,23 @@ class productsController {
       return res.status(404).json({ message: "Category not found" });
     }
 
+    let queryConditions = { Category: category._id };
+    const isAvailable = req.query.isAvailable;
+    const isOutofOrder = req.query.isOutofOrder;
+    if (isAvailable === undefined) {
+      queryConditions.isAvailable = true;
+    } else {
+      queryConditions.isAvailable = isAvailable === "true";
+    }
+
+    if (isOutofOrder === undefined) {
+      queryConditions.isOutofOrder = false;
+    } else {
+      queryConditions.isOutofOrder = isOutofOrder === "true";
+    }
+
     const features = new ApiFeatures(
-      Products.find({ Category: category._id })
+      Products.find(queryConditions)
         .populate({
           path: "Category",
           select: "name",
@@ -230,7 +261,24 @@ class productsController {
     const { search, CategoryID, BrandID } = req.body;
     console.log(req.body);
 
-    let conditions = [];
+    const isAvailable = req.query.isAvailable;
+    const isOutofOrder = req.query.isOutofOrder;
+
+    // Tạo điều kiện tìm kiếm dựa trên tham số truy vấn
+    let queryConditions = {};
+    if (isAvailable === undefined) {
+      queryConditions.isAvailable = true;
+    } else {
+      queryConditions.isAvailable = isAvailable === "true";
+    }
+
+    if (isOutofOrder === undefined) {
+      queryConditions.isOutofOrder = false;
+    } else {
+      queryConditions.isOutofOrder = isOutofOrder === "true";
+    }
+
+    let conditions = [queryConditions];
     if (search) {
       conditions.push({ name: { $regex: search, $options: "i" } });
     }
@@ -279,5 +327,23 @@ class productsController {
       data: products,
     });
   });
+
+  check = catchAsync(async (req, res, next) => {
+    try {
+      const vouchers = await Products.find();
+
+      vouchers.forEach(async (voucher) => {
+        if (voucher.quantity === 0) {
+          voucher.isOutofOrder = true;
+        }
+        await voucher.save();
+      });
+
+      next();
+    } catch (err) {
+      next(err);
+    }
+  });
 }
+
 module.exports = new productsController();

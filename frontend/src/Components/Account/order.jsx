@@ -71,8 +71,7 @@ function Order({ setIsLoading }) {
         try {
           setIsLoading(true);
           console.log(urlParams);
-          const response = await createPayment(urlParams);
-          localStorage.removeItem("cartItems");
+          await createPayment(urlParams);
           navigate("/account/orders");
           setIsLoading(false);
         } catch (error) {

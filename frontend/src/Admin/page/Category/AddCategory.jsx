@@ -7,7 +7,7 @@ import "./style.css";
 import Image from "../Product/image";
 import { toast } from "react-toastify";
 
-function AddCategory() {
+function AddCategory({ setIsLoading }) {
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -17,7 +17,6 @@ function AddCategory() {
   const navigate = useNavigate();
   const [images, setImages] = useState([]);
   const [deletedImageUrls, setDeletedImageUrls] = useState([]);
-
 
   const handleSubmit = async () => {
     if (!categoryName || !categoryDescription || !images[0]?.file) {
@@ -35,14 +34,17 @@ function AddCategory() {
     formData.append("images", images[0]?.file);
 
     try {
+      setIsLoading(true);
       const res = await createCategory(formData);
       toast.success("Danh mục đã được tạo thành công!");
       navigate("/admin/category");
+      setIsLoading(false);
     } catch (error) {
       console.error("Đã xảy ra lỗi khi tạo danh mục:", error);
       setError(error.message || "Đã xảy ra lỗi khi tạo danh mục");
+      setIsLoading(false);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -71,7 +73,7 @@ function AddCategory() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              className="background_cl"
+              className="addbut"
             >
               <FontAwesomeIcon icon={faArrowLeft} />
               Qua về danh mục

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import BrandTable from "./BrandTable";
 
-const Brand = () => {
+const Brand = ({ setIsLoading }) => {
   return (
     <div>
-      <BrandTable />
+      <BrandTable setIsLoading={setIsLoading} />
     </div>
   );
 };

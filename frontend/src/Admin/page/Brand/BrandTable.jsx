@@ -19,7 +19,7 @@ import {
   faExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 
-const BrandTable = ({ onDelete }) => {
+const BrandTable = ({ onDelete,setIsLoading }) => {
   const [categories, setCategories] = useState([]);
   const [deletingCategory, setDeletingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -29,20 +29,26 @@ const BrandTable = ({ onDelete }) => {
   const [statisticsCategory, setStatisticsCategory] = useState([]);
   const fetchStatisticsCategory = async () => {
     try {
+      setIsLoading(true);
       const response = await getStatisticsBrand();
       setStatisticsCategory(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.log("Lỗi khi lấy danh sách danh mục:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchCategories = async (page) => {
     try {
+      setIsLoading(true);
       const response = await getAllBrands(page);
       setCategories(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log("Lỗi khi lấy danh sách thương hiệu:", error);
     }
   };

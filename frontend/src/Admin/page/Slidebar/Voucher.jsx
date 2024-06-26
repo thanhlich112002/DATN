@@ -10,16 +10,19 @@ import { useTable } from "react-table";
 import TopTable from "../component/TopTable/TopTable";
 import Image from "../Product/image";
 
-const VoucherForm = ({ setIsOpen }) => {
+const VoucherForm = ({ setIsOpen, setIsLoading }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
       formData.append("name", code);
       formData.append("images", images[0]?.file);
+      setIsLoading(true);
       const req = await createSidebar(formData);
+      setIsLoading(false)
       toast.success("Thêm phiếu quảng cáo thành công");
     } catch (err) {
+      setIsLoading(false)
       toast.error(err.data.message);
     }
     setIsOpen(false);
@@ -70,7 +73,7 @@ const VoucherForm = ({ setIsOpen }) => {
   );
 };
 
-function Voucher() {
+function Voucher({ setIsLoading }) {
   const [vouchers, setVouchers] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [pageCount, setPageCount] = useState(0);
@@ -82,17 +85,16 @@ function Voucher() {
 
   const getVouchers = async (page) => {
     try {
+      setIsLoading(true);
       const response = await getAllSidebar(page);
       setVouchers(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching vouchers:", error);
+      setIsLoading(false);
     }
-  };
-
-  const handleSave = () => {
-    toast.success("Voucher saved successfully!");
   };
 
   const data = React.useMemo(() => vouchers, [vouchers]);
@@ -192,7 +194,9 @@ function Voucher() {
               })}
             </tbody>
           </table>
-          {isOpen && <VoucherForm onSave={handleSave} setIsOpen={setIsOpen} />}
+          {isOpen && (
+            <VoucherForm setIsLoading={setIsLoading} setIsOpen={setIsOpen} />
+          )}
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@ import {
   faExclamationTriangle,
 } from "@fortawesome/free-solid-svg-icons";
 
-const CategoryTable = () => {
+const CategoryTable = ({ setIsLoading }) => {
   const [categories, setCategories] = useState([]);
   const [deletingCategory, setDeletingCategory] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,21 +30,27 @@ const CategoryTable = () => {
   const [statisticsCategory, setStatisticsCategory] = useState([]);
   const fetchStatisticsCategory = async () => {
     try {
+      setIsLoading(true);
       const response = await getStatisticsCategory();
       setStatisticsCategory(response.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.log("Lỗi khi lấy danh sách danh mục:", error);
+      setIsLoading(false);
     }
   };
 
   const fetchCategories = async (page) => {
     try {
+      setIsLoading(true);
       const response = await getAllCategory(page);
       setCategories(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
+      setIsLoading(false);
     } catch (error) {
       console.log("Lỗi khi lấy danh sách danh mục:", error);
+      setIsLoading(false);
     }
   };
 
@@ -95,12 +101,15 @@ const CategoryTable = () => {
 
   const fetchSProducts = async (searchTerm, page) => {
     try {
+      setIsLoading(true);
       const response = await searchCategorys(searchTerm, page);
       setCategories(response.data.data);
       setPageCount(response.data.totalPages);
       setCurrentPage(response.data.currentPage);
+      setIsLoading(false);
     } catch (error) {
       console.error("Lỗi khi tìm kiếm sản phẩm:", error);
+      setIsLoading(false);
     }
   };
 
@@ -156,7 +165,7 @@ const CategoryTable = () => {
             <Card
               value={statisticsCategory.totalCategories}
               title={"Tổng danh mục"}
-              icon={faListAlt} 
+              icon={faListAlt}
               cln={"bcl1"}
             />
             <Card
@@ -168,13 +177,13 @@ const CategoryTable = () => {
             <Card
               value={statisticsCategory.totalCategoriesWithZeroProducts}
               title={"Danh mục hết hàng"}
-              icon={faBan} 
+              icon={faBan}
               cln={"bcl3"}
             />
             <Card
               value={statisticsCategory.totalCategoriesOutOfStock}
               title={"Danh mục hết hàng"}
-              icon={faExclamationTriangle} 
+              icon={faExclamationTriangle}
               cln={"bcl4"}
             />
           </div>
