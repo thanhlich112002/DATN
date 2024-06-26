@@ -26,10 +26,11 @@ class commentController {
           .json({ message: "You have already reviewed this product" });
       }
       product.ratingsAverage =
-        (product.ratingAverage * product.ratingsQuantity + rating) /
+        (product.ratingsAverage * product.ratingsQuantity + rating) /
         (product.ratingsQuantity + 1);
+
       product.ratingsQuantity = product.ratingsQuantity + 1;
-      product.save();
+      await product.save();
       const newComment = new Comment({
         product: productID,
         content,

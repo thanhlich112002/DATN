@@ -72,8 +72,8 @@ function Order({ setIsLoading }) {
           setIsLoading(true);
           console.log(urlParams);
           await createPayment(urlParams);
-          navigate("/account/orders");
           setIsLoading(false);
+          navigate("/account/orders");
         } catch (error) {
           console.error("Lỗi khi lấy danh sách sản phẩm:", error);
           setIsLoading(false);

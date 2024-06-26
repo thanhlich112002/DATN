@@ -15,34 +15,40 @@ router.get(
 );
 router.get(
   "/getOrdersByUserId",
-  // AuthController.restrict("User"),
+  AuthController.protect,
+  AuthController.restrict("User"),
   orderController.getOrdersByUserId
 );
 
 router.get(
   "/getOrdersByOrderId/:orderId",
-  // AuthController.restrict("User"),
+  AuthController.protect,
+  AuthController.restrict("User"),
   orderController.getOrdersByOrderId
 );
 router.get(
   "/getAllOrders",
-  // AuthController.restrict("User"),
+  AuthController.protect,
+  AuthController.restrict("User"),
   orderController.getAllOrders
 );
 router.get(
   "/getStatisticsOrders",
-  // AuthController.restrict("User"),
+  AuthController.protect,
+  AuthController.restrict("User"),
   orderController.getStatisticsOrders
 );
 router.get(
   "/cancelOrder/:orderId",
-  // AuthController.restrict("User"),
+  AuthController.protect,
+  AuthController.restrict("User"),
   NotificationController.CancelNotification,
   orderController.cancelOrder
 );
 router.get(
   "/ReturnOrder/:orderId",
-  // AuthController.restrict("User"),
+  AuthController.protect,
+  AuthController.restrict("User"),
   NotificationController.RefundNotification,
   orderController.ReturnOrder
 );

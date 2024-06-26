@@ -13,6 +13,7 @@ const CryptoJS = require("crypto-js"); // npm install crypto-js
 const Email = require("../utils/email");
 const { middleware } = require("../utils/socket");
 const Notification = require("../models/notification.model");
+const Comment = require("../models/comment.model");
 
 class orderController {
   createOrder1 = catchAsync(async (req, res, next) => {
@@ -522,10 +523,12 @@ class orderController {
   checkComments = catchAsync(async (req, res, next) => {
     try {
       const productId = req.params.productId;
+      console.log(productId);
       const existingComment = await Comment.findOne({
         product: productId,
         user: req.user.id,
       });
+      console.log(1);
 
       if (existingComment) {
         return res.status(400).json(false);
@@ -533,13 +536,13 @@ class orderController {
       const order = await Order.find({
         user: req.user.id,
         "cart.product": productId,
-        status: { $ne: "Pending" },
       });
       let status = false;
       status = order.length > 0;
-
+      console.log(status);
       return res.status(200).json(status);
     } catch (err) {
+      console.error(err);
       return res.status(500).json(false);
     }
   });
