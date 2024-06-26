@@ -22,7 +22,7 @@ import Category from "../Category/category";
 import Item from "../Category/item";
 import { getAllProductsbyCat } from "../../service/API";
 
-function Product() {
+function Product({ setIsLoading }) {
   const { addToCart } = useUser();
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -50,29 +50,38 @@ function Product() {
   }, []);
   const fetchIsComents = async () => {
     try {
+      setIsLoading(true);
       const productData = await chekcomments(id);
       console.log(productData.data);
       setIsComment(productData.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching product data:", error);
+      setIsLoading(false);
     }
   };
   const fetchProduct = async () => {
     try {
+      setIsLoading(true);
       const productData = await getProductsbyID(id);
       setProduct(productData.data.data[0]);
       setFavorites(productData.data.favorites);
       setActiveImage(productData.data.data[0]?.images[0]);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching product data:", error);
+      setIsLoading(false);
     }
   };
   const fetchComment = async () => {
     try {
+      setIsLoading(true);
       const Comment = await getAllComment(id);
       setListComment(Comment.data.data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching product data:", error);
+      setIsLoading(false);
     }
   };
 
@@ -204,7 +213,6 @@ function Product() {
             <div className="product_r_b" onClick={() => addToCart(product)}>
               <span>THÊM VÀO GIỎ HÀNG</span>
             </div>
-            
           </div>
           <div
             className="product_r_icon"

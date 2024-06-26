@@ -25,9 +25,7 @@ function Collections({ setIsLoading }) {
   function useQuery() {
     return new URLSearchParams(useLocation().search);
   }
-  useEffect(() => {
-    SearchProducts();
-  }, [selectedBrands, selectedCategories, query]);
+
   useEffect(() => {
     if (category) {
       handleCategoryChange(category);
@@ -36,7 +34,6 @@ function Collections({ setIsLoading }) {
       handleBrandChange(brand);
     }
   }, []);
-
   const SeachBands = async (_id) => {
     try {
       const brandsResponse = await seachBrands(_id);
@@ -69,15 +66,12 @@ function Collections({ setIsLoading }) {
         setIsLoading(true);
         const brandsResponse = await getAllBrands();
         setBrands(brandsResponse.data.data);
-        const productsResponse = await getAllProducts();
-        setProducts(productsResponse.data.data);
         setIsLoading(false);
       } catch (error) {
         console.error("Failed to fetch products:", error);
         setIsLoading(false);
       }
     };
-
     const fetchCategories = async () => {
       try {
         setIsLoading(true);
@@ -92,8 +86,8 @@ function Collections({ setIsLoading }) {
       }
     };
 
-    fetchCategories();
     fetchProducts();
+    fetchCategories();
   }, []);
 
   const handleSearch = () => {
@@ -123,6 +117,9 @@ function Collections({ setIsLoading }) {
 
     setSelectedCategories(updatedSelectedCategories);
   };
+  useEffect(() => {
+    SearchProducts();
+  }, [selectedBrands, selectedCategories, query]);
 
   return (
     <div className="container_cus">
