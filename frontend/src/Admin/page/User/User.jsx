@@ -91,9 +91,9 @@ const ProductTable = ({ setIsLoading }) => {
         accessor: "actions",
         Cell: ({ row }) => (
           <div className="btn_tab">
-            <button className="btn-edit">
+            {/* <button className="btn-edit">
               <FontAwesomeIcon icon={faEdit} />
-            </button>
+            </button> */}
             <button
               className="btn-delete"
               onClick={() => handleDelete(row.original._id)}

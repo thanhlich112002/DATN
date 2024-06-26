@@ -5,6 +5,7 @@ import { getAllNotifications, isSend } from "../../service/userService";
 import socketIOClient from "socket.io-client";
 import style from "./style.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../service/authContext";
 function Notification({ listNoti, fetchAllNotifications, setIsOpen }) {
   const Send = async (id, _id) => {
     await isSend(id);
@@ -75,6 +76,7 @@ function Notification1({ notification, fetchAllNotifications }) {
   const handleDetail1 = (id) => {
     navigate(`/admin/order/${id}`);
   };
+
   return (
     <div
       className="container__notification"
@@ -98,7 +100,7 @@ function Headers() {
   const [isOpention, setIsOpention] = useState(false);
   const [listNoti, setListNoti] = useState([]);
   const host = "https://datn-ten-zeta.vercel.app";
-
+  const { user } = useAuth();
   const fetchAllNotifications = async () => {
     try {
       const response = await getAllNotifications();
@@ -127,6 +129,10 @@ function Headers() {
       socket.disconnect();
     };
   }, []);
+  const navigate = useNavigate();
+  const handleDetail2 = () => {
+    navigate(`/admin/account/info`);
+  };
 
   return (
     <div>
@@ -187,8 +193,9 @@ function Headers() {
           }}
         >
           <img
-            style={{ width: "40px", height: "40px" }}
-            src="https://scontent.fdad1-4.fna.fbcdn.net/v/t39.30808-1/341567992_189194443477447_7522191387098263235_n.jpg?stp=cp6_dst-jpg_p200x200&_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEarTZE1aOvAEMKCFgm0iyGwIk906XKCkTAiT3TpcoKRF6DzDf_rTfilFbZ4fh7aLieJ-YbdEzNf9h1RH7jnDvV&_nc_ohc=9wgj3DPaut0Q7kNvgHTlYj1&_nc_ht=scontent.fdad1-4.fna&oh=00_AYCWXjvjWodp66otNOxgqb4FY1ZCXIeiQMDsaykFLSwuZg&oe=666FD5B9"
+            onClick={() => handleDetail2()}
+            style={{ width: "40px", height: "40px", cursor: " pointer" }}
+            src={user?.photo}
             alt=""
           />
         </div>

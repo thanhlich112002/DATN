@@ -59,6 +59,7 @@ function Collections({ setIsLoading }) {
       setIsLoading(false);
     } catch (error) {
       console.error("Failed to search products:", error);
+      setIsLoading(false);
     }
   };
 
@@ -83,6 +84,7 @@ function Collections({ setIsLoading }) {
         const res = await Getallcategory();
         console.log(res.data);
         setCat(res.data.data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
       } finally {

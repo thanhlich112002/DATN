@@ -1,0 +1,135 @@
+.account {
+  margin: 10px;
+  display: flex;
+  width: 100%;
+  margin-top: 50px;
+  min-height: 450px;
+}
+.account_left {
+  display: flex;
+  flex-direction: column;
+  width: 20%;
+}
+.checkout_left_span {
+  margin-top: 10px;
+  font-weight: 10px;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.account_left div {
+  display: flex;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: 350;
+  cursor: pointer;
+}
+
+.account_left div:hover {
+  color: #07503d;
+  cursor: pointer;
+}
+
+.account_right {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin-top: 10px;
+}
+.info {
+  margin-top: 30px;
+}
+
+.table {
+  width: 100%;
+  max-width: 100%;
+  margin-top: 20px;
+}
+.table table {
+  width: 100%;
+  margin: 20px 0;
+  font-size: 14px;
+  text-align: left;
+}
+.table table th,
+.table table td {
+  padding: 5px 15px;
+  border: 1px solid #ddd;
+}
+.table table th {
+  font-weight: 500;
+}
+.dmk {
+  margin-top: 20px;
+  width: 200px;
+}
+.thongbao {
+  color: red;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.address-group {
+  padding-bottom: 5px;
+  margin-top: 35px;
+  margin-bottom: 15px;
+  display: flex;
+  unicode-bidi: isolate;
+  border-top: 0.1px solid #e4e4e4;
+}
+.address-group_info {
+  margin-top: 10px;
+  width: 75%;
+}
+.address-default {
+  margin-left: 20px;
+  font-size: 12px;
+  color: #07503d;
+}
+.address-group_ad {
+  font-size: 20px;
+  gap: 10px;
+  width: 23%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.Form_Add {
+  position: fixed;
+  top: 50%; /* Đặt ở giữa màn hình theo chiều dọc */
+  left: 50%; /* Đặt ở giữa màn hình theo chiều ngang */
+  transform: translate(-50%, -50%); /* Đảm bảo phần tử nằm chính giữa */
+  width: 40%; /* Độ rộng của form */
+  max-width: 800px; /* Độ rộng tối đa của form */
+  padding: 20px;
+  border-radius: 5px;
+  background-color: hsl(0, 0%, 100%);
+  z-index: 1000;
+}
+
+.diachi {
+  display: flex;
+  flex-wrap: wrap; /* Cho phép các phần tử con xuống dòng khi không đủ không gian */
+  gap: 10px;
+}
+
+.diachi div {
+  flex: 1; /* Phần tử con chiếm hết không gian có sẵn theo chiều ngang */
+}
+.full {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Màu xám semi-transparent */
+  z-index: 999; /* Đảm bảo nằm phía dưới của form */
+}
+.X {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 5px;
+  background-color: #e4e4e4;
+  border-radius: 5px;
+}

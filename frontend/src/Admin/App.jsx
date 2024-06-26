@@ -18,6 +18,7 @@ import User from "./page/User/User";
 import Headers from "./component/Headers/headers";
 import LoadingModal from "../Components/Loading/Loading";
 import { useState } from "react";
+import Account from "./page/Account/Account";
 
 const App = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -80,6 +81,10 @@ const App = () => {
           <Route
             path="/voucher"
             element={<Voucher setIsLoading={setIsLoading} />}
+          />
+          <Route
+            path="/account/:id"
+            element={<Account setIsLoading={setIsLoading} />}
           />
         </Routes>
       </Sidebar>

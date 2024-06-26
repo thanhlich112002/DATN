@@ -51,7 +51,7 @@ const CompanyIntroduction = () => {
         </div>
         <div className="company-contact">
           <img
-            src="https://res.cloudinary.com/dzy3cnyb6/image/upload/v1717603819/perfume/okulddba5rdzsy3io1do.jpg"
+            src="https://res.cloudinary.com/dzy3cnyb6/image/upload/v1719373726/perfume/qpkm3xaqohvbvzkdwcyx.jpg"
             alt="Công ty"
           />
         </div>

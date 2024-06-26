@@ -19,7 +19,9 @@ import Favorite from "../Components/Favorite/Favorite";
 import LoadingModal from "../Components/Loading/Loading";
 import { useState } from "react";
 const ProtectedRoute = ({ element, role }) => {
-  if (role === "User") {
+  const user = localStorage.getItem("setUser");
+  const userData = JSON.parse(user);
+  if (userData.role === "User") {
     return element;
   } else {
     return <Navigate to="/login" />;

@@ -15,8 +15,7 @@ class SidebarController {
     }
   });
   getAllSidebar = catchAsync(async (req, res, next) => {
-    console.log(req.query);
-    const features = new ApiFeatures(Sidebar.find(), req.query)
+    const features = new ApiFeatures(Sidebar.find(), { isAvailable: true })
       .filter()
       .search()
       .sort();
@@ -46,9 +45,7 @@ class SidebarController {
       const id = req.params.id;
       const voucher = await Sidebar.findById(id);
       if (!voucher) {
-        return res
-          .status(404)
-          .json({ message: "Phiếu giảm giá không tồn tại" });
+        return res.status(404).json({ message: "" });
       }
       voucher.isAvailable = !voucher.isAvailable;
       const savedVoucher = await voucher.save();

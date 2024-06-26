@@ -23,8 +23,20 @@ function Header() {
   const [isopen, setIsopen] = useState(false);
   const [isopencart, setIsopencart] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const accountMenuRef = useRef(null);
-  const cartRef = useRef(null);
+  const ref = useRef(null);
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setSearchTerm(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   const Nav = () => {
     navigate("/account/info");
   };
@@ -49,6 +61,7 @@ function Header() {
       setIsopen(false);
     }
   };
+
   const handleNavClick = () => {
     navigate(`/collections?query=${encodeURIComponent(searchTerm)}`);
   };
@@ -85,11 +98,7 @@ function Header() {
                 className="header-account"
                 style={{ position: "relative" }}
                 onClick={toggleAccountMenu}
-                ref={accountMenuRef}
               >
-                {/* <div className="header-avata">
-                  <img src={user?.photo} alt="" />
-                </div> */}
                 <div
                   className="header-name"
                   style={{
@@ -99,11 +108,11 @@ function Header() {
                     gap: "5px",
                   }}
                 >
-                  <span>Xin chào : {user.lastName + " " + user.firstName}</span>
-                  <span>Tài khoản hoặc đăng xuất</span>
+                  <span>Xin chào: {user.lastName + " " + user.firstName}</span>
+                  <span>Thông tin tài khoản</span>
                 </div>
                 {isopen && (
-                  <div className="box" style={{ marginTop: "10px" }}>
+                  <div className="box" style={{ marginTop: "10px" }} ref={ref}>
                     <Select
                       title={"Quản lý tài khoản"}
                       icon={faGear}
@@ -119,9 +128,8 @@ function Header() {
               </div>
             ) : (
               <div className="header-account">
-                <div href="/customer/info" className="header-icon">
+                <div className="header-icon">
                   <em>
-                    {" "}
                     <FontAwesomeIcon
                       icon={faCircleUser}
                       style={{ color: "#ffffff" }}
@@ -154,8 +162,8 @@ function Header() {
       <div style={{ boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}>
         <div className="container_cus header-bottom-wrap">
           <div className="header-left-wrap">
-            <a href="/" className="header-a" key="Trang chủ">
-              <span> Trang chủ </span>
+            <a href="/" className="header-a">
+              <span>Trang chủ</span>
             </a>
             <a href="/introduce" className="header-a">
               <span>Giới thiệu</span>
@@ -184,7 +192,6 @@ function Header() {
                         e.stopPropagation();
                         toggleCart();
                       }}
-                      ref={cartRef}
                     >
                       <FontAwesomeIcon
                         icon={faCartShopping}
@@ -193,13 +200,11 @@ function Header() {
                     </em>
                   </a>
                 </div>
-
                 <div className="header-amount">
                   <span className="header-cart-qty" id="_TotalProducts">
                     {cart.length}
                   </span>
                 </div>
-
                 <div id="flyout-cart" className="header-flyout-cart">
                   {isopencart && (
                     <div

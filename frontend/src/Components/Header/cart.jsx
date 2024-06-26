@@ -1,26 +1,38 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import "./Cart.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useNavigate } from "react-router-dom";
-import { faTrash, faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import { useUser } from "../../service/userContext"; // Import the custom hook
+import { useUser } from "../../service/userContext";
 import { useAuth } from "../../service/authContext";
 
 function Cart({ setIsopencart }) {
-  const { cart, removeFromCart } = useUser();
+  const { cart, removeFromCart, addToCart } = useUser();
   const { isLoggedIn } = useAuth();
+  const ref = useRef(null);
+  const handleClickOutside = (event) => {
+    if (ref.current && !ref.current.contains(event.target)) {
+      setIsopencart(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   function formatCurrency(price) {
     return price.toLocaleString("vi-VN", {
       style: "currency",
       currency: "VND",
     });
   }
-  const { addToCart } = useUser();
 
   const totalPrice = cart.reduce(
     (total, product) => total + product.price * product.quantity,
     0
   );
+
   const navigate = useNavigate();
 
   const handleNav = (nav) => {
@@ -30,7 +42,7 @@ function Cart({ setIsopencart }) {
 
   return (
     <div>
-      <div className="min-height">
+      <div className="min-height" ref={ref}>
         <div className="scroll">
           {cart.length > 0 ? (
             <>
@@ -48,7 +60,10 @@ function Cart({ setIsopencart }) {
                     <div className="CartItem_end">
                       <div
                         className="CartItembt"
-                        onClick={() => removeFromCart(product)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeFromCart(product);
+                        }}
                       >
                         -
                       </div>
@@ -57,7 +72,10 @@ function Cart({ setIsopencart }) {
                       <div className="divider"></div>
                       <div
                         className="CartItembt"
-                        onClick={() => addToCart(product)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addToCart(product);
+                        }}
                       >
                         +
                       </div>

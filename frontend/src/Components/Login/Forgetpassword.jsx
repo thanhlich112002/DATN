@@ -11,7 +11,6 @@ function Forgetpassword({ setIsLoading }) {
   const [newPassword, setNewPassword] = useState("");
   const [form, setForm] = useState(1);
   const navigate = useNavigate();
-
   const handleForgetPassword = async () => {
     try {
       setIsLoading(true);
@@ -21,6 +20,7 @@ function Forgetpassword({ setIsLoading }) {
       console.log("Email xác nhận đã được gửi.");
     } catch (error) {
       console.error("Đã xảy ra lỗi khi yêu cầu quên mật khẩu", error);
+      toast.error(error.response.data.message);
       setIsLoading(false);
     }
   };
