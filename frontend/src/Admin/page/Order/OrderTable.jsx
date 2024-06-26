@@ -50,6 +50,14 @@ const ProductTable = ({
     setIsOpen(true);
     setSelectedOrder(order);
   };
+  const Translate = (value) => {
+    if (value === "Pending") return "Đang chờ";
+    if (value === "Confirmed") return "Đã xác nhận";
+    if (value === "Shipped") return "Đang vận chuyển";
+    if (value === "Finished") return "Đã hoàn thành";
+    if (value === "Cancelled") return "Đã hủy";
+    return "Đang chờ";
+  };
 
   const columns = React.useMemo(
     () => [
@@ -65,19 +73,19 @@ const ProductTable = ({
       {
         Header: "TT đơn hàng",
         accessor: "status",
-
         Cell: ({ value }) => (
           <center>
-            <span
+            <div
               style={{
                 padding: "5px 10px",
                 color: "#000000",
-                borderRadius: "10px",
+                borderRadius: "2px",
+                minWidth: "100px",
               }}
               className={`status ${value}`}
             >
-              {value}
-            </span>
+              {Translate(value)}
+            </div>
           </center>
         ),
       },

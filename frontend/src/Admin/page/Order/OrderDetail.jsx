@@ -1,15 +1,31 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getOrdersByOrderId } from "../../service/userService";
+import { getOrdersByOrderId, upStatus } from "../../service/userService";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CartItem from "./CartItem";
 import "./style.css";
 
-function OrderDetail({setIsLoading}) {
+function OrderDetail({ setIsLoading }) {
   const { id } = useParams();
   const [cart, setCart] = useState(null); // Initialize cart state
   const [selectedStatus, setSelectedStatus] = useState("");
   const [notification, setNotification] = useState("");
+  const handleSubmit = async () => {
+    try {
+      setIsLoading(true);
+      const req = await upStatus(
+        {
+          notification: notification,
+          status: selectedStatus,
+        },
+        cart._id
+      );
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Lỗi khi cập nhật trạng thái:", error);
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     getCart(id);
@@ -18,15 +34,15 @@ function OrderDetail({setIsLoading}) {
 
   const getCart = async (id) => {
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const response = await getOrdersByOrderId(id);
       setCart(response.data.data);
       setSelectedStatus(response.data.data.status);
       setNotification(response.data.data.notification);
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching order:", error);
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -215,7 +231,9 @@ function OrderDetail({setIsLoading}) {
             marginTop: "20px",
           }}
         >
-          <button style={{ padding: "5px 10px" }}>Cập nhật</button>{" "}
+          <button style={{ padding: "5px 10px" }} onClick={handleSubmit}>
+            Cập nhật
+          </button>
         </div>
       </div>
     </div>

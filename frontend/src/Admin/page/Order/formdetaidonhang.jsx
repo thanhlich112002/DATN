@@ -168,7 +168,7 @@ function AddAddress({ setIsOpen, cart }) {
             marginTop: "20px",
           }}
         >
-          <button style={{ padding: "5px 10px" }} onClick={handleSubmit}>
+          <button style={{ padding: "5px 10px" }} onClick={() => handleSubmit}>
             Cập nhật
           </button>{" "}
         </div>
