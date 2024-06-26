@@ -125,11 +125,7 @@ function Product({ setIsLoading }) {
     fetchIsComents();
     try {
       await createComment(formData, product._id);
-      fviewsProduct();
-      fetchProduct();
-      fetchComment();
-      fetchIsComents();
-      fetchProducts(product?.Category._id);
+      window.location.reload();
     } catch (error) {
       console.log(error.response.data.message);
       toast.error(error.response.data.message);
