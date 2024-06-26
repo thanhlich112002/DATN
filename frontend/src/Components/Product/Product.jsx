@@ -125,6 +125,7 @@ function Product({ setIsLoading }) {
     fetchIsComents();
     try {
       await createComment(formData, product._id);
+      setIsComment(false);
       window.location.reload();
     } catch (error) {
       console.log(error.response.data.message);
